@@ -1,0 +1,623 @@
+.banner {
+    font-size: 36px;
+    font-family:'Courier New', Courier, monospace;
+    height: 100px;
+    width: 100%;
+    line-height: 100px;
+    text-align: center;    
+}
+
+.subheader {
+    font-size: 24px;
+    height: 100px;
+    width: 400px;
+    text-align: center;
+    margin: auto;
+    line-height: 100px;
+}
+
+.error-page {
+    font-size: 24px;
+    height: 100px;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    margin-top: 200px
+}
+
+.flash-msg {
+    font-size: 14px;
+    height: 30px;
+    width: 400px;
+    text-align: center;
+    margin: auto;
+    line-height: 30px;
+}
+
+textarea {
+  resize: none;
+}
+
+.timestamp {
+    font-size: 12px;
+    font-family: 'Courier New', Courier, monospace;
+    margin-top: 5px;
+}
+
+.approve-button {
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.decline-button {
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+/*----------------------------Homepage----------------------------*/
+
+.grid-homepage-menu {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    width: 100%;
+    margin: auto;
+    padding: 10px 30px 10px;
+    border: 1px solid rgb(0, 0, 0);
+    text-align: center;
+    font-size: 16px;
+    font-family:'Courier New', Courier, monospace;   
+}
+
+.homepage-display {
+    position: relative;
+    display: block;
+    height: 100%;
+    width: 1200px;
+    margin: auto;
+    font-family:'Courier New', Courier, monospace;  
+}
+
+/*----------------------------Search----------------------------*/
+
+.grid-display-search-results {
+    display: inline-grid;
+    grid-template-columns: auto;
+    width: 1200px;
+    margin: auto;
+}
+
+.display-search-text {
+    width: 800px;
+    margin: auto;
+    padding: 20px 10px 20px;
+}
+
+.search-result-item {
+    display: grid;
+    grid-template-columns: 100px 540px 160px;
+    height: 100px;
+    width: 800px;
+    margin: auto;
+    border: 1px solid rgb(0, 0, 0);
+    text-align: center;
+}
+
+.search-result-item-img {
+    height: 100px;
+    width: 100px;
+}
+
+.search-result-item-content {
+    height: 100px;
+    width: 500px;
+    margin: auto;
+    padding-top: 20px;
+    padding-left: 20px;
+    text-align: left;
+}
+
+.select-game {
+    height: 100px;
+    width: 160px;
+    text-align: center;
+    line-height: 100px;
+}
+
+/*----------------------------Registration----------------------------*/
+
+.grid-registration {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    width: 400px;
+    margin: auto;
+}
+
+.grid-login {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    width: 400px;
+    margin: auto;
+}
+
+/*----------------------------Profile----------------------------*/
+
+.grid-profile {
+    position: relative;
+    display: grid;
+    grid-template-columns: 15% 85%;
+    width: 1200px;
+    margin: auto;
+}
+
+.grid-profile-menu {
+    display: grid;
+    grid-template-columns: auto;
+    width: 100%;
+    height: 160px;
+    padding: 50px 20px;
+}
+
+.grid-profile-item {
+    text-align: left;
+    line-height: 40px;
+}
+
+.grid-profile-display {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto;
+    width: 100%;
+}
+
+.grid-profile-user {
+    position: relative;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    height: 180px;
+    width: 500px;
+    margin: auto;
+    border: 1px solid rgb(0, 0, 0);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.profile-user-item {
+    height: 30px;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.profile-subheader {
+    font-size: 24px;
+    height: 100px;
+    width: 400px;
+    text-align: center;
+    margin: auto;
+    line-height: 100px;
+}
+
+.grid-profile-schedules {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto;
+    width: 90%;
+    margin: auto;
+}
+
+.profile-schedules-header {
+    font-size: 18px;
+    height: 50px;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    line-height: 50px;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: floralwhite;
+}
+
+.grid-profile-schedule-item {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    width: 100%;
+    margin: auto;
+    border-left: 1px solid rgb(0, 0, 0);
+    border-right: 1px solid rgb(0, 0, 0);
+    border-bottom: 1px solid rgb(0, 0, 0);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.profile-schedules-item-text {
+    padding-right: 20px;
+    text-align: right;
+}
+
+/*------------------------Create Schedule---------------------------*/
+
+.grid-create-schedule-form {
+    position: relative;
+    display: grid;
+    grid-template-columns: 25% 75%;
+    width: 50%;
+    margin: auto;
+    text-align: left;    
+}
+
+#timezone {
+    width: 100%
+}
+
+/*------------------------Display Games---------------------------*/
+
+.grid-display-games {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: auto auto auto auto auto;
+    width: 90%;
+    margin: auto;
+}
+
+.grid-display-game-item {
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.display-game-item-img {
+    display: block;
+    height: 200px;
+    width: 200px;
+    margin: auto;
+}
+
+.display-game-item-name {
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+}
+
+/*------------------------Display Schedules---------------------------*/
+
+.grid-display-schedules {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto;
+    width: 80%;
+    margin: auto;
+    border-top: 1px solid rgb(0, 0, 0);
+    border-right: 1px solid rgb(0, 0, 0);
+    border-left: 1px solid rgb(0, 0, 0);
+}
+
+.grid-display-schedule-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    width: 100%;
+    border-bottom: 1px solid rgb(0, 0, 0);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.view-schedule-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    text-align: center;
+    width: 80px;
+    height: 20px;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.view-requests-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    text-align: center;
+    width: 160px;
+    height: 20px;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.request-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    text-align: center;
+    width: 160px;
+    height: 20px;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.requested-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    text-align: center;
+    width: 160px;
+    height: 20px;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: lightgrey;
+}
+
+.approved-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    text-align: center;
+    width: 160px;
+    height: 20px;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: palegreen;
+}
+
+.grid-schedule-post-box {
+    position: relative;
+    display: grid;
+    grid-template-columns: 20% 80%;
+    width: 80%;
+    margin: auto;
+    border: 1px solid rgb(0, 0, 0);  
+}
+
+/*------------------------Posts---------------------------*/
+
+.grid-post-box {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto;
+    margin: 10px 10px;  
+}
+
+.grid-post-msg {
+    display: grid;
+    grid-template-columns: 90% 10%;
+}
+
+.schedule-post-item {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    width: 80%;
+    margin: auto;
+    border: 1px solid rgb(0, 0, 0);  
+}
+
+.grid-post-content {
+    display: grid;
+    grid-template-columns: auto;
+    width: 90%;
+    margin: auto;
+    margin: 10px 10px;  
+}
+
+.postmsgbox {
+    border: 1px solid rgb(0, 0, 0);
+    padding: 10px 10px 10px 10px;  
+}
+
+/*------------------------Display Avator Box---------------------------*/
+
+.post-avator {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto;
+    width: 150px;
+    border: 1px solid rgb(0, 0, 0);  
+    padding-top: 10px;
+    padding-bottom: 10px;  
+}
+
+.avator-img {
+    height: 100px;
+    width: 100px;
+    margin: auto;    
+}
+
+.avator-name {
+    text-align: center;
+}
+
+/*------------------------Request---------------------------*/
+
+.grid-request-form {
+    position: relative;
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+
+.grid-request-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto;
+}
+
+.grid-request-header {
+    text-align: left;
+}
+
+.grid-requestform {
+    display: grid;
+    grid-template-columns: 80% 20%;
+}
+
+.grid-display-requests-canvas {
+    display: grid;
+    grid-template-columns: auto;
+}
+
+.grid-display-request-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 20% 65% 15%;
+    width: 80%;
+    margin: auto;
+    border: 1px solid rgb(0, 0, 0); 
+}
+
+.grid-request-content {
+    display: grid;
+    grid-template-columns: auto;
+    padding-top: 5px;
+}
+
+.grid-approval {
+    display: grid;
+    grid-template-columns: auto;
+    padding: 10px 20px 10px;
+}
+
+.decline, .approve {
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: rgb(197, 197, 197);
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.approved {
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: green;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.declined {
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: red;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.grid-users-list {
+    display: inline-grid;
+    grid-template-columns: auto auto auto auto auto;
+}
+
+/*-----------------------------Modal-----------------------------------*/
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/*-----------------------------Snackbar-----------------------------------*/
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+    font-family: 'Courier New', Courier, monospace;
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+/*-----------------------------Collapse-----------------------------------*/
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+  position: relative;
+  background-color: #eee;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  margin: auto;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+  background-color: #ccc;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content-approved-users {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  font-family: 'Courier New', Courier, monospace;
+}

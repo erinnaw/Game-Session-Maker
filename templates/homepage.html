@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Homepage{% endblock %}
+
+{% block body %}
+    <div class="banner" id="banner">
+        Website Name
+    </div>
+
+    <div class="grid-homepage-menu" id="homepage-menu">
+        {% if(session.get('user', 0)) %}
+            <div class="homepage-menu-item" id="my-profile">My Profile</div>
+            <div class="homepage-menu-item" id="log-out">Log Out</div>
+        {% else %}
+            <div class="homepage-menu-item" id="create-account">Create Account</div>
+            <div class="homepage-menu-item" id="log-in">Log In</div>
+        {% endif %}
+        <div class="homepage-menu-item" id="create-schedule">Create Schedule</div>
+        <div class="homepage-menu-item" id="all-schedules">All Schedules</div>
+        <div class="homepage-menu-item" id="all-games">All Games</div>
+        <form action="/search-game">
+            <Label for="search-game">Search</Label>
+            <input type="text" name="search-game" id="search-game" placeholder="multiplayer games" 
+                    onkeyup = "onKeyUp_searchGames()"></input>
+        </form>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="/static/js/homepage.js"></script>
+{% endblock %}
