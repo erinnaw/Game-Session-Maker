@@ -50,6 +50,7 @@ textarea {
     line-height: 50px;
     text-align: center;
     border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
 }
 
 .decline-button {
@@ -58,6 +59,11 @@ textarea {
     line-height: 50px;
     text-align: center;
     border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.homepage-menu-item {
+    cursor: pointer;
 }
 
 /*----------------------------Homepage----------------------------*/
@@ -107,6 +113,7 @@ textarea {
     margin: auto;
     border: 1px solid rgb(0, 0, 0);
     text-align: center;
+    cursor: pointer;
 }
 
 .search-result-item-img {
@@ -167,6 +174,7 @@ textarea {
 .grid-profile-item {
     text-align: left;
     line-height: 40px;
+    cursor: pointer;
 }
 
 .grid-profile-display {
@@ -266,6 +274,7 @@ textarea {
 
 .grid-display-game-item {
     border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
 }
 
 .display-game-item-img {
@@ -312,6 +321,7 @@ textarea {
     width: 80px;
     height: 20px;
     border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
 }
 
 .view-requests-button {
@@ -332,7 +342,8 @@ textarea {
     text-align: center;
     width: 160px;
     height: 20px;
-    border: 1px solid rgb(0, 0, 0);
+    border: 1px solid rgb(0, 0, 0);  
+    cursor: pointer;
 }
 
 .requested-button {

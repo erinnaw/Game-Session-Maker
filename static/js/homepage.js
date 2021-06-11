@@ -496,31 +496,6 @@ $('#all-schedules').on('click', () => {
                                         });
                                     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                     $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"approval-button\">See all approved users</button>" +
                                         "<div class=\"content-approved-users\" id=\"content-approved\"></div>");
 
@@ -972,17 +947,6 @@ function onKeyUp_searchGames() {
 
                 }
             }
-
-            $('.select-game').hover(
-
-                (evt) => {
-                    evt.target.style.background = "lightcyan";
-                },
-
-                (evt) => {
-                    evt.target.style.removeProperty('background');
-                }
-            );
         }
     });
 }
