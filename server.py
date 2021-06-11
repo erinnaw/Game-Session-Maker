@@ -537,7 +537,22 @@ def get_schedule_users(schedule_id):
     return jsonify(data)
 
 
+@app.route('/remove-user-from-schedule/<schedule_id>/<user_id>', methods=["POST"])
+def remove_user_from_schedule(schedule_id, user_id):
+    """Remove a user from a schedule."""
 
+    flash = ''
+    if(session.get('user')):
+        schedule = crud.get_schedule_by_id(schedule_id)
+        if session['user'] == schedule.user_id:
+            crud.remove_user_from_schedule(schedule_id, user_id)
+            flash = 'kicked.'
+        else:
+            flash = 'You must be the schedule host to kick a user'
+    else:
+        flash = 'You must be signed in to kick a user.'
+
+    return flash
 
 
 

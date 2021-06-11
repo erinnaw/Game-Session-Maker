@@ -322,6 +322,7 @@ textarea {
     width: 160px;
     height: 20px;
     border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(211, 208, 167);
 }
 
 .request-button {
@@ -412,6 +413,33 @@ textarea {
     padding-bottom: 10px;  
 }
 
+.post-avator-hover {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto;
+    width: 150px;
+    border: 1px solid rgb(0, 0, 0);  
+    padding-top: 10px;
+    padding-bottom: 10px;  
+}
+
+.post-avator-hover:hover .kick-user {
+    opacity: 1; 
+}
+
+.kick-user {
+  position: absolute;
+  transition: opacity 0.25s;
+  height: 100%; 
+  line-height: 140px;
+  top: 0px;
+  width: 100%;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  cursor: pointer;
+}
+
 .avator-img {
     height: 100px;
     width: 100px;
@@ -420,6 +448,17 @@ textarea {
 
 .avator-name {
     text-align: center;
+}
+
+.kicked-user {
+    position: relative;
+    grid-template-columns: auto;
+    width: 150px;
+    border: 1px solid rgb(0, 0, 0);  
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 100px;
+    text-align: center;  
 }
 
 /*------------------------Request---------------------------*/
@@ -454,7 +493,7 @@ textarea {
     position: relative;
     display: grid;
     grid-template-columns: 20% 65% 15%;
-    width: 80%;
+    width: 100%;
     margin: auto;
     border: 1px solid rgb(0, 0, 0); 
 }
@@ -598,7 +637,7 @@ textarea {
   position: relative;
   background-color: #eee;
   cursor: pointer;
-  padding: 18px;
+  padding: 10px;
   width: 100%;
   margin: auto;
   border: none;
@@ -615,9 +654,22 @@ textarea {
 
 /* Style the collapsible content. Note: hidden by default */
 .content-approved-users {
+  position: relative;
   padding: 0 18px;
   display: none;
   overflow: hidden;
   background-color: #f1f1f1;
   font-family: 'Courier New', Courier, monospace;
+}
+
+.collapsible:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: white;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
 }

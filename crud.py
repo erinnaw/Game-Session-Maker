@@ -211,7 +211,6 @@ def get_schedule_users_by_user_id(user_id):
 
     return Schedule_Users.query.filter(Schedule_Users.user_id == user_id).all()
 
-
 #-----------------Set Wrappers------------------------------->
 def set_game_image_by_game_id(game_id, image_path):
     """Set image in a game and return true if successful and false if failed."""
@@ -257,6 +256,15 @@ def remove_request(request_id):
 
     db.session.delete(Request.query.filter(Request.request_id == request_id).first())
     db.session.commit() 
+
+
+def remove_user_from_schedule(schedule_id, user_id):
+    """Remove a user from a schedule."""
+
+    schedule_user = Schedule_Users.query.filter(Schedule_Users.schedule_id == schedule_id and Schedule_Users.user_id == user_id).first()
+    db.session.delete(schedule_user)
+    db.session.commit()
+
 
 
 if __name__ == '__main__':
