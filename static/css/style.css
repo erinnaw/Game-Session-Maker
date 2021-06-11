@@ -542,6 +542,11 @@ textarea {
     grid-template-columns: auto auto auto auto auto;
 }
 
+.grid-request-list {
+    display: grid;
+    grid-template-columns: auto;
+}
+
 /*-----------------------------Modal-----------------------------------*/
 
 /* The Modal (background) */

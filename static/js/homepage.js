@@ -417,29 +417,29 @@ $('#all-schedules').on('click', () => {
 
                                         $('#requests-button').on('click', () => {
 
-                                            $('#content-requests').html(`<div class=\"grid-users-list\" id=\"display-requests-${schedule.schedule_id}\"></div>`);
+                                            $('#content-requests').html(`<div class=\"grid-request-list\" id=\"display-requests\"></div>`);
 
                                             $.get(`/get-requests/${schedule.schedule_id}`, (requests) => {
 
                                                 if (requests.slice(0, 5) === "Error") {
 
-                                                    $(`#display-requests-${schedule.schedule_id}`).html(`<div class=\"error-page\" id=\"error-page\">${requests}</div>`);
+                                                    $(`#display-requests`).html(`<div class=\"error-page\" id=\"error-page\">${requests}</div>`);
                                                 }
                                                 else {
 
                                                     for (const request of requests) {
 
-                                                        $(`#display-requests-${schedule.schedule_id}`).append(`<div class=\"grid-display-request-item\" id=\"request-item-${schedule.schedule_id}\"></div>`);
-                                                        $(`#request-item-${schedule.schedule_id}`).html(`<div class=\"post-avator\" id=\"post-avator-${request.user_id}\"></div>`);
+                                                        $(`#display-requests`).append(`<div class=\"grid-display-request-item\" id=\"request-item-${request.request_id}\"></div>`);
+                                                        $(`#request-item-${request.request_id}`).html(`<div class=\"post-avator\" id=\"post-avator-${request.user_id}\"></div>`);
                                                         $(`#post-avator-${request.user_id}`).append(`<img class=\"avator-img\" id=\"avator-img-${request.user_id}\" src=\"${request.image_path}\"></img>`);
                                                         $(`#post-avator-${request.user_id}`).append(`<div class=\"avator-name\" id=\"avator-name-${request.user_id}\">${request.username}</div>`);
 
-                                                        $(`#request-item-${schedule.schedule_id}`).append(`<div class=\"grid-request-content\" id=\"request-content-${request.request_id}\"></div>`);
+                                                        $(`#request-item-${request.request_id}`).append(`<div class=\"grid-request-content\" id=\"request-content-${request.request_id}\"></div>`);
                                                         $(`#request-content-${request.request_id}`).append(`<div class=\"grid-request-header\" id=\"request-header-${request.request_id}\">Request Message</div>`);
                                                         $(`#request-content-${request.request_id}`).append(`<div class=\"postmsgbox\">${request.content}</div>`);
                                                         $(`#request-content-${request.request_id}`).append(`<div class=\"timestamp\" id=\"timestamp-request-${request.request_id}\">${request.time_stamp}</div>`);
 
-                                                        $(`#request-item-${schedule.schedule_id}`).append(`<div class=\"grid-approval\" id=\"approval-${request.request_id}\"></div>`);
+                                                        $(`#request-item-${request.request_id}`).append(`<div class=\"grid-approval\" id=\"approval-${request.request_id}\"></div>`);
                                                         $(`#approval-${request.request_id}`).append(`<div class=\"approve-button\" id=\"approve-button-${request.request_id}\">Approve</div>`);
                                                         $(`#approval-${request.request_id}`).append(`<div class=\"decline-button\" id=\"decline-button-${request.request_id}\">Decline</div>`);
 
@@ -521,7 +521,6 @@ $('#all-schedules').on('click', () => {
 
 
 
-
                                     $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"approval-button\">See all approved users</button>" +
                                         "<div class=\"content-approved-users\" id=\"content-approved\"></div>");
 
@@ -529,13 +528,13 @@ $('#all-schedules').on('click', () => {
 
                                         $.get(`/get-schedule-users/${schedule.schedule_id}`, (users) => {
                                             
-                                            $('#content-approved').html(`<div class=\"grid-users-list\" id=\"users-list-${user.user_id}\"></div>`);
+                                            $('#content-approved').html(`<div class=\"grid-users-list\" id=\"users-list\"></div>`);
 
                                             for(const user of users) {
 
                                                 if(status === "host") {
 
-                                                    $('#users-list-${user.user_id}').append(`<div class=\"post-avator-hover\" id=\"post-avator-hover-${user.user_id}\"></div>`);
+                                                    $('#users-list').append(`<div class=\"post-avator-hover\" id=\"post-avator-hover-${user.user_id}\"></div>`);
                                                     $(`#post-avator-hover-${user.user_id}`).html(`<img class=\"avator-img\" id=\"avator-img-${user.user_id}\" src=\"${user.image_path}\"></img>`);
                                                     $(`#post-avator-hover-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avator-name${user.user_id}\">${user.username}</div>`);
                                                     $(`#post-avator-hover-${user.user_id}`).append(`<div class=\"kick-user\" id=\"kick-user-${user.user_id}\">Kick User</div>`);
@@ -766,6 +765,8 @@ function get_userschedule_html(schedule) {
 function get_userrequest_html(request) {
     
     return (
+        `<div class=\"profile-schedules-item-text\">Username:</div>` +
+        `<div class=\"profile-schedules-item-text\">${request['username']}</div>` +
         `<div class=\"profile-schedules-item-text\">Game ID:</div>` +
         `<div class=\"profile-schedules-item-text\">${request['game_id']}</div>` +
         `<div class=\"profile-schedules-item-text\">Game Name:</div>` +

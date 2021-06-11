@@ -214,12 +214,14 @@ def get_user_requests():
         for request in requests:
             game = crud.get_game_by_id(request.game_id)
             schedule = crud.get_schedule_by_id(request.schedule_id)
+            user = crud.get_user_by_id(request.user_id)
 
             data = {"type": "sent",
+                    "username": user.username,
                     "request_id": request.request_id,
                     "game_id": schedule.game_id,
                     "game_name": game.name,
-                    "schedule_id": schedule.datetime, 
+                    "schedule_id": schedule.schedule_id, 
                     "schedule_datetime": schedule.datetime,
                     "schedule_timezone": schedule.timezone,
                     "time_stamp": request.time_stamp,
@@ -232,12 +234,15 @@ def get_user_requests():
             for request in schedule.requests:
                 game = crud.get_game_by_id(schedule.game_id)
                 schedule = crud.get_schedule_by_id(request.schedule_id)
+                user = crud.get_user_by_id(request.user_id)
+
 
                 data = {"type": "received",
+                        "username": user.username,
                         "request_id": request.request_id,
                         "game_id": schedule.game_id,
                         "game_name": game.name,
-                        "schedule_id": schedule.datetime, 
+                        "schedule_id": schedule.schedule_id, 
                         "schedule_datetime": schedule.datetime,
                         "schedule_timezone": schedule.timezone,
                         "time_stamp": request.time_stamp,                    
