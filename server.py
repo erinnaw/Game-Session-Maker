@@ -686,7 +686,7 @@ def view_admin_display(path):
                         "user_id": request.user_id,
                         "game_id": request.game_id,
                         "schedule_id": request.schedule_id})  
-    elif path == 'Schedule-users':
+    elif path == 'schedule-users':
         schedule_users = crud.get_schedule_users()
         for su in schedule_users:
             data.append({"schedule_users_id": su.schedule_users_id,
@@ -695,7 +695,7 @@ def view_admin_display(path):
     elif path == 'posts':
         posts = crud.get_posts()
         for post in posts:
-            data.append({"post_id": post.schedule_users_id,
+            data.append({"post_id": post.post_id,
                         "schedule_id": post.schedule_id,
                         "user_id": post.user_id})         
     else:

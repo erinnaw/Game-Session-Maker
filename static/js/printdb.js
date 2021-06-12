@@ -85,12 +85,6 @@ $('.adminbutton').on('click', (evt) => {
             $('#homepage-display').html('<div class=\"subheader\">All Schedule_Users</div>');
             $('#homepage-display').append('<div class=\"grid-admin-display\"></div>');
 
-            console.log(data);
-            if (data === null)  {
-                console.log("null data for schedule-users");
-                return;
-            }
-
             for (let i = 0; i < data.length; i++) {
 
                 $('.grid-admin-display').append(`<div class=\"admin-display-item\" id=\"admin-display-item-${i}\"></div>`);

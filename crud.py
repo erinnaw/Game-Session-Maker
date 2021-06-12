@@ -211,6 +211,7 @@ def get_schedule_users_by_user_id(user_id):
 
     return Schedule_Users.query.filter(Schedule_Users.user_id == user_id).all()
 
+
 #-----------------Set Wrappers------------------------------->
 def set_game_image_by_game_id(game_id, image_path):
     """Set image in a game and return true if successful and false if failed."""

@@ -1,5 +1,9 @@
 "use strict";
 
+let searchFlag = new Boolean(false);
+let searchHandler;
+const search_timer = 500;
+
 $(document).ready(function () {
 
     let key = new String();
@@ -926,15 +930,29 @@ $('#my-profile').on('click', () => {
 
 function onKeyUp_searchGames() {
 
+    if (searchFlag) {
+        
+        searchHandler = window.setTimeout(search_games, search_timer);
+    }
+    else {
+
+        searchFlag = true;
+        clearTimeout(searchHandler);
+        searchHandler = window.setTimeout(search_games, search_timer);
+    }
+}
+
+function search_games() {
+
     const searchData = $('#search-game').val();
 
-    $.get('/game-info.json', {'search':searchData}, (result) => {
-        
+    $.get('/game-info.json', { 'search': searchData }, (result) => {
+
         let artwork_url = '';
         const results = JSON.parse(result);
         $('#homepage-display').html(`<div class=\"display-search-text\" id=\"display-search-text\">Showing ${results.length} results:</div>`);
         $('#homepage-display').append("<div class=\"grid-display-search-results\" id=\"display-search-results\"></div>");
-        
+
         for (let i = 0; i < results.length; i++) {
 
             let date = '';
@@ -949,13 +967,13 @@ function onKeyUp_searchGames() {
                 date = "NA";
             }
 
-            if(results[i]['artworks']) {
+            if (results[i]['artworks']) {
                 artwork_url = results[i]['artworks'][0]['url'];
             }
             else {
                 artwork_url = "/static/img/image-placeholder.jpg";
             }
-            
+
             $('#display-search-results').append(`
                 <div class=\"search-result-item\" id=\"item-${results[i].id}\">
                     <img class=\"search-result-item-img\" src=${artwork_url}></img>
@@ -967,16 +985,16 @@ function onKeyUp_searchGames() {
                     <div>
                         <div class=\"select-game\" id=\"select-game\"></div>
                     </div>
-                </div>`            
+                </div>`
             );
 
-            if (!results[i].platforms) { 
+            if (!results[i].platforms) {
                 results[i].platforms = new Array();
             }
 
-            for(let j = 0; j < results[i].platforms.length; j++) {
-                
-                if(j == results[i].platforms.length-1) {
+            for (let j = 0; j < results[i].platforms.length; j++) {
+
+                if (j == results[i].platforms.length - 1) {
                     $(`#platforms-${results[i].id}`).append(`${results[i].platforms[j].name}`);
                 }
                 else {
@@ -1003,8 +1021,8 @@ function onKeyUp_searchGames() {
             });
         }
     });
-}
 
+}
 
 
 
