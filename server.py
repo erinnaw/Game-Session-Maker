@@ -651,6 +651,61 @@ def remove_user_from_schedule(schedule_id, user_id):
     return flash
 
 
+@app.route('/admin/<path>')
+def view_admin_display(path):
+    """View admin information."""
+
+    data = list()
+
+    if path == 'users':
+        users = crud.get_users()
+        for user in users:
+            data.append({"users_id": user.user_id,
+                    "username": user.username,
+                    "firstname": user.first_name,
+                    "lastname": user.last_name,
+                    "email": user.email,
+                    "password": user.password,
+                    "image_path": user.image_path})
+    elif path == 'games':
+        games = crud.get_games()
+        for game in games:
+            data.append({"game_id": game.game_id,
+                        "name": game.name,
+                        "image_path": game.image_path})        
+    elif path == 'schedules':
+        schedules = crud.get_schedules()
+        for schedule in schedules:
+            data.append({"schedule_id": schedule.schedule_id,
+                        "user_id": schedule.user_id,
+                        "game_id": schedule.game_id})        
+    elif path == 'requests':
+        requests = crud.get_requests()
+        for request in requests:
+            data.append({"request_id": request.schedule_id,
+                        "user_id": request.user_id,
+                        "game_id": request.game_id,
+                        "schedule_id": request.schedule_id})  
+    elif path == 'Schedule-users':
+        schedule_users = crud.get_schedule_users()
+        for su in schedule_users:
+            data.append({"schedule_users_id": su.schedule_users_id,
+                        "schedule_id": su.schedule_id,
+                        "user_id": su.user_id}) 
+    elif path == 'posts':
+        posts = crud.get_posts()
+        for post in posts:
+            data.append({"post_id": post.schedule_users_id,
+                        "schedule_id": post.schedule_id,
+                        "user_id": post.user_id})         
+    else:
+        data = None                        
+
+    return jsonify(data)
+
+
+
+
 
 
 

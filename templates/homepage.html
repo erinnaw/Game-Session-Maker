@@ -23,7 +23,20 @@
                     onkeyup = "onKeyUp_searchGames()"></input>
         </form>
     </div>
+
+    <div class="homepage-display" id="homepage-display"></div>
+    <div id="snackbar"></div>
+
+    <div class="navbar">
+        <div class="adminbutton" id="users">Users</div>
+        <div class="adminbutton" id="games">Games</div>
+        <div class="adminbutton" id="schedules">Schedules</div>
+        <div class="adminbutton" id="requests">Requests</div>
+        <div class="adminbutton" id="posts">Posts</div>
+        <div class="adminbutton" id="schedule-users">Schedule Users</div>
+    </div>
 {% endblock %}
 {% block js %}
+    <script src="/static/js/printdb.js"></script>
     <script src="/static/js/homepage.js"></script>
 {% endblock %}
