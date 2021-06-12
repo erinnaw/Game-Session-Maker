@@ -105,7 +105,22 @@ textarea {
     padding: 20px 10px 20px;
 }
 
+.search-result-item-hover {
+    position: absolute;
+    transition: opacity 0.25s;
+    height: 100%; 
+    line-height: 103px;
+    top: 0px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    background-color: rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    cursor: pointer;
+}
+
 .search-result-item {
+    position: relative;
     display: grid;
     grid-template-columns: 100px 540px 160px;
     height: 100px;
@@ -114,6 +129,10 @@ textarea {
     border: 1px solid rgb(0, 0, 0);
     text-align: center;
     cursor: pointer;
+}
+
+.search-result-item:hover .search-result-item-hover {
+    opacity: 1; 
 }
 
 .search-result-item-img {
@@ -267,20 +286,38 @@ textarea {
 .grid-display-games {
     position: relative;
     display: inline-grid;
-    grid-template-columns: auto auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto auto;
     width: 90%;
     margin: auto;
 }
 
-.grid-display-game-item {
+.grid-display-game-item-hover {
+    position: relative;
     border: 1px solid rgb(0, 0, 0);
     cursor: pointer;
 }
 
+.grid-display-game-item-hover:hover .create-schedule-hover{
+    opacity: 1; 
+}
+
+.create-schedule-hover {
+  position: absolute;
+  transition: opacity 0.25s;
+  height: 100%; 
+  line-height: 155px;
+  top: 0px;
+  width: 100%;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  cursor: pointer;
+}
+
 .display-game-item-img {
     display: block;
-    height: 200px;
-    width: 200px;
+    height: 150px;
+    width: 150px;
     margin: auto;
 }
 

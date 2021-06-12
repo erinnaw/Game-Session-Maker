@@ -37,20 +37,6 @@ $(document).ready(function () {
     }
 });
 
-$('.homepage-menu-item').hover(
-    
-    (evt) => {
-        evt.target.style.background = "black";
-        evt.target.style.color = "white";
-
-    }, 
-
-    (evt) => {
-        evt.target.style.removeProperty('background');
-        evt.target.style.removeProperty('color');
-    }
-);
-
 $('#create-account').on('click', () => {
 
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create Account</div>");
@@ -158,79 +144,7 @@ $('#log-out').on('click', () => {
     });
 });
 
-$('#create-schedule').on('click', () => {
-
-    $.get('/profile', (user) => {
-        if(user === "None") {
-            $('#homepage-display').html("<div class=\"error-page\" id=\"error-page\">You must be signed in to create a schedule.</div>");
-        }
-        else {
-            $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create a Schedule</div>");
-            $('#homepage-display').append("<form class=\"schedule-form\" id=\"schedule-form\" action=\"/create-schedule\" method=\"POST\"></form>");
-            $('#schedule-form').append("<div class=\"grid-create-schedule-form\" id=\"create-schedule-form\"></div>");
-            $('#create-schedule-form').append("<Label for=\"game\">Game*</Label><select name=\"game\" id=\"game-select\"></select>");
-
-            $.get('/get-games', (games) => {
-                for (const game of games) {
-
-                    name = game.name.charAt(0).toUpperCase() + game.name.slice(1);
-                    $('#game-select').append(`<option value=${game.game_id}>${name}</option>`);
-                }
-            });
-
-            $('#create-schedule-form').append("<Label for=\"date\">Date*</Label>" +
-                "<input type=\"date\" name=\"date\" id=\"date\">" +
-                "<Label for=\"time\">Time*</Label>" +
-                "<input type=\"time\" name=\"time\" id=\"time\">" +
-                "<Label for=\"timezone\">Timezone*</Label>" +
-                "<div class=\"tz\" id=\"tz\"></div>");
-
-            $.get('/get-timezones', (str) => {
-                $('#tz').append(str);
-            });
-
-            $('#create-schedule-form').append("<Label for=\"platform\">Platform</Label>" +
-                "<select name=\"platform\" id=\"platform\">" +
-                "<option value=\"pc\">PC</option>" +
-                "<option value=\"playstation4\">Playstation</option>" +
-                "<option value=\"Xbox\">Xbox</option>" +
-                "<option value=\"Nintendo\">Nintendo</option>" +
-                "</select>");
-
-            $('#create-schedule-form').append("<Label for=\"max_user\">Max Users*</Label>" +
-                "<input type=\"number\" min=\"1\" step=\"1\" name=\"max_user\" id=\"max_user\">" +
-                "<Label for=\"max_team\">Max Teams</Label>" +
-                "<input type=\"number\" min=\"1\" step=\"1\" name=\"max_team\" id=\"max_team\" placeholder=\"1\">" +
-                "<Label for=\"description\">Description*</Label>" +
-                "<textarea name=\"description\" id=\"description\" rows=\"10\" cols=\"50\">Write requirements for users and description of your objective(s).</textarea> " +
-                "<div></div>" +
-                "<input type=\"submit\" value=\"Submit\">" +
-                "<div></div>" +
-                "*required fields");
-
-            $('#homepage-display').append("<div class=\"flash-msg\" id=\"flash-msg\"></div");
-
-            $('#schedule-form').on('submit', (evt) => {
-
-                const formData = $('#schedule-form').serialize();       
-                evt.preventDefault();
-
-                $.post('/create-schedule', formData, (data) => {
-
-                    if(data.status === "fail") {
-                        $('#flash-msg').html(data.flash);
-                    }
-                    else {
-                        $('#snackbar').html(`${data.flash}`);
-                        document.getElementById("snackbar").className = "show";
-                        setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
-                        $('#all-schedules').trigger('click');
-                    }
-                });                       
-            });
-        }
-    });
-});
+$('#create-schedule').on('click', createSchedule_by_game_id);
 
 $('#all-schedules').on('click', () => {
 
@@ -272,7 +186,6 @@ $('#all-schedules').on('click', () => {
         
         $('.view-schedule-button').on('click', (evt) => {
 
-            
             for (const schedule of schedules) {
 
                 if(schedule.schedule_id == parseInt(evt.target.id.slice(9))) {
@@ -645,54 +558,30 @@ $('#all-games').on('click', () => {
         for (const game of games) {
 
             name = game.name.charAt(0).toUpperCase() + game.name.slice(1);
-            $('#display-games').append(`<div class=\"grid-display-game-item\" id=\"display-game-item-${game.game_id}\"></div>`);
+            $('#display-games').append(`<div class=\"grid-display-game-item-hover\" id=\"display-game-item-${game.game_id}\"></div>`);
             $(`#display-game-item-${game.game_id}`).append(`<img class=\"display-game-item-img\" id=\"display-game-item-img-${game.game_id}\" src=\"${game.image_path}\"></div>` +
                 `<div class=\"display-game-item-name\" id=\"display-game-item-name-${game.game_id}\"></div>`);
             $(`#display-game-item-name-${game.game_id}`).append(`${game.name}`);
+            $(`#display-game-item-${game.game_id}`).append(`<div class=\"create-schedule-hover\" id=\"create-schedule-${game.game_id}\">Create Schedule</div>`);
         }
 
-        $('.grid-display-game-item').hover(
+        $('.create-schedule-hover').on('click', (evt) => {
             
-            (evt) => {
-                evt.target.style.borderWidth = "5px";
-            },
-
-            (evt) => {
-                evt.target.style.borderWidth = "1px";
-            }
-        );
-
-        $('.grid-display-game-item').on('click', (evt) => {
+            const game_id = evt.target.id.slice(16);
             
-            const game_id = evt.target.id.slice(-1);
+            $.post(`/create-schedule-from-gamedb/${game_id}`, (game) => {
 
+                if(game === "None") {
 
+                    $('#homepage-display').html("<div class=\"error-page\" id=\"error-page\">Error: Game Not Found</div>");
+                }
+                else {
 
-
-
-
-
-
-
-
+                    createSchedule_by_game_id(game_id);
+                }
+            });
         });
-
-
-
-
-
-
-
     });
-
-
-
-
-
-
-
-
-
 });
 
 function get_userdetails_html(user) {
@@ -767,6 +656,154 @@ function get_userpost_html(post) {
         `<div class=\"profile-schedules-item-text\">${post['time_stamp']}</div>` +
         `<div class=\"profile-schedules-item-text\">Post Content:</div>` +
         `<div class=\"profile-schedules-item-text\">${post['content']}</div>`)
+}
+
+function createSchedule_by_game_id(game_id = 1) {
+
+    $.get('/profile', (user) => {
+        if (user === "None") {
+            $('#homepage-display').html("<div class=\"error-page\" id=\"error-page\">You must be signed in to create a schedule.</div>");
+        }
+        else {
+            $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create a Schedule</div>");
+            $('#homepage-display').append("<form class=\"schedule-form\" id=\"schedule-form\" action=\"/create-schedule\" method=\"POST\"></form>");
+            $('#schedule-form').append("<div class=\"grid-create-schedule-form\" id=\"create-schedule-form\"></div>");
+            $('#create-schedule-form').append(`<Label for=\"game\">Game*</Label><select name=\"game\" id=\"gameselect\"></select>`);
+            console.log(game_id);
+            $.get('/get-games', (games) => {
+                for (const game of games) {
+
+                    name = game.name.charAt(0).toUpperCase() + game.name.slice(1);
+                    $('#gameselect').append(`<option value=${game.game_id}>${name}</option>`);
+                }
+
+                document.getElementById('gameselect').selectedIndex = game_id - 1;
+            });
+
+            $('#create-schedule-form').append("<Label for=\"date\">Date*</Label>" +
+                "<input type=\"date\" name=\"date\" id=\"date\">" +
+                "<Label for=\"time\">Time*</Label>" +
+                "<input type=\"time\" name=\"time\" id=\"time\">" +
+                "<Label for=\"timezone\">Timezone*</Label>" +
+                "<div class=\"tz\" id=\"tz\"></div>");
+
+            $.get('/get-timezones', (str) => {
+                $('#tz').append(str);
+            });
+
+            $('#create-schedule-form').append("<Label for=\"platform\">Platform</Label>" +
+                "<select name=\"platform\" id=\"platform\">" +
+                "<option value=\"pc\">PC</option>" +
+                "<option value=\"playstation4\">Playstation</option>" +
+                "<option value=\"Xbox\">Xbox</option>" +
+                "<option value=\"Nintendo\">Nintendo</option>" +
+                "</select>");
+
+            $('#create-schedule-form').append("<Label for=\"max_user\">Max Users*</Label>" +
+                "<input type=\"number\" min=\"1\" step=\"1\" name=\"max_user\" id=\"max_user\">" +
+                "<Label for=\"max_team\">Max Teams</Label>" +
+                "<input type=\"number\" min=\"1\" step=\"1\" name=\"max_team\" id=\"max_team\" placeholder=\"1\">" +
+                "<Label for=\"description\">Description*</Label>" +
+                "<textarea name=\"description\" id=\"description\" rows=\"10\" cols=\"50\">Write requirements for users and description of your objective(s).</textarea> " +
+                "<div></div>" +
+                "<input type=\"submit\" value=\"Submit\">" +
+                "<div></div>" +
+                "*required fields");
+
+            $('#homepage-display').append("<div class=\"flash-msg\" id=\"flash-msg\"></div");
+
+            $('#schedule-form').on('submit', (evt) => {
+
+                const formData = $('#schedule-form').serialize();
+                evt.preventDefault();
+
+                $.post('/create-schedule', formData, (data) => {
+
+                    if (data.status === "fail") {
+                        $('#flash-msg').html(data.flash);
+                    }
+                    else {
+                        $('#snackbar').html(`${data.flash}`);
+                        document.getElementById("snackbar").className = "show";
+                        setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+                        $('#all-schedules').trigger('click');
+                    }
+                });
+            });
+        }
+    });
+}
+
+function createSchedule_by_game_name(game_name, image_path) {
+
+    $.get('/profile', (user) => {
+
+        if (user === "None") {
+
+            $('#homepage-display').html("<div class=\"error-page\" id=\"error-page\">You must be signed in to create a schedule.</div>");
+        }
+        else {
+           
+            $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create a Schedule</div>");
+            $('#homepage-display').append("<form class=\"schedule-form\" id=\"schedule-form\" action=\"/create-schedule\" method=\"POST\"></form>");
+            $('#schedule-form').append("<div class=\"grid-create-schedule-form\" id=\"create-schedule-form\"></div>");
+            $('#create-schedule-form').append(`<Label for=\"game\">Game*</Label><input type=\"hidden\" name=\"game\" id=\"gameselect\" value=\"${game_name}\"></input><div>${game_name}</div>`);
+            $('#create-schedule-form').append(`<input type=\"hidden\" name=\"image_path\" id=\"image_path\" value=\"${image_path}\"></input>`);
+
+            $('#create-schedule-form').append("<Label for=\"date\">Date*</Label>" +
+                "<input type=\"date\" name=\"date\" id=\"date\">" +
+                "<Label for=\"time\">Time*</Label>" +
+                "<input type=\"time\" name=\"time\" id=\"time\">" +
+                "<Label for=\"timezone\">Timezone*</Label>" +
+                "<div class=\"tz\" id=\"tz\"></div>");
+
+            $.get('/get-timezones', (str) => {
+                $('#tz').append(str);
+            });
+
+            $('#create-schedule-form').append("<Label for=\"platform\">Platform</Label>" +
+                "<select name=\"platform\" id=\"platform\">" +
+                "<option value=\"pc\">PC</option>" +
+                "<option value=\"playstation4\">Playstation</option>" +
+                "<option value=\"Xbox\">Xbox</option>" +
+                "<option value=\"Nintendo\">Nintendo</option>" +
+                "</select>");
+
+            $('#create-schedule-form').append("<Label for=\"max_user\">Max Users*</Label>" +
+                "<input type=\"number\" min=\"1\" step=\"1\" name=\"max_user\" id=\"max_user\">" +
+                "<Label for=\"max_team\">Max Teams</Label>" +
+                "<input type=\"number\" min=\"1\" step=\"1\" name=\"max_team\" id=\"max_team\" placeholder=\"1\">" +
+                "<Label for=\"description\">Description*</Label>" +
+                "<textarea name=\"description\" id=\"description\" rows=\"10\" cols=\"50\">Write requirements for users and description of your objective(s).</textarea> " +
+                "<div></div>" +
+                "<input type=\"submit\" value=\"Submit\">" +
+                "<div></div>" +
+                "*required fields");
+
+            $('#homepage-display').append("<div class=\"flash-msg\" id=\"flash-msg\"></div");
+
+            $('#schedule-form').on('submit', (evt) => {
+
+                const formData = $('#schedule-form').serialize();
+                evt.preventDefault();
+                
+                $.post('/create-schedule-by-search-game', formData, (data) => {
+
+                    if (data.status === "fail") {
+
+                        $('#flash-msg').html(data.flash);
+                    }
+                    else {
+
+                        $('#snackbar').html(`${data.flash}`);
+                        document.getElementById("snackbar").className = "show";
+                        setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+                        $('#all-schedules').trigger('click');
+                    }
+                });
+            });
+        }
+    });
 }
 
 $('#my-profile').on('click', () => {
@@ -904,7 +941,7 @@ function onKeyUp_searchGames() {
 
             if (results[i].first_release_date) {
 
-                const timestamp = new Date(results[i].first_release_date);
+                const timestamp = new Date(results[i].first_release_date * 1000);
                 date = timestamp.getDate() + "/" + (`${timestamp.getMonth()}` + 1).toString() + "/" + timestamp.getFullYear();
             }
             else {
@@ -920,7 +957,7 @@ function onKeyUp_searchGames() {
             }
             
             $('#display-search-results').append(`
-                <div class=\"search-result-item\" id=\"item-${results[i].name}\">
+                <div class=\"search-result-item\" id=\"item-${results[i].id}\">
                     <img class=\"search-result-item-img\" src=${artwork_url}></img>
                     <div class=\"search-result-item-content\">
                         Name: ${results[i].name}
@@ -928,8 +965,8 @@ function onKeyUp_searchGames() {
                         <div class=\"platforms\" id=\"platforms-${results[i].id}\">Plaform(s): </div>
                     </div>
                     <div>
-                        <div class=\"select-game\" id=\"select-game\">Select</div>
-                    </div
+                        <div class=\"select-game\" id=\"select-game\"></div>
+                    </div>
                 </div>`            
             );
 
@@ -944,12 +981,38 @@ function onKeyUp_searchGames() {
                 }
                 else {
                     $(`#platforms-${results[i].id}`).append(`${results[i].platforms[j].name}, `);
-
                 }
             }
+
+            $(`#item-${results[i].id}`).append(`<div class=\"search-result-item-hover\" id=\"search-result-item-hover-${results[i].id}\">Create A Schedule</div>`);
+
+            $(`#search-result-item-hover-${results[i].id}`).on('click', (evt) => {
+                console.log(`${results[i].name}`);
+                $.get(`/get-game/${results[i].name}`, (game) => {
+                    console.log(game);
+
+                    if (game.length !== 0) {
+
+                        createSchedule_by_game_id(`${game.game_id}`);
+                    }
+                    else {
+
+                        createSchedule_by_game_name(results[i].name, results[i]['artworks'][0]['url']);
+                    }
+                });
+            });
         }
     });
 }
+
+
+
+
+
+
+
+
+
 
 
 

@@ -250,6 +250,23 @@ def hasRequested(schedule_id, user_id):
     return False
 
 
+def hasGame(game_id):
+    """Check if a game exist in the db."""
+
+    if Game.query.filter(Game.game_id == game_id).first():
+        return True
+    
+    return False
+
+
+def hasGame_by_name(game_name):
+    """Check if a game exist in the db."""
+
+    if Game.query.filter(Game.name == game_name).first():
+        return True
+    
+    return False
+
 #-----------------Remove Wrappers------------------------------->
 def remove_request(request_id):
     """Remove a request from request_id."""

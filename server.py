@@ -42,8 +42,8 @@ igdb_header = {
 # total_rating,total_rating_count,updated_at,url,version_parent,version_title,videos,websites
 
 fields = 'fields name, game_modes.name, artworks.url, platforms.name, first_release_date;'
-limit = ' limit 10;'
-where = ' where game_modes = 2;'
+limit = ' limit 20;'
+where = ' where game_modes != 1;'
 search = ''
 
 @app.route('/')
@@ -60,6 +60,22 @@ def get_game_info():
     search = ' search \"'+data+'\";'
     results = requests.post('https://api.igdb.com/v4/games', headers=igdb_header, data=fields+limit+where+search)
     results_json = results.json()
+
+    for result in results_json:
+        print(result)
+        print("------------------------------------------>")
+
+    #print(results_json)
+
+    #game modes
+    #fields1 = "fields checksum,created_at,name,slug,updated_at,url;"
+    #gamemodes = requests.post('https://api.igdb.com/v4/game_modes', headers=igdb_header, data=fields1)
+    #print(gamemodes.json())
+
+    #artwork
+    #fields2 = "fields alpha_channel,animated,checksum,game,height,image_id,url,width;"
+    #artwork = requests.post('https://api.igdb.com/v4/game_modes', headers=igdb_header, data=fields2)
+    #print(artwork.json())
 
     return json.dumps(results_json)
 
@@ -313,6 +329,67 @@ def create_schedule():
     return jsonify({"flash": flash, "status": status, "schedule_id": schedule_id})
 
 
+@app.route('/create-schedule-from-gamedb/<game_id>', methods=["POST"])
+def create_schedule_from_gamedb(game_id):
+    """Create a schedule from a particular game."""
+
+    if crud.hasGame(game_id):
+        game = crud.get_game_by_id(game_id)
+        data = {
+            "game_id": game.game_id,
+            "game_name": game.name
+        }
+        
+        return data
+
+    return "None"
+
+
+@app.route('/create-schedule-by-search-game', methods=["POST"])
+def create_schedule_by_search_game():
+    """Create a schedule by using the game search API. (via game_name)"""
+
+    status = 'fail'
+    game_name = request.form.get("game")
+    image_path = request.form.get("image_path")
+    date = request.form.get("date")
+    time = request.form.get("time")
+    timezone = request.form.get("timezone")
+    platform = request.form.get("platform")
+    description = request.form.get("description")
+    max_user = request.form.get("max_user")
+    max_team = request.form.get("max_team")
+    schedule_id = 0
+    if max_team == '':
+        max_team = 0
+
+    if session.get('user', 0):
+        if description != '' and max_user != '' and date != '' and time != '':
+            date_ = date.split('-')
+            datetime_date = datetime(int(date_[0]), int(date_[1]), int(date_[2]))
+            time_ = datetime.strptime(time,'%H:%M').time()
+            date_time = datetime.combine(datetime_date, time_)
+            game = crud.add_game(game_name, image_path)
+            game_id = game.game_id
+            schedule = crud.add_schedule(session['user'], 
+                                        game_id, 
+                                        date_time, 
+                                        timezone, 
+                                        platform, 
+                                        description, 
+                                        max_user, 
+                                        max_team)
+            schedule_id = schedule.schedule_id
+            flash = "Schedule has been submitted."
+            status = 'success'
+        else:
+            flash = "All (*) field input is required."
+    else:
+        flash = "You need to be logged in to create a schedule."
+        
+    return jsonify({"flash": flash, "status": status, "schedule_id": schedule_id})
+
+
 @app.route('/get-schedules', methods=["GET"])
 def get_schedules():
     """Get all schedules."""
@@ -348,6 +425,20 @@ def get_games():
     for game in games:
         data.append({"name": game.name, "game_id": game.game_id, "image_path": game.image_path})
         
+    return jsonify(data)
+
+
+@app.route('/get-game/<name>', methods=["GET"])
+def get_game(name):
+    """Get a game by id."""
+
+    data = list()
+
+    if crud.hasGame_by_name(name):
+        game = crud.get_game_by_name(name)
+        data = {"name": game.name, "game_id": game.game_id}
+
+
     return jsonify(data)
 
 
