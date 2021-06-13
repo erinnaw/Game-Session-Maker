@@ -224,10 +224,12 @@ def get_schedule_by_id(schedule_id):
 
     schedule = crud.get_schedule_by_id(schedule_id)
     user = crud.get_user_by_id(schedule.user_id)
+    game = crud.get_game_by_id(schedule.game_id)
     data = {"schedule_id": schedule.schedule_id,
             "user_id": schedule.user_id,
             "username": user.username,
             "game_id": schedule.game_id,
+            "game_name": game.name,
             "datetime": schedule.datetime,
             "timezone": schedule.timezone,
             "platform": schedule.platform,
