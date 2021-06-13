@@ -66,6 +66,10 @@ textarea {
     cursor: pointer;
 }
 
+.homepage-display-bottom {
+    height: 100px;
+}
+
 /*----------------------------Admin----------------------------*/
 
 .grid-admin-display {
@@ -201,6 +205,31 @@ textarea {
     width: 160px;
     text-align: center;
     line-height: 100px;
+}
+
+.display-search-schedule-bar {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+    width: 100%;
+    margin: auto;
+    text-align: right;
+    padding-bottom: 10px;
+}
+
+.display-search-game-bar {
+    position: relative;
+    display: grid;
+    grid-template-columns: 15% 20% 65%;
+    width: 100%;
+    margin: auto;
+    text-align: right;
+    padding-bottom: 10px;
+}
+
+.search-schedule-item {
+    padding-left: 10px;
+    padding-right: 5px;
 }
 
 /*----------------------------Registration----------------------------*/

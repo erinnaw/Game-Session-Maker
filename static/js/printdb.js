@@ -6,7 +6,6 @@ $('.adminbutton').on('click', (evt) => {
 
         if (evt.target.id === "users") {
 
-            console.log(data);
             $('#homepage-display').html('<div class=\"subheader\">All Users</div>');
             $('#homepage-display').append('<div class=\"grid-admin-display\"></div>');
 
@@ -25,7 +24,6 @@ $('.adminbutton').on('click', (evt) => {
         }
         else if (evt.target.id === "games") {
 
-            console.log(data);
             $('#homepage-display').html('<div class=\"subheader\">All Games</div>');
             $('#homepage-display').append('<div class=\"grid-admin-display\"></div>');
 
@@ -39,7 +37,6 @@ $('.adminbutton').on('click', (evt) => {
         }
         else if (evt.target.id === "schedules") {
             
-            console.log(data);
             $('#homepage-display').html('<div class=\"subheader\">All Schedules</div>');
             $('#homepage-display').append('<div class=\"grid-admin-display\"></div>');
 
@@ -53,7 +50,6 @@ $('.adminbutton').on('click', (evt) => {
         }
         else if (evt.target.id === "requests") {
 
-            console.log(data);
             $('#homepage-display').html('<div class=\"subheader\">All Requests</div>');
             $('#homepage-display').append('<div class=\"grid-admin-display\"></div>');
 
@@ -68,7 +64,6 @@ $('.adminbutton').on('click', (evt) => {
         }
         else if (evt.target.id === "posts") {
 
-            console.log(data);
             $('#homepage-display').html('<div class=\"subheader\">All Posts</div>');
             $('#homepage-display').append('<div class=\"grid-admin-display\"></div>');
 

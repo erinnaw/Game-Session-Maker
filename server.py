@@ -61,9 +61,9 @@ def get_game_info():
     results = requests.post('https://api.igdb.com/v4/games', headers=igdb_header, data=fields+limit+where+search)
     results_json = results.json()
 
+    print("------------------IGDB API call----------------->")
     for result in results_json:
         print(result)
-        print("------------------------------------------>")
 
     #print(results_json)
 
@@ -394,8 +394,21 @@ def create_schedule_by_search_game():
 def get_schedules():
     """Get all schedules."""
 
-    schedules = crud.get_schedules()
+    username = request.args.get("username")
+    game_name = request.args.get("game_name")
+    date = request.args.get("date")
+    time = request.args.get("time") 
     data = list()
+
+    if username == '' and game_name == '' and date == '' and time == '':
+        schedules = crud.get_schedules()
+
+    else:
+        formData = {"username": username,
+                    "game_name": game_name,
+                    "date": date,
+                    "time": time}
+        schedules = crud.get_schedules_by_criteria(formData)
 
     for schedule in schedules:
         user = crud.get_user_by_id(schedule.user_id)
@@ -419,12 +432,21 @@ def get_schedules():
 def get_games():
     """Get all games."""
 
-    games = crud.get_games()
+    game_name = request.args.get("game_name")
     data = list()
+    print(game_name)
+    if game_name == '' or game_name == None:
+        games = crud.get_games()
+
+    else:
+        formData = {"game_name": game_name}
+        games = crud.get_games_by_criteria(formData)
 
     for game in games:
-        data.append({"name": game.name, "game_id": game.game_id, "image_path": game.image_path})
-        
+        data.append({"name": game.name, 
+                    "game_id": game.game_id, 
+                    "image_path": game.image_path})
+
     return jsonify(data)
 
 

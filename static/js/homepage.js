@@ -2,7 +2,15 @@
 
 let searchFlag = new Boolean(false);
 let searchHandler;
-const search_timer = 500;
+const search_timer = 800;
+
+let schedule_search_Flag = new Boolean(false);
+let schedule_search_Handler;
+const schedule_search_timer = 500;
+
+let game_search_Flag = new Boolean(false);
+let game_search_Handler;
+const game_search_timer = 500;
 
 $(document).ready(function () {
 
@@ -150,12 +158,102 @@ $('#log-out').on('click', () => {
 
 $('#create-schedule').on('click', createSchedule_by_game_id);
 
+$('#all-games').on('click', () => {
+
+    $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Games</div>");
+    $('#homepage-display').append("<form class=\"display-search-game-bar\" method=\"GET\" id=\"search-game-bar\"></form>");
+    $('#search-game-bar').append("<div class=\"search-schedule-item\">Search Database</div><input onkeyup=\"onKeyUp_searchGames_db()\" type=\"text\" name=\"game-name\" id=\"game-name\"></input>");
+    $('#homepage-display').append("<div class=\"grid-display-games\" id=\"display-games\"></div>");
+
+    get_games();
+});
+
+function onKeyUp_searchGames_db() {
+
+    if (game_search_Flag) {
+
+        clearTimeout(game_search_Handler);
+        game_search_Handler = window.setTimeout(get_games, game_search_timer);
+        game_search_Flag = false;
+    }
+    else {
+
+        game_search_Flag = true;
+        game_search_Handler = window.setTimeout(get_games, game_search_timer);
+    }
+}
+
+function get_games() {
+
+    const formData = {"game_name": $('#game-name').val()}
+    $('#display-games').html('');
+    
+    $.get('/get-games', formData, (games) => {
+        for (const game of games) {
+
+            name = game.name.charAt(0).toUpperCase() + game.name.slice(1);
+            $('#display-games').append(`<div class=\"grid-display-game-item-hover\" id=\"display-game-item-${game.game_id}\"></div>`);
+            $(`#display-game-item-${game.game_id}`).append(`<img class=\"display-game-item-img\" id=\"display-game-item-img-${game.game_id}\" src=\"${game.image_path}\"></div>` +
+                `<div class=\"display-game-item-name\" id=\"display-game-item-name-${game.game_id}\"></div>`);
+            $(`#display-game-item-name-${game.game_id}`).append(`${game.name}`);
+            $(`#display-game-item-${game.game_id}`).append(`<div class=\"create-schedule-hover\" id=\"create-schedule-${game.game_id}\">Create Schedule</div>`);
+        }
+
+        $('.create-schedule-hover').on('click', (evt) => {
+
+            const game_id = evt.target.id.slice(16);
+
+            $.post(`/create-schedule-from-gamedb/${game_id}`, (game) => {
+
+                if (game === "None") {
+
+                    $('#homepage-display').html("<div class=\"error-page\" id=\"error-page\">Error: Game Not Found</div>");
+                }
+                else {
+
+                    createSchedule_by_game_id(game_id);
+                }
+            });
+        });
+    });
+}
+
+
 $('#all-schedules').on('click', () => {
 
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Schedules</div>");
+    $('#homepage-display').append("<form class=\"display-search-schedule-bar\" method=\"GET\" id=\"search-schedule-bar\"></form>");
+    $('#search-schedule-bar').append("<div>Search by</div>");
+    $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Host Username</div><input onkeyup=\"onKeyUp_searchSchedules()\" type=\"text\" name=\"username\" id=\"username\"></input>");
+    $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Game Name</div><input onkeyup=\"onKeyUp_searchSchedules()\" type=\"text\" name=\"game_name\" id=\"game_name\"></input>");
+    $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Date</div><input onchange=\"onKeyUp_searchSchedules()\" type=\"date\" name=\"date\" id=\"date\"></input>");
+    $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Time</div><input onchange=\"onKeyUp_searchSchedules()\" type=\"time\" name=\"time\" id=\"time\"></input>");
     $('#homepage-display').append("<div class=\"grid-display-schedules\" id=\"display-schedules\"></div>");
 
-    $.get('/get-schedules', (schedules) => {
+    get_schedules();
+});
+
+function onKeyUp_searchSchedules() {
+
+    if (schedule_search_Flag) {
+
+        clearTimeout(schedule_search_Handler);
+        schedule_search_Handler = window.setTimeout(get_schedules, schedule_search_timer);
+        game_search_Flag = false;
+    }
+    else {
+
+        schedule_search_Flag = true;
+        schedule_search_Handler = window.setTimeout(get_schedules, schedule_search_timer);
+    }
+}
+
+function get_schedules() {
+
+    const formData = $('#search-schedule-bar').serialize();
+    $('#display-schedules').html('');
+
+    $.get('/get-schedules', formData, (schedules) => {
 
         for (const schedule of schedules) {
 
@@ -187,12 +285,12 @@ $('#all-schedules').on('click', () => {
                 evt.target.style.removeProperty('color');
             }
         );
-        
+
         $('.view-schedule-button').on('click', (evt) => {
 
             for (const schedule of schedules) {
 
-                if(schedule.schedule_id == parseInt(evt.target.id.slice(9))) {
+                if (schedule.schedule_id == parseInt(evt.target.id.slice(9))) {
 
                     $('#homepage-display').html(`<div class=\"subheader\" id=\"subheader\">Schedule ID: ${schedule.schedule_id}</div>`);
                     $('#homepage-display').append("<div class=\"grid-display-schedules\" id=\"display-schedules\"></div>");
@@ -212,19 +310,19 @@ $('#all-schedules').on('click', () => {
 
                     $.get(`/get-schedule-user-status/${schedule.schedule_id}`, (status) => {
 
-                        if(status === "host") {
+                        if (status === "host") {
 
                             $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-requests-button\" id=\"view-requests-${schedule.schedule_id}\">Host</div>`);
                         }
-                        else if(status === "requested") {
+                        else if (status === "requested") {
 
                             $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"requested-button\" id=\"requested-${schedule.schedule_id}\">Requested</div>`);
                         }
-                        else if(status === "approved") {
+                        else if (status === "approved") {
 
                             $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"approved-button\" id=\"approved-${schedule.schedule_id}\">Approved</div>`);
                         }
-                        else if(status === "not approved") {
+                        else if (status === "not approved") {
 
                             $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"request-button\" id=\"request-${schedule.schedule_id}\">Request</div>`);
                             $(`#schedule-item-${schedule.schedule_id}`).append("<div id=\"myModal\" class=\"modal\">" +
@@ -235,7 +333,7 @@ $('#all-schedules').on('click', () => {
 
                             $.get('/profile', (user) => {
 
-                                if(user === "None") {
+                                if (user === "None") {
                                     $('#request-form').html("<div class=\"error-page\" id=\"error-page\">You must be signed in.</div>")
                                 }
                                 else {
@@ -284,7 +382,7 @@ $('#all-schedules').on('click', () => {
                             span.onclick = function () {
                                 modal.style.display = "none";
                             }
-                            
+
                             // When the user clicks anywhere outside of the modal, close it
                             window.onclick = function (event) {
                                 if (event.target == $('#myModal')) {
@@ -312,12 +410,12 @@ $('#all-schedules').on('click', () => {
                             });
                         }
                         else {
-                            
+
                             $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"requested-button\"></div>`);
                         }
 
                         if (status === "host" || status === "approved") {
-                            
+
                             $.get('/profile', (user) => {
 
                                 if (user === "None") {
@@ -327,7 +425,7 @@ $('#all-schedules').on('click', () => {
                                 }
                                 else {
 
-                                    if(status === "host") {
+                                    if (status === "host") {
 
                                         $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"requests-button\">See all requests</button>" +
                                             "<div class=\"content-approved-users\" id=\"content-requests\"></div>");
@@ -419,12 +517,12 @@ $('#all-schedules').on('click', () => {
                                     $('#approval-button').on('click', () => {
 
                                         $.get(`/get-schedule-users/${schedule.schedule_id}`, (users) => {
-                                            
+
                                             $('#content-approved').html(`<div class=\"grid-users-list\" id=\"users-list\"></div>`);
 
-                                            for(const user of users) {
+                                            for (const user of users) {
 
-                                                if(status === "host") {
+                                                if (status === "host") {
 
                                                     $('#users-list').append(`<div class=\"post-avator-hover\" id=\"post-avator-hover-${user.user_id}\"></div>`);
                                                     $(`#post-avator-hover-${user.user_id}`).html(`<img class=\"avator-img\" id=\"avator-img-${user.user_id}\" src=\"${user.image_path}\"></img>`);
@@ -462,7 +560,7 @@ $('#all-schedules').on('click', () => {
                                             }
                                         });
                                     }
-                                  
+
                                     $('#homepage-display').append("<div class=\"grid-schedule-post-box\" id=\"schedule-post-box\"></div>");
                                     $('#schedule-post-box').append(`<div class=\"post-avator\" id=\"avatorbox-${user.user_id}\"></div>`);
                                     $(`#avatorbox-${user.user_id}`).append(`<img class=\"avator-img\" id=\"avatorimg-${user.user_id}\" src=\"${user.image_path}\"></img>`);
@@ -548,45 +646,10 @@ $('#all-schedules').on('click', () => {
 
                     $('#homepage-display').html(`<div class=\"error-page\" id=\"error-page\">Error: Cannot Find Schedule ID: ${evt.target.id.slice(9)}</div>`);
                 }
-            }  
-        });
-    });   
-});
-
-$('#all-games').on('click', () => {
-
-    $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Games</div>");
-    $('#homepage-display').append("<div class=\"grid-display-games\" id=\"display-games\"></div>");
-
-    $.get('/get-games', (games) => {
-        for (const game of games) {
-
-            name = game.name.charAt(0).toUpperCase() + game.name.slice(1);
-            $('#display-games').append(`<div class=\"grid-display-game-item-hover\" id=\"display-game-item-${game.game_id}\"></div>`);
-            $(`#display-game-item-${game.game_id}`).append(`<img class=\"display-game-item-img\" id=\"display-game-item-img-${game.game_id}\" src=\"${game.image_path}\"></div>` +
-                `<div class=\"display-game-item-name\" id=\"display-game-item-name-${game.game_id}\"></div>`);
-            $(`#display-game-item-name-${game.game_id}`).append(`${game.name}`);
-            $(`#display-game-item-${game.game_id}`).append(`<div class=\"create-schedule-hover\" id=\"create-schedule-${game.game_id}\">Create Schedule</div>`);
-        }
-
-        $('.create-schedule-hover').on('click', (evt) => {
-            
-            const game_id = evt.target.id.slice(16);
-            
-            $.post(`/create-schedule-from-gamedb/${game_id}`, (game) => {
-
-                if(game === "None") {
-
-                    $('#homepage-display').html("<div class=\"error-page\" id=\"error-page\">Error: Game Not Found</div>");
-                }
-                else {
-
-                    createSchedule_by_game_id(game_id);
-                }
-            });
+            }
         });
     });
-});
+}
 
 function get_userdetails_html(user) {
 
@@ -673,7 +736,7 @@ function createSchedule_by_game_id(game_id = 1) {
             $('#homepage-display').append("<form class=\"schedule-form\" id=\"schedule-form\" action=\"/create-schedule\" method=\"POST\"></form>");
             $('#schedule-form').append("<div class=\"grid-create-schedule-form\" id=\"create-schedule-form\"></div>");
             $('#create-schedule-form').append(`<Label for=\"game\">Game*</Label><select name=\"game\" id=\"gameselect\"></select>`);
-            console.log(game_id);
+            
             $.get('/get-games', (games) => {
                 for (const game of games) {
 
@@ -931,13 +994,14 @@ $('#my-profile').on('click', () => {
 function onKeyUp_searchGames() {
 
     if (searchFlag) {
-        
+
+        clearTimeout(searchHandler);
         searchHandler = window.setTimeout(search_games, search_timer);
+        searchFlag = false;
     }
     else {
 
         searchFlag = true;
-        clearTimeout(searchHandler);
         searchHandler = window.setTimeout(search_games, search_timer);
     }
 }
@@ -1005,9 +1069,8 @@ function search_games() {
             $(`#item-${results[i].id}`).append(`<div class=\"search-result-item-hover\" id=\"search-result-item-hover-${results[i].id}\">Create A Schedule</div>`);
 
             $(`#search-result-item-hover-${results[i].id}`).on('click', (evt) => {
-                console.log(`${results[i].name}`);
+                
                 $.get(`/get-game/${results[i].name}`, (game) => {
-                    console.log(game);
 
                     if (game.length !== 0) {
 

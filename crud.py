@@ -1,5 +1,6 @@
 from model import db, User, Game, Schedule, Request, Post, Schedule_Users, connect_to_db
 from datetime import datetime
+from sqlalchemy import func, Time, cast
 
 #-----------------Add Wrappers------------------------------->
 def create_user(username, fname, lname, email, password, image_path='/static/img/avator-placeholder.jpg'):
@@ -117,6 +118,12 @@ def get_game_by_name(name):
     return Game.query.filter(Game.name == name).first()
 
 
+def get_games_by_criteria(formData):
+    """Get games by criteria."""
+    
+    return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).all()
+
+
 def get_schedules():
     """Return all schedules."""
 
@@ -138,6 +145,67 @@ def get_schedules_by_user_id(user_id):
     """Return all schedules by user_id."""
 
     return Schedule.query.filter(Schedule.user_id == user_id).all()
+
+
+def get_schedules_by_criteria(formData):
+    """Return schedules by criterias."""
+
+    username = formData["username"]
+    game_name = formData["game_name"]
+    date = formData["date"]
+    time = formData["time"]
+
+    if formData["username"] != '' and formData["game_name"] != '' and formData["date"] != '' and formData["time"] != '':
+        date_time = datetime.combine(date, time)
+        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).join(Game.name.ilike('%'+game_name+'%')).filter(Schedule.datetime == date_time).all()
+
+    elif formData["username"] != '' and formData["game_name"] != '' and formData["time"] != '':
+        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).join(Game.name.ilike('%'+game_name+'%')).filter(cast(Schedule.datetime, Time) == time).all()
+
+    elif formData["username"] != '' and formData["game_name"] != '' and formData["date"] != '':
+        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).filter(Game.name.ilike('%'+game_name+'%')).filter(func.DATE(Schedule.datetime) == date).all()
+
+    elif formData["username"] != '' and formData["date"] != '' and formData["time"] != '':
+        date_time = datetime.combine(date, time)
+        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).filter(Schedule.datetime == date_time).all()
+
+    elif formData["game_name"] != '' and formData["date"] != '' and formData["time"] != '':
+        date_time = datetime.combine(date, time)
+        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(Schedule.datetime == date_date).all()
+
+    elif formData["username"] != '' and formData["game_name"] != '':
+        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).filter(Game.name.ilike('%'+game_name+'%')).all()
+
+    elif formData["username"] != '' and formData["date"] != '':
+        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).filter(func.DATE(Schedule.datetime) == date).all()
+
+    elif formData["username"] != '' and formData["time"] != '':
+        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).filter(cast(Schedule.datetime, Time) == time).all()
+
+    elif formData["game_name"] != '' and formData["date"] != '':
+        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(func.DATE(Schedule.datetime) == date).all()
+
+    elif formData["game_name"] != '' and formData["time"] != '':
+        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(cast(Schedule.datetime, Time) == time).all()
+
+    elif formData["date"] != '' and formData["time"] != '':
+        date_time = datetime.combine(date, time)
+        return Schedule.query.filter(Schedule.datetime == date_time).all()
+
+    elif formData["username"] != '':
+        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).all()
+
+    elif formData["game_name"] != '':
+        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).all()
+
+    elif formData["date"] != '':
+        return Schedule.query.filter(func.DATE(Schedule.datetime) == date).all()
+
+    elif formData["time"] != '':
+        return Schedule.query.filter(cast(Schedule.datetime, Time) == time).all()
+
+    else:
+        return "Error"
 
 
 def get_requests():
