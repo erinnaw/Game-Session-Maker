@@ -223,8 +223,10 @@ def get_schedule_by_id(schedule_id):
     """Get a schedule by schedule_id."""
 
     schedule = crud.get_schedule_by_id(schedule_id)
+    user = crud.get_user_by_id(schedule.user_id)
     data = {"schedule_id": schedule.schedule_id,
             "user_id": schedule.user_id,
+            "username": user.username,
             "game_id": schedule.game_id,
             "datetime": schedule.datetime,
             "timezone": schedule.timezone,

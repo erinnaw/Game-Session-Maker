@@ -13,6 +13,8 @@ let game_search_Handler;
 const game_search_timer = 500;
 
 let prev_formData;
+let back_button_flag = new Boolean(false);
+let searchParams;
 
 $(document).ready(function () {
 
@@ -232,6 +234,23 @@ $('#all-schedules').on('click', () => {
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Time</div><input onchange=\"onKeyUp_searchSchedules()\" type=\"time\" name=\"time\" id=\"time\"></input>");
     $('#homepage-display').append("<div class=\"grid-display-schedules\" id=\"display-schedules\"></div>");
 
+    if (back_button_flag == true) {
+
+        searchParams = new URLSearchParams(prev_formData);
+        let arr = new Array();
+
+        for (const value of searchParams.values()) {
+
+            arr.push(value);
+        }
+
+        $('#username').val(arr[0]);
+        $('#game_name').val(arr[1]);
+        $('#date').val(arr[2]);
+        $('#time').val(arr[3]);
+        back_button_flag = false;
+    }
+
     get_schedules();
 });
 
@@ -253,11 +272,9 @@ function onKeyUp_searchSchedules() {
 function get_schedules() {
 
     const formData = $('#search-schedule-bar').serialize();
-    $('#display-schedules').html('');
+    prev_formData = formData;
 
-    if (formData != undefined)
-        prev_formData = formData;
-        console.log(prev_formData);
+    $('#display-schedules').html('');
 
     $.get('/get-schedules', formData, (schedules) => {
 
@@ -294,6 +311,7 @@ function get_schedules() {
 
         $('.view-schedule-button').on('click', (evt) => {
 
+            back_button_flag = true;
             view_schedule(evt.target.id.slice(9));
         });
     });
@@ -319,42 +337,10 @@ function view_schedule(schedule_id) {
         $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max Team:</div><div class=\"profile-schedules-item-text\">${schedule.max_team}</div>`);
         $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Description:</div><div class=\"profile-schedules-item-text\">${schedule.description}</div>`);
 
-        $('.back-button').on('clicl', () => {
+        $('.back-button').on('click', () => {
 
-
-            //use prev_formData to fill search criteria, then empty it after exiting from view-schedule
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            back_button_flag = true;
+            $('#all-schedules').trigger('click');
         });
 
         $.get(`/get-schedule-user-status/${schedule.schedule_id}`, (status) => {
