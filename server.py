@@ -702,7 +702,7 @@ def view_admin_display(path):
     if path == 'users':
         users = crud.get_users()
         for user in users:
-            data.append({"users_id": user.user_id,
+            data.append({"user_id": user.user_id,
                     "username": user.username,
                     "firstname": user.first_name,
                     "lastname": user.last_name,
