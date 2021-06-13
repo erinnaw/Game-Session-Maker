@@ -288,333 +288,318 @@ function get_schedules() {
 
         $('.view-schedule-button').on('click', (evt) => {
 
-            for (const schedule of schedules) {
+            view_schedule(evt.target.id.slice(9));
+        });
+    });
+}
 
-                if (schedule.schedule_id == parseInt(evt.target.id.slice(9))) {
+function view_schedule(schedule_id) {
 
-                    $('#homepage-display').html(`<div class=\"subheader\" id=\"subheader\">Schedule ID: ${schedule.schedule_id}</div>`);
-                    $('#homepage-display').append("<div class=\"grid-display-schedules\" id=\"display-schedules\"></div>");
-                    $('#display-schedules').append(`<div class=\"grid-display-schedule-item\" id=\"schedule-item-${schedule.schedule_id}\"></div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Host:</div><div class=\"profile-schedules-item-text\">${schedule.username}</div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule ID:</div><div class=\"profile-schedules-item-text\">${schedule.schedule_id}</div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Game ID:</div><div class=\"profile-schedules-item-text\">${schedule.game_id}</div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Game Name:</div><div class=\"profile-schedules-item-text\">${schedule.game_name}</div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule ID:</div><div class=\"profile-schedules-item-text\">${schedule.schedule_id}</div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule Date/Time::</div><div class=\"profile-schedules-item-text\">${schedule.datetime}</div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule Timezone:</div><div class=\"profile-schedules-item-text\">${schedule.timezone}</div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Platform:</div><div class=\"profile-schedules-item-text\">${schedule.platform}</div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max User:</div><div class=\"profile-schedules-item-text\">${schedule.max_user}</div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max Team:</div><div class=\"profile-schedules-item-text\">${schedule.max_team}</div>`);
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Description:</div><div class=\"profile-schedules-item-text\">${schedule.description}</div>`);
+    $.get(`/get-schedule-by-id/${schedule_id}`, (schedule) => {
+
+        $('#homepage-display').html(`<div class=\"subheader\" id=\"subheader\">Schedule ID: ${schedule.schedule_id}</div>`);
+        $('#homepage-display').append("<div class=\"grid-display-schedules\" id=\"display-schedules\"></div>");
+        $('#display-schedules').append(`<div class=\"grid-display-schedule-item\" id=\"schedule-item-${schedule.schedule_id}\"></div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Host:</div><div class=\"profile-schedules-item-text\">${schedule.username}</div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule ID:</div><div class=\"profile-schedules-item-text\">${schedule.schedule_id}</div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Game ID:</div><div class=\"profile-schedules-item-text\">${schedule.game_id}</div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Game Name:</div><div class=\"profile-schedules-item-text\">${schedule.game_name}</div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule ID:</div><div class=\"profile-schedules-item-text\">${schedule.schedule_id}</div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule Date/Time::</div><div class=\"profile-schedules-item-text\">${schedule.datetime}</div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule Timezone:</div><div class=\"profile-schedules-item-text\">${schedule.timezone}</div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Platform:</div><div class=\"profile-schedules-item-text\">${schedule.platform}</div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max User:</div><div class=\"profile-schedules-item-text\">${schedule.max_user}</div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max Team:</div><div class=\"profile-schedules-item-text\">${schedule.max_team}</div>`);
+        $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Description:</div><div class=\"profile-schedules-item-text\">${schedule.description}</div>`);
 
 
-                    $.get(`/get-schedule-user-status/${schedule.schedule_id}`, (status) => {
+        $.get(`/get-schedule-user-status/${schedule.schedule_id}`, (status) => {
+
+            if (status === "host") {
+
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-requests-button\" id=\"view-requests-${schedule.schedule_id}\">Host</div>`);
+            }
+            else if (status === "requested") {
+
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"requested-button\" id=\"requested-${schedule.schedule_id}\">Requested</div>`);
+            }
+            else if (status === "approved") {
+
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"approved-button\" id=\"approved-${schedule.schedule_id}\">Approved</div>`);
+            }
+            else if (status === "not approved") {
+
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"request-button\" id=\"request-${schedule.schedule_id}\">Request</div>`);
+                $(`#schedule-item-${schedule.schedule_id}`).append("<div id=\"myModal\" class=\"modal\">" +
+                    "<div class=\"modal-content\">" +
+                    "<span class=\"close\">&times;</span>" +
+                    "<div class=\"grid-request-form\" id=\"request-form\"></div>" +
+                    "</div></div>")
+
+                $.get('/profile', (user) => {
+
+                    if (user === "None") {
+                        $('#request-form').html("<div class=\"error-page\" id=\"error-page\">You must be signed in.</div>")
+                    }
+                    else {
+                        $('#request-form').html(`<div class=\"post-avator\" id=\"avatorboxreq-${user.user_id}\"></div>`);
+                        $(`#avatorboxreq-${user.user_id}`).append(`<img class=\"avator-img\" id=\"avatorimgreq-${user.user_id}\" src=\"${user.image_path}\"></img>`);
+                        $(`#avatorboxreq-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avatornamereq-${user.user_id}\">${user.username}</div>`);
+
+                        $('#request-form').append("<div class=\"grid-request-inner\" id=\"request-inner\"></div>");
+                        $('#request-inner').append("<div class=\"grid-request-header\" id=\"request-header\">Request</div>");
+                        $('#request-inner').append(`<form class=\"grid-requestform\" method=\"POST\" id=\"requestform\"></form>`);
+                        $('#requestform').append("<textarea name=\"description\" id=\"request-content\" rows=\"8\" cols=\"50\"></textarea>" +
+                            "<input type=\"submit\" value=\"submit\">");
+                        $('#request-inner').append("<div class=\"flash-msg\" id=\"flash-msg-request\"></div>");
+
+                        $('#requestform').on('submit', (evt) => {
+
+                            evt.preventDefault();
+
+                            if (document.querySelector('#request-content').value == '') {
+
+                                $('#flash-msg-request').html("Message cannot be blank.");
+                            }
+                            else {
+                                const formData = {
+                                    "user_id": user.user_id,
+                                    "schedule_id": schedule.schedule_id,
+                                    "content": $('#request-content').val()
+                                }
+
+                                $.post(`/request/${schedule.schedule_id}`, formData, (msg) => {
+
+                                    $('#snackbar').html(`${msg}`);
+                                    document.getElementById("snackbar").className = "show";
+                                    setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+                                    $(`#request-${schedule.schedule_id}`).replaceWith("<div class=\"requested-button\">Requested</div>");
+                                });
+                            }
+                        });
+                    }
+                });
+
+                const modal = document.getElementById("myModal");
+                const span = document.getElementsByClassName("close")[0];
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function () {
+                    modal.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == $('#myModal')) {
+                        modal.style.display = "none";
+                    }
+                }
+
+                $(`#request-${schedule.schedule_id}`).hover(
+
+                    (evt) => {
+                        evt.target.style.background = "black";
+                        evt.target.style.color = "white";
+
+                    },
+
+                    (evt) => {
+                        evt.target.style.removeProperty('background');
+                        evt.target.style.removeProperty('color');
+                    }
+                );
+
+                $(`#request-${schedule.schedule_id}`).on('click', () => {
+
+                    modal.style.display = "block";
+                });
+            }
+            else {
+
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"requested-button\"></div>`);
+            }
+
+            if (status === "host" || status === "approved") {
+
+                $.get('/profile', (user) => {
+
+                    if (user === "None") {
+
+                        $('#homepage-display').append("<div class\"grid-schedule-post-box\" id=\"schedule-post-box\"></div>");
+                        $('#schedule-post-box').append("<div class=\"error-page\" id=\"error-page\">Sign in to post/view messages for this schedule.</div>");
+                    }
+                    else {
 
                         if (status === "host") {
 
-                            $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-requests-button\" id=\"view-requests-${schedule.schedule_id}\">Host</div>`);
-                        }
-                        else if (status === "requested") {
+                            $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"requests-button\">See all requests</button>" +
+                                "<div class=\"content-approved-users\" id=\"content-requests\"></div>");
 
-                            $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"requested-button\" id=\"requested-${schedule.schedule_id}\">Requested</div>`);
-                        }
-                        else if (status === "approved") {
+                            $('#requests-button').on('click', () => {
 
-                            $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"approved-button\" id=\"approved-${schedule.schedule_id}\">Approved</div>`);
-                        }
-                        else if (status === "not approved") {
+                                $('#content-requests').html(`<div class=\"grid-request-list\" id=\"display-requests\"></div>`);
 
-                            $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"request-button\" id=\"request-${schedule.schedule_id}\">Request</div>`);
-                            $(`#schedule-item-${schedule.schedule_id}`).append("<div id=\"myModal\" class=\"modal\">" +
-                                "<div class=\"modal-content\">" +
-                                "<span class=\"close\">&times;</span>" +
-                                "<div class=\"grid-request-form\" id=\"request-form\"></div>" +
-                                "</div></div>")
+                                $.get(`/get-requests/${schedule.schedule_id}`, (requests) => {
 
-                            $.get('/profile', (user) => {
+                                    if (requests.slice(0, 5) === "Error") {
 
-                                if (user === "None") {
-                                    $('#request-form').html("<div class=\"error-page\" id=\"error-page\">You must be signed in.</div>")
-                                }
-                                else {
-                                    $('#request-form').html(`<div class=\"post-avator\" id=\"avatorboxreq-${user.user_id}\"></div>`);
-                                    $(`#avatorboxreq-${user.user_id}`).append(`<img class=\"avator-img\" id=\"avatorimgreq-${user.user_id}\" src=\"${user.image_path}\"></img>`);
-                                    $(`#avatorboxreq-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avatornamereq-${user.user_id}\">${user.username}</div>`);
+                                        $(`#display-requests`).html(`<div class=\"error-page\" id=\"error-page\">${requests}</div>`);
+                                    }
+                                    else {
 
-                                    $('#request-form').append("<div class=\"grid-request-inner\" id=\"request-inner\"></div>");
-                                    $('#request-inner').append("<div class=\"grid-request-header\" id=\"request-header\">Request</div>");
-                                    $('#request-inner').append(`<form class=\"grid-requestform\" method=\"POST\" id=\"requestform\"></form>`);
-                                    $('#requestform').append("<textarea name=\"description\" id=\"request-content\" rows=\"8\" cols=\"50\"></textarea>" +
-                                        "<input type=\"submit\" value=\"submit\">");
-                                    $('#request-inner').append("<div class=\"flash-msg\" id=\"flash-msg-request\"></div>");
+                                        for (const request of requests) {
 
-                                    $('#requestform').on('submit', (evt) => {
+                                            $(`#display-requests`).append(`<div class=\"grid-display-request-item\" id=\"request-item-${request.request_id}\"></div>`);
+                                            $(`#request-item-${request.request_id}`).html(`<div class=\"post-avator\" id=\"post-avator-${request.user_id}\"></div>`);
+                                            $(`#post-avator-${request.user_id}`).append(`<img class=\"avator-img\" id=\"avator-img-${request.user_id}\" src=\"${request.image_path}\"></img>`);
+                                            $(`#post-avator-${request.user_id}`).append(`<div class=\"avator-name\" id=\"avator-name-${request.user_id}\">${request.username}</div>`);
 
-                                        evt.preventDefault();
+                                            $(`#request-item-${request.request_id}`).append(`<div class=\"grid-request-content\" id=\"request-content-${request.request_id}\"></div>`);
+                                            $(`#request-content-${request.request_id}`).append(`<div class=\"grid-request-header\" id=\"request-header-${request.request_id}\">Request Message</div>`);
+                                            $(`#request-content-${request.request_id}`).append(`<div class=\"postmsgbox\">${request.content}</div>`);
+                                            $(`#request-content-${request.request_id}`).append(`<div class=\"timestamp\" id=\"timestamp-request-${request.request_id}\">${request.time_stamp}</div>`);
 
-                                        if (document.querySelector('#request-content').value == '') {
+                                            $(`#request-item-${request.request_id}`).append(`<div class=\"grid-approval\" id=\"approval-${request.request_id}\"></div>`);
+                                            $(`#approval-${request.request_id}`).append(`<div class=\"approve-button\" id=\"approve-button-${request.request_id}\">Approve</div>`);
+                                            $(`#approval-${request.request_id}`).append(`<div class=\"decline-button\" id=\"decline-button-${request.request_id}\">Decline</div>`);
 
-                                            $('#flash-msg-request').html("Message cannot be blank.");
-                                        }
-                                        else {
-                                            const formData = {
-                                                "user_id": user.user_id,
-                                                "schedule_id": schedule.schedule_id,
-                                                "content": $('#request-content').val()
-                                            }
+                                            $('.approve-button').hover(
 
-                                            $.post(`/request/${schedule.schedule_id}`, formData, (msg) => {
+                                                (evt) => {
+                                                    evt.target.style.background = "green";
+                                                },
 
-                                                $('#snackbar').html(`${msg}`);
-                                                document.getElementById("snackbar").className = "show";
-                                                setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
-                                                $('.view-schedule-button').trigger("click");
-                                                $(`#request-${schedule.schedule_id}`).replaceWith("<div class=\"requested-button\">Requested</div>");
+                                                (evt) => {
+                                                    evt.target.style.removeProperty('background');
+                                                }
+                                            );
+
+                                            $('.decline-button').hover(
+
+                                                (evt) => {
+                                                    evt.target.style.background = "red";
+                                                },
+
+                                                (evt) => {
+                                                    evt.target.style.removeProperty('background');
+                                                }
+                                            );
+
+                                            $(`#approve-button-${request.request_id}`).on('click', () => {
+
+                                                $.post(`/approve-request/${request.request_id}`, (msg) => {
+
+                                                    $('#snackbar').html(`${msg}`);
+                                                    document.getElementById("snackbar").className = "show";
+                                                    setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+
+                                                    $(`#decline-button-${request.request_id}`).replaceWith("<div class=\"decline\" id=\"decline\">Decline</div>");
+                                                    $(`#approve-button-${request.request_id}`).replaceWith("<div class=\"approved\" id=\"approved\">Approved</div>");
+                                                });
+                                            });
+
+                                            $(`#decline-button-${request.request_id}`).on('click', () => {
+
+                                                $.post(`/decline-request/${request.request_id}`, (msg) => {
+
+                                                    $('#snackbar').html(`${msg}`);
+                                                    document.getElementById("snackbar").className = "show";
+                                                    setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+
+                                                    $(`#decline-button-${request.request_id}`).replaceWith("<div class=\"declined\" id=\"declined\">Declined</div>");
+                                                    $(`#approve-button-${request.request_id}`).replaceWith("<div class=\"approve\" id=\"approve\">Approve</div>");
+                                                });
                                             });
                                         }
-                                    });
-                                }
-                            });
-
-                            const modal = document.getElementById("myModal");
-                            const span = document.getElementsByClassName("close")[0];
-                            // When the user clicks on <span> (x), close the modal
-                            span.onclick = function () {
-                                modal.style.display = "none";
-                            }
-
-                            // When the user clicks anywhere outside of the modal, close it
-                            window.onclick = function (event) {
-                                if (event.target == $('#myModal')) {
-                                    modal.style.display = "none";
-                                }
-                            }
-
-                            $(`#request-${schedule.schedule_id}`).hover(
-
-                                (evt) => {
-                                    evt.target.style.background = "black";
-                                    evt.target.style.color = "white";
-
-                                },
-
-                                (evt) => {
-                                    evt.target.style.removeProperty('background');
-                                    evt.target.style.removeProperty('color');
-                                }
-                            );
-
-                            $(`#request-${schedule.schedule_id}`).on('click', () => {
-
-                                modal.style.display = "block";
+                                    }
+                                });
                             });
                         }
-                        else {
 
-                            $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"requested-button\"></div>`);
-                        }
+                        $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"approval-button\">See all approved users</button>" +
+                            "<div class=\"content-approved-users\" id=\"content-approved\"></div>");
 
-                        if (status === "host" || status === "approved") {
+                        $('#approval-button').on('click', () => {
 
-                            $.get('/profile', (user) => {
+                            $.get(`/get-schedule-users/${schedule.schedule_id}`, (users) => {
 
-                                if (user === "None") {
+                                $('#content-approved').html(`<div class=\"grid-users-list\" id=\"users-list\"></div>`);
 
-                                    $('#homepage-display').append("<div class\"grid-schedule-post-box\" id=\"schedule-post-box\"></div>");
-                                    $('#schedule-post-box').append("<div class=\"error-page\" id=\"error-page\">Sign in to post/view messages for this schedule.</div>");
-                                }
-                                else {
+                                for (const user of users) {
 
                                     if (status === "host") {
 
-                                        $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"requests-button\">See all requests</button>" +
-                                            "<div class=\"content-approved-users\" id=\"content-requests\"></div>");
+                                        $('#users-list').append(`<div class=\"post-avator-hover\" id=\"post-avator-hover-${user.user_id}\"></div>`);
+                                        $(`#post-avator-hover-${user.user_id}`).html(`<img class=\"avator-img\" id=\"avator-img-${user.user_id}\" src=\"${user.image_path}\"></img>`);
+                                        $(`#post-avator-hover-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avator-name${user.user_id}\">${user.username}</div>`);
+                                        $(`#post-avator-hover-${user.user_id}`).append(`<div class=\"kick-user\" id=\"kick-user-${user.user_id}\">Kick User</div>`);
 
-                                        $('#requests-button').on('click', () => {
+                                        $(`#kick-user-${user.user_id}`).on('click', () => {
 
-                                            $('#content-requests').html(`<div class=\"grid-request-list\" id=\"display-requests\"></div>`);
+                                            $.post(`/remove-user-from-schedule/${schedule.schedule_id}/${user.user_id}`, (msg) => {
 
-                                            $.get(`/get-requests/${schedule.schedule_id}`, (requests) => {
-
-                                                if (requests.slice(0, 5) === "Error") {
-
-                                                    $(`#display-requests`).html(`<div class=\"error-page\" id=\"error-page\">${requests}</div>`);
-                                                }
-                                                else {
-
-                                                    for (const request of requests) {
-
-                                                        $(`#display-requests`).append(`<div class=\"grid-display-request-item\" id=\"request-item-${request.request_id}\"></div>`);
-                                                        $(`#request-item-${request.request_id}`).html(`<div class=\"post-avator\" id=\"post-avator-${request.user_id}\"></div>`);
-                                                        $(`#post-avator-${request.user_id}`).append(`<img class=\"avator-img\" id=\"avator-img-${request.user_id}\" src=\"${request.image_path}\"></img>`);
-                                                        $(`#post-avator-${request.user_id}`).append(`<div class=\"avator-name\" id=\"avator-name-${request.user_id}\">${request.username}</div>`);
-
-                                                        $(`#request-item-${request.request_id}`).append(`<div class=\"grid-request-content\" id=\"request-content-${request.request_id}\"></div>`);
-                                                        $(`#request-content-${request.request_id}`).append(`<div class=\"grid-request-header\" id=\"request-header-${request.request_id}\">Request Message</div>`);
-                                                        $(`#request-content-${request.request_id}`).append(`<div class=\"postmsgbox\">${request.content}</div>`);
-                                                        $(`#request-content-${request.request_id}`).append(`<div class=\"timestamp\" id=\"timestamp-request-${request.request_id}\">${request.time_stamp}</div>`);
-
-                                                        $(`#request-item-${request.request_id}`).append(`<div class=\"grid-approval\" id=\"approval-${request.request_id}\"></div>`);
-                                                        $(`#approval-${request.request_id}`).append(`<div class=\"approve-button\" id=\"approve-button-${request.request_id}\">Approve</div>`);
-                                                        $(`#approval-${request.request_id}`).append(`<div class=\"decline-button\" id=\"decline-button-${request.request_id}\">Decline</div>`);
-
-                                                        $('.approve-button').hover(
-
-                                                            (evt) => {
-                                                                evt.target.style.background = "green";
-                                                            },
-
-                                                            (evt) => {
-                                                                evt.target.style.removeProperty('background');
-                                                            }
-                                                        );
-
-                                                        $('.decline-button').hover(
-
-                                                            (evt) => {
-                                                                evt.target.style.background = "red";
-                                                            },
-
-                                                            (evt) => {
-                                                                evt.target.style.removeProperty('background');
-                                                            }
-                                                        );
-
-                                                        $(`#approve-button-${request.request_id}`).on('click', () => {
-
-                                                            $.post(`/approve-request/${request.request_id}`, (msg) => {
-
-                                                                $('#snackbar').html(`${msg}`);
-                                                                document.getElementById("snackbar").className = "show";
-                                                                setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
-
-                                                                $(`#decline-button-${request.request_id}`).replaceWith("<div class=\"decline\" id=\"decline\">Decline</div>");
-                                                                $(`#approve-button-${request.request_id}`).replaceWith("<div class=\"approved\" id=\"approved\">Approved</div>");
-                                                            });
-                                                        });
-
-                                                        $(`#decline-button-${request.request_id}`).on('click', () => {
-
-                                                            $.post(`/decline-request/${request.request_id}`, (msg) => {
-
-                                                                $('#snackbar').html(`${msg}`);
-                                                                document.getElementById("snackbar").className = "show";
-                                                                setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
-
-                                                                $(`#decline-button-${request.request_id}`).replaceWith("<div class=\"declined\" id=\"declined\">Declined</div>");
-                                                                $(`#approve-button-${request.request_id}`).replaceWith("<div class=\"approve\" id=\"approve\">Approve</div>");
-                                                            });
-                                                        });
-                                                    }
-                                                }
+                                                $(`#post-avator-hover-${user.user_id}`).replaceWith(`<div class=\"kicked-user\" id=\"kicked-user-${user.user_id}\">${user.username} ${msg}</div>`);
+                                                $(`#kick-user-${user.user_id}`).remove();
                                             });
                                         });
                                     }
-
-                                    $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"approval-button\">See all approved users</button>" +
-                                        "<div class=\"content-approved-users\" id=\"content-approved\"></div>");
-
-                                    $('#approval-button').on('click', () => {
-
-                                        $.get(`/get-schedule-users/${schedule.schedule_id}`, (users) => {
-
-                                            $('#content-approved').html(`<div class=\"grid-users-list\" id=\"users-list\"></div>`);
-
-                                            for (const user of users) {
-
-                                                if (status === "host") {
-
-                                                    $('#users-list').append(`<div class=\"post-avator-hover\" id=\"post-avator-hover-${user.user_id}\"></div>`);
-                                                    $(`#post-avator-hover-${user.user_id}`).html(`<img class=\"avator-img\" id=\"avator-img-${user.user_id}\" src=\"${user.image_path}\"></img>`);
-                                                    $(`#post-avator-hover-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avator-name${user.user_id}\">${user.username}</div>`);
-                                                    $(`#post-avator-hover-${user.user_id}`).append(`<div class=\"kick-user\" id=\"kick-user-${user.user_id}\">Kick User</div>`);
-
-                                                    $(`#kick-user-${user.user_id}`).on('click', () => {
-
-                                                        $.post(`/remove-user-from-schedule/${schedule.schedule_id}/${user.user_id}`, (msg) => {
-
-                                                            $(`#post-avator-hover-${user.user_id}`).replaceWith(`<div class=\"kicked-user\" id=\"kicked-user-${user.user_id}\">${user.username} ${msg}</div>`);
-                                                            $(`#kick-user-${user.user_id}`).remove();
-                                                        });
-                                                    });
-                                                }
-                                                else {
-                                                    $('.grid-users-list').append(`<div class=\"post-avator\" id=\"post-avator-${user.user_id}\"></div>`);
-                                                    $(`#post-avator-${user.user_id}`).html(`<img class=\"avator-img\" id=\"avator-img-${user.user_id}\" src=\"${user.image_path}\"></img>`);
-                                                    $(`#post-avator-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avator-name${user.user_id}\">${user.username}</div>`);
-                                                }
-                                            }
-                                        });
-                                    });
-
-                                    const element = document.getElementsByClassName("collapsible");
-
-                                    for (let i = 0; i < element.length; i++) {
-                                        element[i].addEventListener("click", function () {
-                                            this.classList.toggle("active");
-                                            let content = this.nextElementSibling;
-                                            if (content.style.display === "block") {
-                                                content.style.display = "none";
-                                            } else {
-                                                content.style.display = "block";
-                                            }
-                                        });
+                                    else {
+                                        $('.grid-users-list').append(`<div class=\"post-avator\" id=\"post-avator-${user.user_id}\"></div>`);
+                                        $(`#post-avator-${user.user_id}`).html(`<img class=\"avator-img\" id=\"avator-img-${user.user_id}\" src=\"${user.image_path}\"></img>`);
+                                        $(`#post-avator-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avator-name${user.user_id}\">${user.username}</div>`);
                                     }
+                                }
+                            });
+                        });
 
-                                    $('#homepage-display').append("<div class=\"grid-schedule-post-box\" id=\"schedule-post-box\"></div>");
-                                    $('#schedule-post-box').append(`<div class=\"post-avator\" id=\"avatorbox-${user.user_id}\"></div>`);
-                                    $(`#avatorbox-${user.user_id}`).append(`<img class=\"avator-img\" id=\"avatorimg-${user.user_id}\" src=\"${user.image_path}\"></img>`);
-                                    $(`#avatorbox-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avatorname-${user.user_id}\">${user.username}</div>`);
+                        const element = document.getElementsByClassName("collapsible");
 
-                                    $('#schedule-post-box').append("<div class=\"grid-post-box\" id=\"post-box\"></div>");
-                                    $('#post-box').append(`<form action=\"/post/${schedule.schedule_id}\" method=\"POST\" id=\"post-form\">` +
-                                        "<Label for=\"message\">Post Message:</Label>" +
-                                        "<div class=\"grid-post-msg\">" +
-                                        "<textarea name=\"message\" id=\"message\" rows=\"6\" cols=\"60\"></textarea>" +
-                                        "<input type=\"submit\" value=\"submit\"></input>" +
-                                        "</form></div>" +
-                                        "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
-                                    $('#homepage-display').append("<div class=\"schedule-post-canvas\" id=\"schedule-post-canvas\"></div>");
+                        for (let i = 0; i < element.length; i++) {
+                            element[i].addEventListener("click", function () {
+                                this.classList.toggle("active");
+                                let content = this.nextElementSibling;
+                                if (content.style.display === "block") {
+                                    content.style.display = "none";
+                                } else {
+                                    content.style.display = "block";
+                                }
+                            });
+                        }
 
-                                    $('#post-form').on('submit', (evt) => {
+                        $('#homepage-display').append("<div class=\"grid-schedule-post-box\" id=\"schedule-post-box\"></div>");
+                        $('#schedule-post-box').append(`<div class=\"post-avator\" id=\"avatorbox-${user.user_id}\"></div>`);
+                        $(`#avatorbox-${user.user_id}`).append(`<img class=\"avator-img\" id=\"avatorimg-${user.user_id}\" src=\"${user.image_path}\"></img>`);
+                        $(`#avatorbox-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avatorname-${user.user_id}\">${user.username}</div>`);
 
-                                        evt.preventDefault();
+                        $('#schedule-post-box').append("<div class=\"grid-post-box\" id=\"post-box\"></div>");
+                        $('#post-box').append(`<form action=\"/post/${schedule.schedule_id}\" method=\"POST\" id=\"post-form\">` +
+                            "<Label for=\"message\">Post Message:</Label>" +
+                            "<div class=\"grid-post-msg\">" +
+                            "<textarea name=\"message\" id=\"message\" rows=\"6\" cols=\"60\"></textarea>" +
+                            "<input type=\"submit\" value=\"submit\"></input>" +
+                            "</form></div>" +
+                            "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
+                        $('#homepage-display').append("<div class=\"schedule-post-canvas\" id=\"schedule-post-canvas\"></div>");
 
-                                        if (document.querySelector('#message').value == '') {
+                        $('#post-form').on('submit', (evt) => {
 
-                                            $('#flash-msg').html("Message cannot be blank.");
-                                        }
-                                        else {
-                                            const formData = {
-                                                "user_id": user.user_id,
-                                                "schedule_id": schedule.schedule_id,
-                                                "content": $('#message').val(),
-                                            };
+                            evt.preventDefault();
 
-                                            $.post('/add-post', formData, (res) => {
+                            if (document.querySelector('#message').value == '') {
 
-                                                document.querySelector('#message').value = '';
-                                                $('#flash-msg').html(res);
-                                                $('#schedule-post-canvas').html("");
+                                $('#flash-msg').html("Message cannot be blank.");
+                            }
+                            else {
+                                const formData = {
+                                    "user_id": user.user_id,
+                                    "schedule_id": schedule.schedule_id,
+                                    "content": $('#message').val(),
+                                };
 
-                                                $.get(`/get-posts/${schedule.schedule_id}`, (posts) => {
+                                $.post('/add-post', formData, (res) => {
 
-                                                    for (const post of posts) {
-
-                                                        $('#schedule-post-canvas').append(`<div class=\"schedule-post-item\" id=\"scheduleposts-${post.post_id}\"></div>`);
-                                                        $(`#scheduleposts-${post.post_id}`).append(`<div class=\"post-avator\" id=\"post-avatorbox-${post.post_id}\"></div>`);
-                                                        $(`#post-avatorbox-${post.post_id}`).append(`<img class=\"avator-img\" id=\"avatorimg-${post.post_id}\" src=\"${post.image_path}\"></img>`);
-                                                        $(`#post-avatorbox-${post.post_id}`).append(`<div class=\"avator-name\" id=\"avatorname-${post.post_id}\">${post.username}</div>`);
-
-                                                        $(`#scheduleposts-${post.post_id}`).append(`<div class=\"grid-post-content\" id=\"postcontent-${post.post_id}\"></div>`);
-                                                        $(`#postcontent-${post.post_id}`).append(`<div>${post.username} says:</div>`);
-                                                        $(`#postcontent-${post.post_id}`).append(`<div class=\"postmsgbox\"><p>${post.content}</p></div>`);
-                                                        $(`#postcontent-${post.post_id}`).append(`<div class=\"timestamp\">${post.time_stamp}</div>`);
-                                                    }
-                                                });
-                                            })
-                                        }
-                                    });
+                                    document.querySelector('#message').value = '';
+                                    $('#flash-msg').html(res);
+                                    $('#schedule-post-canvas').html("");
 
                                     $.get(`/get-posts/${schedule.schedule_id}`, (posts) => {
 
@@ -631,21 +616,31 @@ function get_schedules() {
                                             $(`#postcontent-${post.post_id}`).append(`<div class=\"timestamp\">${post.time_stamp}</div>`);
                                         }
                                     });
-                                }
-                            });
-                        }
-                        else {
-                            $('#homepage-display').append("<div class\"grid-schedule-post-box\" id=\"schedule-post-box\"></div>");
-                            $('#schedule-post-box').append("<div class=\"error-page\" id=\"error-page\">You must be approved by the host to view/post messages.</div>");
-                        }
-                    });
+                                })
+                            }
+                        });
 
-                    break;
-                }
-                else {
+                        $.get(`/get-posts/${schedule.schedule_id}`, (posts) => {
 
-                    $('#homepage-display').html(`<div class=\"error-page\" id=\"error-page\">Error: Cannot Find Schedule ID: ${evt.target.id.slice(9)}</div>`);
-                }
+                            for (const post of posts) {
+
+                                $('#schedule-post-canvas').append(`<div class=\"schedule-post-item\" id=\"scheduleposts-${post.post_id}\"></div>`);
+                                $(`#scheduleposts-${post.post_id}`).append(`<div class=\"post-avator\" id=\"post-avatorbox-${post.post_id}\"></div>`);
+                                $(`#post-avatorbox-${post.post_id}`).append(`<img class=\"avator-img\" id=\"avatorimg-${post.post_id}\" src=\"${post.image_path}\"></img>`);
+                                $(`#post-avatorbox-${post.post_id}`).append(`<div class=\"avator-name\" id=\"avatorname-${post.post_id}\">${post.username}</div>`);
+
+                                $(`#scheduleposts-${post.post_id}`).append(`<div class=\"grid-post-content\" id=\"postcontent-${post.post_id}\"></div>`);
+                                $(`#postcontent-${post.post_id}`).append(`<div>${post.username} says:</div>`);
+                                $(`#postcontent-${post.post_id}`).append(`<div class=\"postmsgbox\"><p>${post.content}</p></div>`);
+                                $(`#postcontent-${post.post_id}`).append(`<div class=\"timestamp\">${post.time_stamp}</div>`);
+                            }
+                        });
+                    }
+                });
+            }
+            else {
+                $('#homepage-display').append("<div class\"grid-schedule-post-box\" id=\"schedule-post-box\"></div>");
+                $('#schedule-post-box').append("<div class=\"error-page\" id=\"error-page\">You must be approved by the host to view/post messages.</div>");
             }
         });
     });
@@ -793,7 +788,7 @@ function createSchedule_by_game_id(game_id = 1) {
                         $('#snackbar').html(`${data.flash}`);
                         document.getElementById("snackbar").className = "show";
                         setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
-                        $('#all-schedules').trigger('click');
+                        view_schedule(data.schedule_id);
                     }
                 });
             });
@@ -865,7 +860,7 @@ function createSchedule_by_game_name(game_name, image_path) {
                         $('#snackbar').html(`${data.flash}`);
                         document.getElementById("snackbar").className = "show";
                         setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
-                        $('#all-schedules').trigger('click');
+                        view_schedule(data.schedule_id);
                     }
                 });
             });

@@ -218,6 +218,24 @@ def get_user_schedules():
     return jsonify(data_list)
 
 
+@app.route('/get-schedule-by-id/<schedule_id>', methods=["GET"])
+def get_schedule_by_id(schedule_id):
+    """Get a schedule by schedule_id."""
+
+    schedule = crud.get_schedule_by_id(schedule_id)
+    data = {"schedule_id": schedule.schedule_id,
+            "user_id": schedule.user_id,
+            "game_id": schedule.game_id,
+            "datetime": schedule.datetime,
+            "timezone": schedule.timezone,
+            "platform": schedule.platform,
+            "description": schedule.description,
+            "max_user": schedule.max_user,
+            "max_team": schedule.max_team}
+
+    return jsonify(data)
+
+
 @app.route('/user-requests', methods=["GET"])
 def get_user_requests():
     """Get logged user sent and received requests."""
