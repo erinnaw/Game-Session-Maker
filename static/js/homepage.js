@@ -12,6 +12,8 @@ let game_search_Flag = new Boolean(false);
 let game_search_Handler;
 const game_search_timer = 500;
 
+let prev_formData;
+
 $(document).ready(function () {
 
     let key = new String();
@@ -253,6 +255,10 @@ function get_schedules() {
     const formData = $('#search-schedule-bar').serialize();
     $('#display-schedules').html('');
 
+    if (formData != undefined)
+        prev_formData = formData;
+        console.log(prev_formData);
+
     $.get('/get-schedules', formData, (schedules) => {
 
         for (const schedule of schedules) {
@@ -298,6 +304,7 @@ function view_schedule(schedule_id) {
     $.get(`/get-schedule-by-id/${schedule_id}`, (schedule) => {
 
         $('#homepage-display').html(`<div class=\"subheader\" id=\"subheader\">Schedule ID: ${schedule.schedule_id}</div>`);
+        $('#homepage-display').append(`<div class=\"back-bar\"><div class=\"back-button\" id=\"back-button\">Back</div></div>`);
         $('#homepage-display').append("<div class=\"grid-display-schedules\" id=\"display-schedules\"></div>");
         $('#display-schedules').append(`<div class=\"grid-display-schedule-item\" id=\"schedule-item-${schedule.schedule_id}\"></div>`);
         $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Host:</div><div class=\"profile-schedules-item-text\">${schedule.username}</div>`);
@@ -312,6 +319,43 @@ function view_schedule(schedule_id) {
         $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max Team:</div><div class=\"profile-schedules-item-text\">${schedule.max_team}</div>`);
         $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Description:</div><div class=\"profile-schedules-item-text\">${schedule.description}</div>`);
 
+        $('.back-button').on('clicl', () => {
+
+
+            //use prev_formData to fill search criteria, then empty it after exiting from view-schedule
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        });
 
         $.get(`/get-schedule-user-status/${schedule.schedule_id}`, (status) => {
 

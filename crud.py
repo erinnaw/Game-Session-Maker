@@ -154,6 +154,7 @@ def get_schedules_by_criteria(formData):
     game_name = formData["game_name"]
     date = formData["date"]
     time = formData["time"]
+    print(date)
 
     if formData["username"] != '' and formData["game_name"] != '' and formData["date"] != '' and formData["time"] != '':
         date_time = datetime.combine(date, time)
@@ -189,7 +190,7 @@ def get_schedules_by_criteria(formData):
         return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(cast(Schedule.datetime, Time) == time).all()
 
     elif formData["date"] != '' and formData["time"] != '':
-        date_time = datetime.combine(date, time)
+        date_time = datetime.combine(datetime.strptime(date, "%Y-%m-%d"), (datetime.strptime(time, "%H:%M")))
         return Schedule.query.filter(Schedule.datetime == date_time).all()
 
     elif formData["username"] != '':
