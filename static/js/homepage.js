@@ -162,7 +162,7 @@ $('#all-games').on('click', () => {
 
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Games</div>");
     $('#homepage-display').append("<form class=\"display-search-game-bar\" method=\"GET\" id=\"search-game-bar\"></form>");
-    $('#search-game-bar').append("<div class=\"search-schedule-item\">Search Database</div><input onkeyup=\"onKeyUp_searchGames_db()\" type=\"text\" name=\"game-name\" id=\"game-name\"></input>");
+    $('#search-game-bar').append("<div class=\"search-schedule-item\">Search Database</div><input onkeyup=\"onKeyUp_searchGames_db()\" onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"game-name\" id=\"game-name\"></input>");
     $('#homepage-display').append("<div class=\"grid-display-games\" id=\"display-games\"></div>");
 
     get_games();
@@ -224,8 +224,8 @@ $('#all-schedules').on('click', () => {
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Schedules</div>");
     $('#homepage-display').append("<form class=\"display-search-schedule-bar\" method=\"GET\" id=\"search-schedule-bar\"></form>");
     $('#search-schedule-bar').append("<div>Search by</div>");
-    $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Host Username</div><input onkeyup=\"onKeyUp_searchSchedules()\" type=\"text\" name=\"username\" id=\"username\"></input>");
-    $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Game Name</div><input onkeyup=\"onKeyUp_searchSchedules()\" type=\"text\" name=\"game_name\" id=\"game_name\"></input>");
+    $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Host Username</div><input onkeyup=\"onKeyUp_searchSchedules()\" onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"username\" id=\"username\"></input>");
+    $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Game Name</div><input onkeyup=\"onKeyUp_searchSchedules()\" onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"game_name\" id=\"game_name\"></input>");
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Date</div><input onchange=\"onKeyUp_searchSchedules()\" type=\"date\" name=\"date\" id=\"date\"></input>");
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Time</div><input onchange=\"onKeyUp_searchSchedules()\" type=\"time\" name=\"time\" id=\"time\"></input>");
     $('#homepage-display').append("<div class=\"grid-display-schedules\" id=\"display-schedules\"></div>");
@@ -1084,7 +1084,6 @@ function search_games() {
             });
         }
     });
-
 }
 
 
