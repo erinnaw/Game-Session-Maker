@@ -326,6 +326,7 @@ textarea {
 }
 
 .grid-profile-schedule-item {
+    position: relative;
     display: grid;
     grid-template-columns: 20% 80%;
     width: 100%;
@@ -341,6 +342,139 @@ textarea {
     padding-right: 20px;
     text-align: right;
 }
+
+.grid-user-schedule-hover {
+    position: absolute;
+    transition: opacity 0.25s;
+    height: 100%; 
+    top: 0px;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    cursor: pointer;
+    text-align: center;
+}
+
+.grid-profile-schedule-item:hover .grid-user-schedule-hover {
+    opacity: 1;
+}
+
+.archive-schedule-button {
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.delete-schedule-button {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.archive-schedule-button:hover {
+    background-color: rgb(172, 168, 112);
+}
+
+.delete-schedule-button:hover {
+    background-color: red;
+}
+
+.grid-user-schedule-hover {
+    position: absolute;
+    transition: opacity 0.25s;
+    height: 100%; 
+    top: 0px;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    cursor: pointer;
+    text-align: center;
+}
+
+.grid-user-schedule-hover .grid-joined-user-schedule-hover {
+    opacity: 1;
+}
+
+.leave-schedule-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.leave-schedule-button:hover {
+    background-color: red;
+}
+
+/*---------------Hover Tabs for user schedules--------------*/
+
+/* Set height of body and the document to 100% to enable "full page tabs" */
+
+.grid-schedules-tabs {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    width: 100%;
+    margin: auto;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family:'Courier New', Courier, monospace;
+}
+
+/* Style tab links */
+.tablink {
+    color: rgb(0, 0, 0);
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 100%;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.tablink:hover {
+  background-color: #777;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+    color: rgb(0, 0, 0);
+    display: none;
+    padding: 10px 20px;
+    height: 100%;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+#created {background-color: white;}
+#joined {background-color: white;}
+#archived {background-color: white;}
 
 /*------------------------Create Schedule---------------------------*/
 

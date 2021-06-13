@@ -218,6 +218,95 @@ def get_user_schedules():
     return jsonify(data_list)
 
 
+@app.route('/user-schedules-created', methods=["GET"])
+def get_user_schedules_created():
+    """Get logged user's created schedules."""
+
+    data_list = list()
+
+    if session.get('user',0):
+        schedules = crud.get_schedules_by_user_id(session['user'])
+
+        for schedule in schedules:
+            game = crud.get_game_by_id(schedule.game_id)
+            host = crud.get_user_by_id(schedule.user_id)
+
+            data = {"type": "host",
+                    "host_username": host.username,
+                    "schedule_id": schedule.schedule_id,
+                    "game_id": schedule.game_id,
+                    "game_name": game.name,
+                    "datetime": schedule.datetime, 
+                    "timezone": schedule.timezone, 
+                    "platform": schedule.platform,
+                    "max_user": schedule.max_user,
+                    "max_team": schedule.max_team,
+                    "description": schedule.description}
+            data_list.append(data)
+
+    return jsonify(data_list)
+
+
+
+@app.route('/user-schedules-joined', methods=["GET"])
+def get_user_schedules_joined():
+    """Get logged user's joined schedules."""
+
+    data_list = list()
+
+    if session.get('user',0):
+        schedules_user = crud.get_schedule_users_by_user_id(session['user'])
+
+        for schedule_user in schedules_user:
+            schedule = crud.get_schedule_by_id(schedule_user.schedule_id)
+            game = crud.get_game_by_id(schedule.game_id)
+            host = crud.get_user_by_id(schedule.user_id)
+
+            data = {"type": "user",
+                    "host_username": host.username,
+                    "schedule_id": schedule.schedule_id,
+                    "game_id": schedule.game_id,
+                    "game_name": game.name,
+                    "datetime": schedule.datetime, 
+                    "timezone": schedule.timezone, 
+                    "platform": schedule.platform,
+                    "max_user": schedule.max_user,
+                    "max_team": schedule.max_team,
+                    "description": schedule.description}
+            data_list.append(data)            
+
+    return jsonify(data_list)
+
+
+@app.route('/user-schedules-archived', methods=["GET"])
+def get_user_schedules_archived():
+    """Get logged user's archived schedules."""
+
+    data_list = list()
+
+    if session.get('user',0):
+        schedules = crud.get_archived_schedules_by_user_id(session['user'].user_id)
+
+        for schedule in schedules:
+            game = crud.get_game_by_id(schedule.game_id)
+            host = crud.get_user_by_id(schedule.user_id)
+
+            data = {"type": "host",
+                    "host_username": host.username,
+                    "schedule_id": schedule.schedule_id,
+                    "game_id": schedule.game_id,
+                    "game_name": game.name,
+                    "datetime": schedule.datetime, 
+                    "timezone": schedule.timezone, 
+                    "platform": schedule.platform,
+                    "max_user": schedule.max_user,
+                    "max_team": schedule.max_team,
+                    "description": schedule.description}
+            data_list.append(data)
+
+    return jsonify(data_list)
+
+
 @app.route('/get-schedule-by-id/<schedule_id>', methods=["GET"])
 def get_schedule_by_id(schedule_id):
     """Get a schedule by schedule_id."""

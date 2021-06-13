@@ -138,13 +138,20 @@ def get_schedule_by_id(schedule_id):
 
 def get_schedules_by_game_id(game_id):
     """Return all schedules by game_id."""
+
     return Schedule.query.filter(Schedule.game_id == game_id).all()
 
 
 def get_schedules_by_user_id(user_id):
     """Return all schedules by user_id."""
 
-    return Schedule.query.filter(Schedule.user_id == user_id).all()
+    return Schedule.query.filter(Schedule.user_id == user_id and Schedule.isArchived == False).all()
+
+
+def get_archived_schedules_by_user_id(user_id):
+    """Return all schedules created by user_id."""
+
+    return Schedule.query.filter(Schedule.user_id == user_id and Schedule.isArchived == True).all()
 
 
 def get_schedules_by_criteria(formData):

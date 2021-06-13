@@ -84,6 +84,9 @@ class Schedule(db.Model):
     max_user = db.Column(db.Integer,
                         nullable=False)
     max_team = db.Column(db.Integer)
+    isArchived = db.Column(db.Boolean, 
+                        default=False, 
+                        nullable=False)
 
     requests = db.relationship('Request')
     posts = db.relationship('Post')
