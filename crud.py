@@ -130,6 +130,12 @@ def get_schedules():
     return Schedule.query.all()
 
 
+def get_schedules_active():
+    """ Return all non archived schedules."""
+
+    return Schedule.query.filter(Schedule.isArchived == False).all()
+
+
 def get_schedule_by_id(schedule_id):    
     """Return a schedule from schedule_id."""
 
@@ -145,13 +151,13 @@ def get_schedules_by_game_id(game_id):
 def get_schedules_by_user_id(user_id):
     """Return all schedules by user_id."""
 
-    return Schedule.query.filter(Schedule.user_id == user_id and Schedule.isArchived == False).all()
+    return Schedule.query.filter((Schedule.user_id == user_id) & (Schedule.isArchived == False)).all()
 
 
 def get_archived_schedules_by_user_id(user_id):
     """Return all schedules created by user_id."""
 
-    return Schedule.query.filter(Schedule.user_id == user_id and Schedule.isArchived == True).all()
+    return Schedule.query.filter((Schedule.user_id == user_id) & (Schedule.isArchived == True)).all()
 
 
 def get_schedules_by_criteria(formData):
@@ -165,52 +171,52 @@ def get_schedules_by_criteria(formData):
 
     if formData["username"] != '' and formData["game_name"] != '' and formData["date"] != '' and formData["time"] != '':
         date_time = datetime.strptime(date+" "+time, "%Y-%m-%d %H:%M")
-        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).filter(Game.name.ilike('%'+game_name+'%')).filter(Schedule.datetime == date_time).all()
+        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).filter(Game.name.ilike('%'+game_name+'%')).filter(Schedule.datetime == date_time).filter(Schedule.isArchived == False).all()
 
     elif formData["username"] != '' and formData["game_name"] != '' and formData["time"] != '':
-        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).filter(Game.name.ilike('%'+game_name+'%')).filter(cast(Schedule.datetime, Time) == time).all()
+        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).filter(Game.name.ilike('%'+game_name+'%')).filter(cast(Schedule.datetime, Time) == time).filter(Schedule.isArchived == False).all()
 
     elif formData["username"] != '' and formData["game_name"] != '' and formData["date"] != '':
-        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).filter(Game.name.ilike('%'+game_name+'%')).filter(func.DATE(Schedule.datetime) == date).all()
+        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).filter(Game.name.ilike('%'+game_name+'%')).filter(func.DATE(Schedule.datetime) == date).filter(Schedule.isArchived == False).all()
 
     elif formData["username"] != '' and formData["date"] != '' and formData["time"] != '':
         date_time = datetime.strptime(date+" "+time, "%Y-%m-%d %H:%M")
-        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).filter(Schedule.datetime == date_time).all()
+        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).filter(Schedule.datetime == date_time).filter(Schedule.isArchived == False).all()
 
     elif formData["game_name"] != '' and formData["date"] != '' and formData["time"] != '':
         date_time = datetime.strptime(date+" "+time, "%Y-%m-%d %H:%M")
-        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(Schedule.datetime == date_time).all()
+        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(Schedule.datetime == date_time).filter(Schedule.isArchived == False).all()
 
     elif formData["username"] != '' and formData["game_name"] != '':
-        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).filter(Game.name.ilike('%'+game_name+'%')).all()
+        return Schedule.query.join(User).join(Game).filter(User.username.ilike('%'+username+'%')).filter(Game.name.ilike('%'+game_name+'%')).filter(Schedule.isArchived == False).all()
 
     elif formData["username"] != '' and formData["date"] != '':
-        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).filter(func.DATE(Schedule.datetime) == date).all()
+        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).filter(func.DATE(Schedule.datetime) == date).filter(Schedule.isArchived == False).all()
 
     elif formData["username"] != '' and formData["time"] != '':
-        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).filter(cast(Schedule.datetime, Time) == time).all()
+        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).filter(cast(Schedule.datetime, Time) == time).filter(Schedule.isArchived == False).all()
 
     elif formData["game_name"] != '' and formData["date"] != '':
-        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(func.DATE(Schedule.datetime) == date).all()
+        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(func.DATE(Schedule.datetime) == date).filter(Schedule.isArchived == False).all()
 
     elif formData["game_name"] != '' and formData["time"] != '':
-        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(cast(Schedule.datetime, Time) == time).all()
+        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(cast(Schedule.datetime, Time) == time).filter(Schedule.isArchived == False).all()
 
     elif formData["date"] != '' and formData["time"] != '':
         date_time = datetime.strptime(date+" "+time, "%Y-%m-%d %H:%M")
-        return Schedule.query.filter(Schedule.datetime == date_time).all()
+        return Schedule.query.filter(Schedule.datetime == date_time).filter(Schedule.isArchived == False).all()
 
     elif formData["username"] != '':
-        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).all()
+        return Schedule.query.join(User).filter(User.username.ilike('%'+username+'%')).filter(Schedule.isArchived == False).all()
 
     elif formData["game_name"] != '':
-        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).all()
+        return Schedule.query.join(Game).filter(Game.name.ilike('%'+game_name+'%')).filter(Schedule.isArchived == False).all()
 
     elif formData["date"] != '':
-        return Schedule.query.filter(func.DATE(Schedule.datetime) == date).all()
+        return Schedule.query.filter(func.DATE(Schedule.datetime) == date).filter(Schedule.isArchived == False).all()
 
     elif formData["time"] != '':
-        return Schedule.query.filter(cast(Schedule.datetime, Time) == time).all()
+        return Schedule.query.filter(cast(Schedule.datetime, Time) == time).filter(Schedule.isArchived == False).all()
 
     else:
         return "Error"
@@ -304,7 +310,7 @@ def set_schedule_archived_by_id(schedule_id):
     """Set a schedule to archived."""
 
     if Schedule.query.get(schedule_id):
-        Schedule.query.filter(Schedule.schedule_id == schedule_id).update({"isArchived": True})
+        schedule = Schedule.query.filter(Schedule.schedule_id == schedule_id).update({"isArchived": True})
         db.session.commit()
         return True
 
@@ -354,6 +360,15 @@ def hasGame_by_name(game_name):
     
     return False
 
+def isUserinSchedule(user_id, schedule_id):
+    """Check if a user is in a schedule."""
+
+    schedule = Schedule_Users.query.filter(Schedule_Users.user_id == user_id and Schedule_Users.schedule_id == schedule_id).first()
+    if schedule:
+        return True
+
+    return False
+
 #-----------------Remove Wrappers------------------------------->
 def remove_request(request_id):
     """Remove a request from request_id."""
@@ -367,6 +382,18 @@ def remove_user_from_schedule(schedule_id, user_id):
 
     schedule_user = Schedule_Users.query.filter(Schedule_Users.schedule_id == schedule_id and Schedule_Users.user_id == user_id).first()
     db.session.delete(schedule_user)
+    db.session.commit()
+
+
+def delete_schedule(schedule_id):
+    """Delete a schedule by id."""
+
+    schedule = Schedule.query.filter(Schedule.schedule_id == schedule_id).first()
+    
+    for request in schedule.requests:
+        db.session.delete(request)
+
+    db.session.delete(schedule)
     db.session.commit()
 
 

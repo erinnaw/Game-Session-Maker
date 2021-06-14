@@ -19,7 +19,7 @@
 .subheader-2 {
     font-size: 24px;
     height: 100px;
-    width: 400px;
+    width: 800px;
     text-align: center;
     margin: auto;
     margin-top: 50px;
@@ -422,6 +422,24 @@ textarea {
     text-align: center;
     border: 1px solid rgb(0, 0, 0);
     cursor: pointer;
+}
+
+.view-schedule-button-5 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.view-schedule-button-5:hover {
+    background-color: rgb(0, 0, 0);
+    color: white;
 }
 
 .delete-request-button-2 {

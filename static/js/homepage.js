@@ -1002,39 +1002,27 @@ $('#my-profile').on('click', () => {
 
                                 $.post(`/archive-schedule/${schedule.schedule_id}`, (msg) => {
 
-                                    //$(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"subheader\" id=\"subheader-${schedule["schedule_id"]}\">msg</div>`);
-                                    console.log(`${schedule["isActive"]}`);
-
-
-
-
-
-
-
-
-
-
-
-
+                                    $(`#view-schedule-user-${schedule["schedule_id"]}`).remove();
+                                    $(`#archive-schedule-user-${schedule["schedule_id"]}`).remove();
+                                    $(`#delete-schedule-user-${schedule["schedule_id"]}`).remove();
+                                    $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${schedule["schedule_id"]}\">Sent to Archived</div>`);
+                                    $(`#user-schedule-hover-${schedule["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
+                                    $(`#user-schedule-hover-${schedule["schedule_id"]}`).css('opacity', '1');
                                 });
                             });
 
                             $(`#delete-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 
+                                $.post(`/delete-schedule/${ schedule["schedule_id"]}`, (msg) => {
 
-
-
-
-                                //delete it
-
-
-
-
-
-
-
-                            });
-                            
+                                    $(`#view-schedule-user-${schedule["schedule_id"]}`).remove();
+                                    $(`#archive-schedule-user-${schedule["schedule_id"]}`).remove();
+                                    $(`#delete-schedule-user-${schedule["schedule_id"]}`).remove();
+                                    $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${schedule["schedule_id"]}\">${msg}</div>`);
+                                    $(`#user-schedule-hover-${schedule["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
+                                    $(`#user-schedule-hover-${schedule["schedule_id"]}`).css('opacity', '1');
+                                })
+                            });                       
                         }                         
                     });
                 });
@@ -1062,20 +1050,14 @@ $('#my-profile').on('click', () => {
 
                             $(`#leave-button-${schedule["schedule_id"]}`).on('click', () => {
 
+                                $.post(`/leave-schedule/${schedule["schedule_id"]}`, (msg) => {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                    $(`#view-schedule-user-${schedule["schedule_id"]}`).remove();
+                                    $(`#leave-button-${schedule["schedule_id"]}`).remove();
+                                    $(`#user-request-sent-hover-${request["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${schedule["schedule_id"]}\">${msg}</div>`);
+                                    $(`#user-request-sent-hover-${request["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
+                                    $(`#user-request-sent-hover-${request["schedule_id"]}`).css('opacity', '1');
+                                });
                             });                                    
                         }
                     });
@@ -1089,22 +1071,16 @@ $('#my-profile').on('click', () => {
 
                         for (const schedule of schedules) {
 
-                            $('#archived').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
-                            $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
+                            $('#archived').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-archived-${schedule["schedule_id"]}\"></div>`);
+                            $(`#profile-archived-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
 
+                            $(`#profile-archived-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-joined-schedule-hover-${schedule["schedule_id"]}\"></div>`);
+                            $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).html(`<div class=\"view-schedule-button-5\" id=\"view-schedule-user-${schedule["schedule_id"]}\">View Schedule</div>`);
 
- 
+                            $(`#view-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 
-
-
-
-
-
-
-
-
-
-
+                                view_schedule(`${schedule["schedule_id"]}`);
+                            });
                         }
                     });
                 });

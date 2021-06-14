@@ -193,7 +193,8 @@ def get_user_schedules():
                     "platform": schedule.platform,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
-                    "description": schedule.description}
+                    "description": schedule.description,
+                    "isArchived": schedule.isArchived}
             data_list.append(data)
 
         schedules_user = crud.get_schedule_users_by_user_id(session['user'])
@@ -212,7 +213,8 @@ def get_user_schedules():
                     "platform": schedule.platform,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
-                    "description": schedule.description}
+                    "description": schedule.description,
+                    "isArchived": schedule.isArchived}
             data_list.append(data)            
 
     return jsonify(data_list)
@@ -247,6 +249,45 @@ def get_user_schedules_created():
     return jsonify(data_list)
 
 
+@app.route('/get-schedules-active', methods=["GET"])
+def get_schedules_active():
+    """Get all non archived schedules."""
+
+    username = request.args.get("username")
+    game_name = request.args.get("game_name")
+    date = request.args.get("date")
+    time = request.args.get("time") 
+    data = list()
+
+    if username == '' and game_name == '' and date == '' and time == '':
+        schedules = crud.get_schedules_active()
+
+    else:
+        formData = {"username": username,
+                    "game_name": game_name,
+                    "date": date,
+                    "time": time}
+        schedules = crud.get_schedules_by_criteria(formData)
+
+    for schedule in schedules:
+        user = crud.get_user_by_id(schedule.user_id)
+        game = crud.get_game_by_id(schedule.game_id)
+        data.append({"schedule_id": schedule.schedule_id,
+                    "user_id": schedule.user_id,
+                    "username": user.username,
+                    "game_id": schedule.game_id,
+                    "game_name": game.name,
+                    "datetime": schedule.datetime,
+                    "timezone": schedule.timezone,
+                    "platform": schedule.platform,
+                    "description": schedule.description,
+                    "max_user": schedule.max_user,
+                    "max_team": schedule.max_team,
+                    "isArchived": schedule.isArchived})
+
+    return jsonify(data)
+
+
 @app.route('/user-schedules-joined', methods=["GET"])
 def get_user_schedules_joined():
     """Get logged user's joined schedules."""
@@ -271,7 +312,8 @@ def get_user_schedules_joined():
                     "platform": schedule.platform,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
-                    "description": schedule.description}
+                    "description": schedule.description,
+                    "isArchived": schedule.isArchived}
             data_list.append(data)            
 
     return jsonify(data_list)
@@ -300,7 +342,8 @@ def get_user_schedules_archived():
                     "platform": schedule.platform,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
-                    "description": schedule.description}
+                    "description": schedule.description,
+                    "isArchived": schedule.isArchived}
             data_list.append(data)
 
     return jsonify(data_list)
@@ -344,7 +387,8 @@ def get_schedule_by_id(schedule_id):
             "platform": schedule.platform,
             "description": schedule.description,
             "max_user": schedule.max_user,
-            "max_team": schedule.max_team}
+            "max_team": schedule.max_team,
+            "isArchived": schedule.isArchived}
 
     return jsonify(data)
 
@@ -873,7 +917,7 @@ def remove_user_from_schedule(schedule_id, user_id):
     """Remove a user from a schedule."""
 
     flash = ''
-    if(session.get('user')):
+    if session.get('user', 0):
         schedule = crud.get_schedule_by_id(schedule_id)
         if session['user'] == schedule.user_id:
             crud.remove_user_from_schedule(schedule_id, user_id)
@@ -882,6 +926,42 @@ def remove_user_from_schedule(schedule_id, user_id):
             flash = 'You must be the schedule host to kick a user'
     else:
         flash = 'You must be signed in to kick a user.'
+
+    return flash
+
+
+@app.route('/leave-schedule/<schedule_id>', methods=['POST'])
+def leave_schedule(schedule_id):
+    """Leave a schedule as a user."""
+
+    flash = ''
+    if session.get('user', 0):
+        if crud.isUserinSchedule(session['user'], schedule_id):
+            crud.remove_user_from_schedule(schedule_id, user_id)
+            flash = 'Left Schedule'
+        else:
+            flash = 'You must be a user in the schedule to leave.'
+
+    else:
+        flash = 'You must be logged in to leave a schedule.'
+
+    return flash
+
+
+@app.route('/delete-schedule/<schedule_id>', methods=['POST'])
+def delete_schedule(schedule_id):
+    """Delete a schedule as host."""
+
+    flash = ''
+    if session.get('user', 0):
+        schedule = crud.get_schedule_by_id(schedule_id)
+        if session['user'] == schedule.user_id:
+            crud.delete_schedule(schedule_id)
+            flash = 'Schedule Deleted'
+        else:
+            flash = 'You must be the host to delete the schedule.'
+    else:
+        flash = 'You must be signed in to delete a schedule.'
 
     return flash
 
@@ -913,7 +993,8 @@ def view_admin_display(path):
         for schedule in schedules:
             data.append({"schedule_id": schedule.schedule_id,
                         "user_id": schedule.user_id,
-                        "game_id": schedule.game_id})        
+                        "game_id": schedule.game_id,
+                        "isArchived": schedule.isArchived} )       
     elif path == 'requests':
         requests = crud.get_requests()
         for request in requests:
