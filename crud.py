@@ -293,12 +293,22 @@ def set_game_image_by_game_id(game_id, image_path):
     """Set image in a game and return true if successful and false if failed."""
 
     if Game.query.get(game_id):
-        Game.query.filter(Game.game_id == game_id).update({"image_path":image_path})
+        Game.query.filter(Game.game_id == game_id).update({"image_path": image_path})
         db.session.commit()
-    else:
-        return False
+        return True
     
-    return True
+    return False
+
+
+def set_schedule_archived_by_id(schedule_id):
+    """Set a schedule to archived."""
+
+    if Schedule.query.get(schedule_id):
+        Schedule.query.filter(Schedule.schedule_id == schedule_id).update({"isArchived": True})
+        db.session.commit()
+        return True
+
+    return False
 
 
 #-----------------Boolean Wrappers------------------------------->

@@ -16,7 +16,7 @@ db.create_all()
 
 crud.create_user("admin", "admin", "admin", "admin", "admin", "/static/img/avator-placeholder.jpg")
 crud.create_user("user", "user", "user", "user", "user", "/static/img/avator-placeholder.jpg")
-crud.create_user("user1", "user1", "user1", "user1", "user2", "/static/img/avator-placeholder.jpg")
+crud.create_user("user1", "user1", "user1", "user1", "user1", "/static/img/avator-placeholder.jpg")
 crud.create_user("user2", "user2", "user2", "user2", "user2", "/static/img/avator-placeholder.jpg")
 
 crud.add_game('Dota 2', '/static/img/image-placeholder.jpg')
@@ -27,3 +27,15 @@ crud.add_game('World of Warcraft', '/static/img/image-placeholder.jpg')
 crud.add_game('Starcraft', '/static/img/image-placeholder.jpg')
 crud.add_game('Rocket League', '/static/img/image-placeholder.jpg')
 crud.add_game('Among Us', '/static/img/image-placeholder.jpg')
+
+for i in range(10):
+    crud.add_schedule(1, 1, datetime.now(), "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", "pc", "generating via seed_database", 4, 1)
+
+for i in range(10):
+    crud.add_schedule(2, 4, datetime.now(), "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", "pc", "generating via seed_database", 4, 1)
+
+for i in range(10):
+    crud.add_schedule(3, 5, datetime.now(), "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", "pc", "generating via seed_database", 4, 1)
+
+for i in range(10):
+    crud.add_schedule(4, 6, datetime.now(), "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", "pc", "generating via seed_database", 4, 1)

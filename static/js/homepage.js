@@ -900,15 +900,14 @@ function createSchedule_by_game_name(game_name, image_path) {
 
 function openPage(pageName, elmnt, color) {
     // Hide all elements with class="tabcontent" by default */
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
+    const tabcontent = document.getElementsByClassName("tabcontent");
+    for (let i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
 
     // Remove the background color of all tablinks/buttons
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < tablinks.length; i++) {
+    const tablinks = document.getElementsByClassName("tablink");
+    for (let i = 0; i < tablinks.length; i++) {
         tablinks[i].style.backgroundColor = "";
     }
 
@@ -968,51 +967,64 @@ $('#my-profile').on('click', () => {
                 $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-schedules\"></div>");
 
                 $('#profile-schedules').append('<div class=\"grid-schedules-tabs\" id=\"schedules-tabs\"></div>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'created\', this, \'lightgrey\')\" id=\"defaultOpen\">Created</button>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'joined\', this, \'lightgrey\')\">Joined</button>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'archived\', this, \'lightgrey\')\">Archived</button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'created\', this, \'lightgrey\')\" id=\"created-tab\">Created</button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'joined\', this, \'lightgrey\')\" id=\"joined-tab\">Joined</button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'archived\', this, \'lightgrey\')\" id=\"archived-tab\">Archived</button>');
                 $('#profile-schedules').append('<div id=\"created\" class=\"tabcontent\"></div>');
                 $('#profile-schedules').append('<div id=\"joined\" class=\"tabcontent\"></div>');
                 $('#profile-schedules').append('<div id=\"archived\" class=\"tabcontent\"></div>');
 
 
-                $('#created').on('click', () => {
+                $('#created-tab').on('click', () => {
 
                     $.get('/user-schedules-created', (schedules) => {
                     
+                        $('#created').html('');
+
                         for (const schedule of schedules) {
 
-                            $('#profile-schedules').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
+                            $('#created').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
                             $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
 
                             $(`#profile-schedule-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-schedule-hover-${schedule["schedule_id"]}\"></div>`);
-                            $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div></div><div class=\"archive-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Archive</div><div></div>`);
-                            $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"delete-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Delete</div><div></div>`);
+                            $(`#user-schedule-hover-${schedule["schedule_id"]}`).html(`<div class=\"view-schedule-button-2\" id=\"view-schedule-user-${schedule["schedule_id"]}\">View</div><div></div>`);
+                            $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div></div><div class=\"archive-schedule-button\" id=\"archive-schedule-user-${schedule["schedule_id"]}\">Archive</div><div></div>`);
+                            $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"delete-schedule-button\" id=\"delete-schedule-user-${schedule["schedule_id"]}\">Delete</div><div></div>`);
 
-                            $(`#archive-schedule-user-schedule-hover-${schedule["schedule_id"]}`).on('click', () => {
+                            $(`#view-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 
-
-
-
-
-
-
-                                $('#profile-schedules').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
-                                $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
-
-                                $(`#profile-schedule-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-schedule-hover-${schedule["schedule_id"]}\"></div>`);
-                                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"archive-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Archive</div>`);
-                                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"delete-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Delete</div>`);
+                                view_schedule(`${schedule["schedule_id"]}`);
                             });
 
-                            $(`#delete-schedule-user-schedule-hover-${schedule["schedule_id"]}`).on('click', () => {
+                            $(`#archive-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 
-                                $('#profile-schedules').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
-                                $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
+                                $.post(`/archive-schedule/${schedule.schedule_id}`, (msg) => {
 
-                                $(`#profile-schedule-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-schedule-hover-${schedule["schedule_id"]}\"></div>`);
-                                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"archive-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Archive</div>`);
-                                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"delete-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Delete</div>`);
+                                    //$(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"subheader\" id=\"subheader-${schedule["schedule_id"]}\">msg</div>`);
+                                    console.log(`${schedule["isActive"]}`);
+
+
+
+
+
+
+
+
+
+
+
+
+                                });
+                            });
+
+                            $(`#delete-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
+
+
+
+
+
+                                //delete it
+
 
 
 
@@ -1025,139 +1037,203 @@ $('#my-profile').on('click', () => {
                     });
                 });
                     
+                $('#joined-tab').on('click', () => {
 
+                    $.get('/user-schedules-joined', (schedules) => {
 
-                    
-        
+                        $('#joined').html('');
 
+                        for (const schedule of schedules) {
 
-                    //$('#profile-schedules').append("<div class=\"profile-schedules-header\" id=\"profile-schedules-header\">Created</div>");
-/*
-                    for(const schedule of schedules) {
-
-                        if(schedule["type"] === "host") {
-
-                            $('#profile-schedules').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
+                            $('#joined').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
                             $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
 
-                            $(`#profile-schedule-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-schedule-hover-${schedule["schedule_id"]}\"></div>`);
-                            $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div></div><div class=\"archive-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Archive</div><div></div>`);
-                            $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"delete-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Delete</div><div></div>`);
-
-                            $(`#archive-schedule-user-schedule-hover-${schedule["schedule_id"]}`).on('click', () => {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                $('#profile-schedules').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
-                                $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
-
-                                $(`#profile-schedule-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-schedule-hover-${schedule["schedule_id"]}\"></div>`);
-                                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"archive-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Archive</div>`);
-                                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"delete-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Delete</div>`);
-                            });
-
-                            $(`#delete-schedule-user-schedule-hover-${schedule["schedule_id"]}`).on('click', () => {
-
-                                $('#profile-schedules').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
-                                $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
-
-                                $(`#profile-schedule-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-schedule-hover-${schedule["schedule_id"]}\"></div>`);
-                                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"archive-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Archive</div>`);
-                                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"delete-schedule-button\" id=\"archive-schedule-user-schedule-hover-${schedule["schedule_id"]}\">Delete</div>`);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            });
-                        }
-                    }
-
-                    $('#profile-schedules').append("<div class=\"profile-schedules-header\" id=\"profile-schedules-header\">Joined</div>");
-                    for (const schedule of schedules) {
-
-                        if (schedule["type"] === "user") { 
                             
-                            $('#profile-schedules').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
-                            $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
-
                             $(`#profile-schedule-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-joined-schedule-hover-${schedule["schedule_id"]}\"></div>`);
+                            $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).html(`<div class=\"view-schedule-button-2\" id=\"view-schedule-user-${schedule["schedule_id"]}\">View</div><div></div>`);
                             $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"leave-schedule-button\" id=\"leave-button-${schedule["schedule_id"]}\">Leave Schedule</div>`);
 
-                            $(`#archive-schedule-user-schedule-hover-${schedule["schedule_id"]}`).on('click', () => {
+                            $(`#view-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                view_schedule(`${schedule["schedule_id"]}`);
                             });
-                        }
-                    }*/
 
-                    // Get the element with id="defaultOpen" and click on it
-                    $('#defaultOpen').trigger('click');
+                            $(`#leave-button-${schedule["schedule_id"]}`).on('click', () => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            });                                    
+                        }
+                    });
+                });
+
+                $('#archived-tab').on('click', () => {
+
+                    $.get('/user-schedules-archived', (schedules) => {
+
+                        $('#archived').html('');
+
+                        for (const schedule of schedules) {
+
+                            $('#archived').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
+                            $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+                        }
+                    });
+                });
+
+                $('#created-tab').trigger('click');
             });
 
             $('#profile-menu-requests').on('click', () => {
 
-                $.get('/user-requests', (requests) => {
+                $('#profile-display').html("<div class=\"profile-subheader\">Pending Requests</div>");
+                $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-requests\"></div>");
 
-                    $('#profile-display').html("<div class=\"profile-subheader\">Pending Requests</div>");
-                    $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-requests\"></div>");
+                $('#profile-requests').append('<div class=\"grid-schedules-tabs\" id=\"requests-tabs\"></div>');
+                $('#requests-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'sent\', this, \'lightgrey\')\" id=\"sent-tab\">Sent</button>');
+                $('#requests-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'received\', this, \'lightgrey\')\" id=\"received-tab\">Received</button>');
+                $('#profile-requests').append('<div id=\"sent\" class=\"tabcontent\"></div>');
+                $('#profile-requests').append('<div id=\"received\" class=\"tabcontent\"></div>');
 
-                    $('#profile-requests').append("<div class=\"profile-schedules-header\" id=\"profile-requests-header\">Sent</div>");
-                    for (const request of requests) {
-                        
-                        if (request["type"] === "sent") {
-                            $('#profile-requests').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-request-${request["request_id"]}\"></div>`);
-                            $(`#profile-request-${request["request_id"]}`).append(get_userrequest_html(request));
+                $('#sent-tab').on('click', () => {
+
+                    $.get('/user-sent-requests', (requests) => {
+
+                        $('#sent').html('');
+
+                        for (const request of requests) {
+
+
+                            $('#sent').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-request-sent-${request["request_id"]}\"></div>`);
+                            $(`#profile-request-sent-${request["request_id"]}`).append(get_userrequest_html(request));
+                            
+                            $(`#profile-request-sent-${request["request_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-request-sent-hover-${request["schedule_id"]}\"></div>`);
+                            $(`#user-request-sent-hover-${request["schedule_id"]}`).html(`<div class=\"view-schedule-button-3\" id=\"view-schedule-user-${request["schedule_id"]}\">View Schedule</div><div></div>`);
+                            $(`#user-request-sent-hover-${request["schedule_id"]}`).append(`<div class=\"delete-request-button-2\" id=\"delete-request-user-${request["schedule_id"]}\">Delete Request</div><div></div>`);
+
+                            $(`#view-schedule-user-${request["schedule_id"]}`).on('click', () => {
+
+                                view_schedule(`${request["schedule_id"]}`);
+                            });
+
+                            $(`#delete-request-user-${request["schedule_id"]}`).on('click', () => {
+
+                                
+                                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            });                      
                         }
-                    }
-
-                    $('#profile-requests').append("<div class=\"profile-schedules-header\" id=\"profile-requests-header\">Received</div>");
-                    for (const request of requests) {
-
-                        if (request["type"] === "received") {
-                            $('#profile-requests').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-request-${request["request_id"]}\"></div>`);
-                            $(`#profile-request-${request["request_id"]}`).append(get_userrequest_html(request));
-                        }
-                    }
+                    });
                 });
+
+                $('#received-tab').on('click', () => {
+
+                    $.get('/user-received-requests', (requests) => {
+
+                        $('#received').html('');
+
+                        for (const request of requests) {
+
+                            $('#received').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-request-received-${request["request_id"]}\"></div>`);
+                            $(`#profile-request-received-${request["request_id"]}`).append(get_userrequest_html(request));
+
+                            $(`#profile-request-received-${request["request_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-request-received-hover-${request["schedule_id"]}\"></div>`);
+                            $(`#user-request-received-hover-${request["schedule_id"]}`).html(`<div class=\"view-schedule-button-4\" id=\"view-schedule-user-${request["schedule_id"]}\">View Schedule</div><div></div>`);
+                            $(`#user-request-received-hover-${request["schedule_id"]}`).append(`<div class=\"approve-request-button\" id=\"approve-request-user-${request["schedule_id"]}\">Approve</div><div></div>`);
+                            $(`#user-request-received-hover-${request["schedule_id"]}`).append(`<div class=\"decline-request-button\" id=\"decline-request-user-${request["schedule_id"]}\">Decline</div><div></div>`);
+
+                            $(`#view-schedule-user-${request["schedule_id"]}`).on('click', () => {
+
+                                view_schedule(`${request["schedule_id"]}`);
+                            });
+
+                            $(`#approve-request-user-${request["schedule_id"]}`).on('click', () => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            });
+
+                            $(`#decline-request-user-${request["schedule_id"]}`).on('click', () => {
+
+                             
+                                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            });                        
+                        }
+                    });
+                });
+
+                $('#sent-tab').trigger('click');
             });
 
             $('#profile-menu-posts').on('click', () => {
@@ -1167,8 +1243,6 @@ $('#my-profile').on('click', () => {
                     $('#profile-display').html("<div class=\"profile-subheader\">Post Hisory</div>");
                     $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-posts\"></div>")
                     
-
-                    $('#profile-posts').append("<div class=\"profile-schedules-header\" id=\"profile-requests-header\"></div>");
                     for (const post of posts) {
 
                         $('#profile-posts').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-post-${post["post_id"]}\"></div>`);

@@ -45,7 +45,8 @@ $('.adminbutton').on('click', (evt) => {
                 $('.grid-admin-display').append(`<div class=\"admin-display-item\" id=\"admin-display-item-${i}\"></div>`);
                 $(`#admin-display-item-${i}`).append(`Schedule ID: ${data[i].schedule_id} |
                                                 User ID: ${data[i].user_id} |
-                                                Game ID: ${data[i].game_id}`);
+                                                Game ID: ${data[i].game_id} |
+                                                isArchived: ${data[i].isArchived}`);
             }
         }
         else if (evt.target.id === "requests") {

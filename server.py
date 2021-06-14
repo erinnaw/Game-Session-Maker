@@ -247,7 +247,6 @@ def get_user_schedules_created():
     return jsonify(data_list)
 
 
-
 @app.route('/user-schedules-joined', methods=["GET"])
 def get_user_schedules_joined():
     """Get logged user's joined schedules."""
@@ -284,8 +283,8 @@ def get_user_schedules_archived():
 
     data_list = list()
 
-    if session.get('user',0):
-        schedules = crud.get_archived_schedules_by_user_id(session['user'].user_id)
+    if session.get('user', 0):
+        schedules = crud.get_archived_schedules_by_user_id(session['user'])
 
         for schedule in schedules:
             game = crud.get_game_by_id(schedule.game_id)
@@ -305,6 +304,27 @@ def get_user_schedules_archived():
             data_list.append(data)
 
     return jsonify(data_list)
+
+
+@app.route('/archive-schedule/<schedule_id>', methods=["POST"])
+def set_schedule_archived(schedule_id):
+    """Archive a schedule by schedule_id."""
+
+    flash = 'fail'
+    schedule = crud.get_schedule_by_id(schedule_id)
+
+    if session.get('user', 0):
+        if session['user'] == schedule.user_id:
+            if crud.set_schedule_archived_by_id(schedule_id):
+                flash = "success"
+            else:
+                flash = "Error: Schedule archive failed."
+        else:
+            flash = 'You must be the host to archive the schedule.'
+    else:
+        flash = 'You must be signed in to archive a schedule.'
+
+    return flash
 
 
 @app.route('/get-schedule-by-id/<schedule_id>', methods=["GET"])
@@ -335,7 +355,7 @@ def get_user_requests():
     
     data_list = list()
 
-    if session.get('user',0):
+    if session.get('user', 0):
         requests = crud.get_requests_by_user_id(session['user'])
         
         for request in requests:
@@ -363,6 +383,67 @@ def get_user_requests():
                 schedule = crud.get_schedule_by_id(request.schedule_id)
                 user = crud.get_user_by_id(request.user_id)
 
+
+                data = {"type": "received",
+                        "username": user.username,
+                        "request_id": request.request_id,
+                        "game_id": schedule.game_id,
+                        "game_name": game.name,
+                        "schedule_id": schedule.schedule_id, 
+                        "schedule_datetime": schedule.datetime,
+                        "schedule_timezone": schedule.timezone,
+                        "time_stamp": request.time_stamp,                    
+                        "content": request.content}
+
+                data_list.append(data)
+
+    return jsonify(data_list)
+
+
+@app.route('/user-sent-requests', methods=["GET"])
+def get_user_sent_requests():
+    """Get logged user sent requests."""
+
+    data_list = list()
+
+    if session.get('user', 0):
+        requests = crud.get_requests_by_user_id(session['user'])
+        
+        for request in requests:
+            game = crud.get_game_by_id(request.game_id)
+            schedule = crud.get_schedule_by_id(request.schedule_id)
+            user = crud.get_user_by_id(request.user_id)
+
+            data = {"type": "sent",
+                    "username": user.username,
+                    "request_id": request.request_id,
+                    "game_id": schedule.game_id,
+                    "game_name": game.name,
+                    "schedule_id": schedule.schedule_id, 
+                    "schedule_datetime": schedule.datetime,
+                    "schedule_timezone": schedule.timezone,
+                    "time_stamp": request.time_stamp,
+                    "content": request.content}
+
+            data_list.append(data)
+
+    return jsonify(data_list)
+
+
+@app.route('/user-received-requests', methods=["GET"])
+def get_user_received_requests():
+    """Get logged user received requests."""
+
+    data_list = list()
+
+    if session.get('user', 0):
+        schedules = crud.get_schedules_by_user_id(session['user'])
+
+        for schedule in schedules:
+            for request in schedule.requests:
+                game = crud.get_game_by_id(schedule.game_id)
+                schedule = crud.get_schedule_by_id(request.schedule_id)
+                user = crud.get_user_by_id(request.user_id)
 
                 data = {"type": "received",
                         "username": user.username,

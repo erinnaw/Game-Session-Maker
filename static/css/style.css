@@ -105,7 +105,8 @@ textarea {
     height: 100%;
     width: 1200px;
     margin: auto;
-    font-family:'Courier New', Courier, monospace;  
+    font-family:'Courier New', Courier, monospace;
+    overflow: auto;  
 }
 
 .navbar {
@@ -314,28 +315,16 @@ textarea {
     margin: auto;
 }
 
-.profile-schedules-header {
-    font-size: 18px;
-    height: 50px;
-    width: 100%;
-    text-align: center;
-    margin: auto;
-    line-height: 50px;
-    border: 1px solid rgb(0, 0, 0);
-    background-color: floralwhite;
-}
-
 .grid-profile-schedule-item {
     position: relative;
     display: grid;
     grid-template-columns: 20% 80%;
     width: 100%;
     margin: auto;
-    border-left: 1px solid rgb(0, 0, 0);
-    border-right: 1px solid rgb(0, 0, 0);
-    border-bottom: 1px solid rgb(0, 0, 0);
+    border: 1px solid rgb(0, 0, 0);
     padding-top: 10px;
     padding-bottom: 10px;
+    background-color: white;
 }
 
 .profile-schedules-item-text {
@@ -360,10 +349,23 @@ textarea {
     opacity: 1;
 }
 
+.view-schedule-button-2 {
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
 .archive-schedule-button {
     position: absolute;
     top: 50%;
-    left: 40%;
+    left: 50%;
     transform: translate(-50%, -50%);
     width: 100px;
     height: 50px;
@@ -376,7 +378,7 @@ textarea {
 .delete-schedule-button {
     position: absolute;
     top: 50%;
-    left: 60%;
+    left: 65%;
     transform: translate(-50%, -50%);
     width: 100px;
     height: 50px;
@@ -386,11 +388,51 @@ textarea {
     cursor: pointer;
 }
 
+.view-schedule-button-2:hover {
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+
 .archive-schedule-button:hover {
     background-color: rgb(172, 168, 112);
 }
 
 .delete-schedule-button:hover {
+    background-color: red;
+}
+
+.view-schedule-button-3 {
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.delete-request-button-2 {
+    position: absolute;
+    top: 50%;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.view-schedule-button-3:hover {
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+
+.delete-request-button-2:hover {
     background-color: red;
 }
 
@@ -414,7 +456,7 @@ textarea {
 .leave-schedule-button {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 60%;
     transform: translate(-50%, -50%);
     width: 200px;
     height: 50px;
@@ -426,6 +468,58 @@ textarea {
 
 .leave-schedule-button:hover {
     background-color: red;
+}
+
+.view-schedule-button-4 {
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.approve-request-button {
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.decline-request-button {
+    position: absolute;
+    top: 50%;
+    left: 69%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+.view-schedule-button-4:hover {
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+
+.decline-request-button:hover {
+    background-color: red;
+}
+
+.approve-request-button:hover {
+    background-color: palegreen;
 }
 
 /*---------------Hover Tabs for user schedules--------------*/
@@ -472,9 +566,11 @@ body, html {
     border: 1px solid rgb(0, 0, 0);
 }
 
-#created {background-color: white;}
-#joined {background-color: white;}
-#archived {background-color: white;}
+#created {background-color: lightgrey;}
+#joined {background-color: lightgrey;}
+#archived {background-color: lightgrey;}
+#sent {background-color: lightgrey;}
+#received {background-color: lightgrey;}
 
 /*------------------------Create Schedule---------------------------*/
 
@@ -802,7 +898,7 @@ body, html {
     height: 50px;
     line-height: 50px;
     text-align: center;
-    background-color: green;
+    background-color: palegreen;
     border: 1px solid rgb(0, 0, 0);
 }
 
