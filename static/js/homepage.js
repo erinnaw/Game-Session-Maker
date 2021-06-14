@@ -51,6 +51,8 @@ $(document).ready(function () {
             setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
         })
     }
+
+    $('#all-games').trigger('click');
 });
 
 $('#create-account').on('click', () => {
@@ -1135,7 +1137,7 @@ $('#my-profile').on('click', () => {
                             
                             $(`#profile-request-sent-${request["request_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-request-sent-hover-${request["schedule_id"]}\"></div>`);
                             $(`#user-request-sent-hover-${request["schedule_id"]}`).html(`<div class=\"view-schedule-button-3\" id=\"view-schedule-user-${request["schedule_id"]}\">View Schedule</div><div></div>`);
-                            $(`#user-request-sent-hover-${request["schedule_id"]}`).append(`<div class=\"delete-request-button-2\" id=\"delete-request-user-${request["schedule_id"]}\">Delete Request</div><div></div>`);
+                            $(`#user-request-sent-hover-${request["schedule_id"]}`).append(`<div class=\"delete-request-button-2\" id=\"delete-request-user-${request["schedule_id"]}\">Cancel Request</div><div></div>`);
 
                             $(`#view-schedule-user-${request["schedule_id"]}`).on('click', () => {
 
@@ -1144,24 +1146,14 @@ $('#my-profile').on('click', () => {
 
                             $(`#delete-request-user-${request["schedule_id"]}`).on('click', () => {
 
-                                
-                                
+                                $.post(`/delete-request/${request["request_id"]}`, (msg) => {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                    $(`#delete-request-user-${request["schedule_id"]}`).remove();
+                                    $(`#view-schedule-user-${request["schedule_id"]}`).remove();
+                                    $(`#user-request-sent-hover-${request["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${request["schedule_id"]}\">Request Cancelled</div>`);
+                                    $(`#user-request-sent-hover-${request["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
+                                    $(`#user-request-sent-hover-${request["schedule_id"]}`).css('opacity', '1');
+                                });
                             });                      
                         }
                     });
@@ -1190,45 +1182,30 @@ $('#my-profile').on('click', () => {
 
                             $(`#approve-request-user-${request["schedule_id"]}`).on('click', () => {
 
+                                $.post(`/approve-request/${request.request_id}`, (msg) => {
 
+                                    $('#snackbar').html(`${msg}`);
+                                    document.getElementById("snackbar").className = "show";
+                                    setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                    $(`#decline-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"decline-2\" id=\"decline-2\">Decline</div>");
+                                    $(`#approve-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"approved-2\" id=\"approved-2\">Approved</div>");
+                                });       
                             });
 
                             $(`#decline-request-user-${request["schedule_id"]}`).on('click', () => {
+         
+                                $.post(`/decline-request/${request.request_id}`, (msg) => {
 
-                             
-                                
-
-
-
-
-
+                                    $('#snackbar').html(`${msg}`);
+                                    document.getElementById("snackbar").className = "show";
+                                    setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
 
 
-
-
-
-
-
-
-
-
-
-                            });                        
+                                    $(`#decline-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"declined-2\" id=\"declined-2\">Declined</div>");
+                                    $(`#approve-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"approve-2\" id=\"approve-2\">Approve</div>");
+                                });                                  
+                          });                        
                         }
                     });
                 });

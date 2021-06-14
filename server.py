@@ -826,6 +826,27 @@ def decline_request(request_id):
     return flash
 
 
+@app.route('/delete-request/<request_id>', methods=["POST"])
+def delete_request(request_id):
+    """Delete a request."""
+
+    flash = ''
+
+    if session.get('user', 0):
+        request = crud.get_request_by_id(request_id)
+        if session['user'] == request.user_id:
+            crud.remove_request(request_id)
+            flash = 'Request deleted.'
+
+        else:
+            flash = 'You must be the requestee to delete the request.'
+
+    else:
+        flash = 'You must be signed in to delete your request.'
+
+    return flash 
+
+
 @app.route('/get-schedule-users/<schedule_id>')
 def get_schedule_users(schedule_id):
     """Get all users for a particular schedule."""
