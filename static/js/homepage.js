@@ -55,10 +55,24 @@ $(document).ready(function () {
     $('#all-games').trigger('click');
 });
 
+const isAdvancedUpload = function () {
+    const div = document.createElement('div');
+    return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+}();
+
 $('#create-account').on('click', () => {
 
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create Account</div>");
-    $('#homepage-display').append("<form class = \"registration-form\" id = \"registration-form\" action = \"/create-user\" method = \"POST\"></form>");
+    $('#homepage-display').append("<form class=\"registration-form\" id=\"registration-form\" action=\"/create-user\" method=\"POST\"></form>");
+
+    $('#registration-form').append("<div class=\"avator-upload-form\" id=\"avator-upload-form\">");
+    $('#avator-upload-form').append("<img class=\"avator-img-profile-upload\" id=\"avator-img\" src=\"\"></img>");
+    $('#avator-upload-form').append("<div class=\"drop-area\" id=\"drop-area\"></div>");
+    $('#drop-area').append("<input accept=\"image/*\" type=\"file\" class=\"file-box\" name=\"files[]\" id=\"file\" data-multiple-caption=\"{count} files selected\" multiple></input>" +
+        "<br><label for=\"file\"><strong>Select an image</strong><br>" +
+        "<span class=\"dragdrop-box\">or drag and drop</span></div>");
+    $('#registration-form').append("<div class=\"registration-form-spacing\"></div>");
+
     $('#registration-form').append("<div class=\"grid-registration\" id=\"registration\"></div>");
     $('#registration').append(
         "<Label for=\"username\">Username*</Label>"+
@@ -68,14 +82,57 @@ $('#create-account').on('click', () => {
         "<Label for=\"lname\">Last Name</Label>"+
         "<input type =\"text\" name=\"lname\" id=\"lname\">"+
         "<Label for=\"email\">Email*</Label>" +
-        "<input type =\"text\" name=\"email\" id=\"email\">" +
+        "<input type =\"email\" name=\"email\" id=\"email\">" +
         "<Label for= \"password\">Password*</Label>" +
         "<input type=\"password\" name=\"password\" id=\"password\">" +
         "<div></div>" +
         "<input type=\"submit\" value=\"Submit\">" +
         "<div></div>* required fields" +
         "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
-     
+
+    if (isAdvancedUpload) {
+
+        $('#avator-upload-form').addClass('has-advanced-upload');
+        let droppedFiles = false;
+        const $form = $('#avator-upload-form');
+        const $label = $form.find('label');
+
+        const showFiles = function (files) {
+
+            $label.text(files.length > 1 ? ($('#drop-area').attr('data-multiple-caption') || '').replace('{count}', files.length) : files[0].name);
+        }
+
+        $('#avator-upload-form').on('submit drag dragstart dragend dragover dragenter dragleave drop', function (evt) {
+
+            evt.preventDefault();
+            evt.stopPropagation();
+        })
+        .on('dragover dragenter', function () {
+
+            $('#avator-upload-form').addClass('is-dragover');
+        })
+        .on('dragleave dragend drop', function () {
+
+            $('#avator-upload-form').removeClass('is-dragover');
+        })
+        .on('drop', function (evt) {
+
+            droppedFiles = evt.originalEvent.dataTransfer.files;
+            showFiles(droppedFiles);
+
+            if (droppedFiles) {
+                $('#avator-img').attr("src", URL.createObjectURL(droppedFiles[0]));
+            }
+        })
+        .on('change', () => {
+
+            const [file_] = file.files;
+            if (file_) {
+                $('#avator-img').attr("src", URL.createObjectURL(file_));
+            }
+        });
+    }
+
     $('#registration-form').on('submit', (evt) => {
         
         evt.preventDefault();
@@ -84,12 +141,16 @@ $('#create-account').on('click', () => {
             "fname": $('#fname').val(),
             "lname": $('#lname').val(),
             "email": $('#email').val(),
-            "password": $('#password').val()
+            "password": $('#password').val(),
+            "image_path": $('#avator-img').attr('src')
         };
 
         $.post('/add-user', formData, (res) => {
 
-            $('#flash-msg').html(res);
+            $('#snackbar').html(res);
+            document.getElementById("snackbar").className = "show";
+            setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+            $('#all-games').trigger('click');
         })
     });
 });
@@ -101,7 +162,7 @@ $('#log-in').on('click', () => {
     $('#login-form').append("<div class=\"grid-login\" id=\"login\"></div>");
     $('#login').append(
         "<Label for=\"email\">Email</Label>" +
-        "<input type =\"text\" name=\"email\" id=\"email\">" +
+        "<input type =\"email\" name=\"email\" id=\"email\">" +
         "<Label for= \"password\">Password</Label>" +
         "<input type=\"password\" name=\"password\" id=\"password\">" +
         "<div></div>" +
@@ -686,16 +747,28 @@ function get_userdetails_html(user) {
         `<div class="profile-user-item">Username:</div>` +
         `<div class="profile-user-item">${user.username}</div>` +
         `<div class="profile-user-item">First Name:</div>` +
-        `<div class="profile-user-item">${user.firstname}</div>` +
+        `<div class="profile-user-item" id=\"edit-firstname\">${user.firstname}</div>` +
         `<div class="profile-user-item">Last Name:</div>` +
-        `<div class="profile-user-item">${user.lastname}</div>` +
+        `<div class="profile-user-item" id=\"edit-lastname\">${user.lastname}</div>` +
         `<div class="profile-user-item">Email:</div>` +
-        `<div class="profile-user-item">${user.email}</div>` +
+        `<div class="profile-user-item" id=\"edit-email\">${user.email}</div>` +
         `<div class="profile-user-item">Password:</div>` +
-        `<div class="profile-user-item">${user.password}</div>`)
+        `<div class="profile-user-item" id=\"edit-password\">${user.password}</div>`)
 }
 
 function get_userschedule_html(schedule) {
+
+    let str = '';
+
+    if (schedule['isArchived']) {
+
+        str = `<div class=\"profile-schedules-item-text\"><span class=\"status-archived\">Archived</span></div>`;
+    }
+        
+    else {
+
+        str = `<div class=\"profile-schedules-item-text\"><span class=\"status-not-archived\">Active</span></div>`;
+    }   
     
     return (
         `<div class=\"profile-schedules-item-text\">Schedule ID:</div>` +
@@ -717,7 +790,8 @@ function get_userschedule_html(schedule) {
         `<div class=\"profile-schedules-item-text\">Max Team:</div>` +
         `<div class=\"profile-schedules-item-text\">${schedule['max_team']}</div>` +
         `<div class=\"profile-schedules-item-text\">Description:</div>` +
-        `<div class=\"profile-schedules-item-text\">${schedule['description']}</div>`)
+        `<div class=\"profile-schedules-item-text\">${schedule['description']}</div>` +
+        `<div class=\"profile-schedules-item-text\">Status:</div>` + str)
 }
 
 function get_userrequest_html(request) {
@@ -935,11 +1009,14 @@ $('#my-profile').on('click', () => {
                 "<div class=\"grid-profile-item\" id=\"profile-menu-requests\">Pending Requests</div>" +
                 "<div class=\"grid-profile-item\" id=\"profile-menu-posts\">Post History</div>");
             $('#profile').append("<div class=\"grid-profile-display\" id=\"profile-display\"></div>");
-            $('#profile-display').append("<div class=\"profile-subheader\">Account Details</div>");
-            $('#profile-display').append(`<img class=\"avator-img\" src=\"${res.image_path}\"></img>`);
-            $('#profile-display').append("<div class=\"grid-profile-user\" id=\"profile-user\"></div>");
-            $('#profile-user').append(get_userdetails_html(res));
 
+            $('#profile-display').append("<div class=\"profile-subheader\">Account Details</div>");
+            $('#profile-display').append(`<img class=\"avator-img-profile\" id=\"avator-img-edit\" src=\"${res.image_path}\"></img>`);
+            $('#profile-display').append("<div class=\"grid-profile-user\" id=\"profile-user\"></div>");
+            $('#profile-user').html(get_userdetails_html(res));
+            $('#profile-display').append("<div class=\"edit-profile-button\" id=\"edit-profile\">Edit Profile</div>");
+            $('#profile-display').append("<div class=\"flash-msg\" id=\"flash-msg\"></div");
+            
             $('.grid-profile-item').hover(
 
                 (evt) => {
@@ -954,13 +1031,99 @@ $('#my-profile').on('click', () => {
                 }
             );
 
+            $('#edit-profile').on('click', () => {
+
+                $('#avator-img-edit').replaceWith("<form class=\"avator-upload-form\" id=\"avator-upload-form\" method=\"post\">");
+                $('#avator-upload-form').append("<img class=\"avator-img-profile-upload\" id=\"avator-img\" src=\"\"></img>");
+                $('#avator-upload-form').append("<div class=\"drop-area\" id=\"drop-area\"></div>");
+                $('#drop-area').append("<input accept=\"image/*\" type=\"file\" class=\"file-box\" name=\"files[]\" id=\"file\" data-multiple-caption=\"{count} files selected\" multiple></input>" +
+                                        "<br><label for=\"file\"><strong>Select an image</strong><br>" +
+                                        "<span class=\"dragdrop-box\">or drag and drop</span></label>");
+
+                if(isAdvancedUpload) {
+
+                    $('#avator-upload-form').addClass('has-advanced-upload');
+                    let droppedFiles = false;
+                    const $form = $('#avator-upload-form');
+                    const $label = $form.find('label');
+
+                    const showFiles = function (files) {
+
+                        $label.text(files.length > 1 ? ($('#drop-area').attr('data-multiple-caption') || '').replace('{count}', files.length) : files[0].name);
+                    }
+
+                    $('#avator-upload-form').on('submit drag dragstart dragend dragover dragenter dragleave drop', function(evt) {
+
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    })
+                    .on('dragover dragenter', function() {
+
+                        $('#avator-upload-form').addClass('is-dragover');
+                    })
+                    .on('dragleave dragend drop', function() {
+
+                        $('#avator-upload-form').removeClass('is-dragover');
+                    })
+                    .on('drop', function(evt) {
+
+                        droppedFiles = evt.originalEvent.dataTransfer.files;
+                        showFiles(droppedFiles);
+
+                        if (droppedFiles) {
+                            $('#avator-img').attr("src", URL.createObjectURL(droppedFiles[0]));
+                        }
+                    })
+                    .on('change', () => {
+
+                        const [file_] = file.files;
+                        if (file_) {
+                            $('#avator-img').attr("src", URL.createObjectURL(file_));
+                        }
+                    });
+                }
+
+                $('#edit-firstname').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"firstname\" id=\"firstname\" class=\"edit-firstname-text\"></input>");
+                $('#edit-lastname').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"lastname\" id=\"lastname\" class=\"edit-lastname-text\"></input>");
+                $('#edit-email').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"email\" name=\"email\" id=\"email\" class=\"edit-email-text\"></input>");
+                $('#edit-password').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"\" name=\"password\" id=\"password\" class=\"edit-password-text\"></input>");
+                $('#edit-profile').replaceWith("<div class=\"save-changes-button\" id=\"save-changes\">Save Changes</div></form>");
+
+                $('#firstname').val(`${res.firstname}`);
+                $('#lastname').val(`${res.lastname}`);
+                $('#email').val(`${res.email}`);
+                $('#password').val(`${res.password}`);
+                $('#avator-img').attr("src", res.image_path);
+
+                $('#save-changes').on('click', () => {
+                
+                    if ($('#email').val() == '' || $('#password').val() == '') {
+                        
+                        $('#flash-msg').html("Email and Password cannot be blank.");
+                        return;
+                    }
+                    else {
+
+                        const formData = {"fname": $('#firstname').val(),
+                                        "lname": $('#lastname').val(),
+                                        "email": $('#email').val(),
+                                        "password": $('#password').val(),
+                                        "image_path": $('#avator-img').attr('src')}
+
+                        $.post('/edit-profile', formData, (msg) => {
+
+                            $('#snackbar').html(msg);
+                            document.getElementById("snackbar").className = "show";
+                            setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+                            $('#my-profile').trigger('click');
+                        });
+                    }
+                });
+            });
+
             $('#profile-menu-user').on('click', () => {
                 
-                $('#profile-display').html("<div class=\"profile-subheader\">Account Details</div>");
-                $('#profile-display').append(`<img class=\"avator-img\" src=\"${res.image_path}\"></img>`);
-                $('#profile-display').append(`<div></div>`);
-                $('#profile-display').append("<div class=\"grid-profile-user\" id=\"profile-user\"></div>");
-                $('#profile-user').append(get_userdetails_html(res));
+                $('#my-profile').trigger('click');
             });
 
             $('#profile-menu-schedules').on('click', () => {
@@ -1301,11 +1464,6 @@ function search_games() {
         }
     });
 }
-
-
-
-
-
 
 
 

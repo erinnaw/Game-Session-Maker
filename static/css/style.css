@@ -80,6 +80,53 @@ textarea {
     height: 100px;
 }
 
+.status-archived { 
+    background-color: red;
+    color:white;
+}
+
+.status-not-archived {
+    background-color: rgb(0, 145, 0);
+    color:white;
+}
+
+.edit-profile-button {
+    /*top: 50%;
+    left: 35%;
+    transform: translate(-50%, -50%);*/
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+    margin: 30px 435px 30px;
+}
+
+.edit-profile-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.save-changes-button {
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+    margin: 30px 435px 30px;
+}
+
+.save-changes-button:hover {
+    background-color: black;
+    color: white;
+}
+
+.edit-firstname-text, .edit-lastname-text, .edit-email-text, .edit-password-text {
+    width: 220px;
+}
+
 /*----------------------------Admin----------------------------*/
 
 .grid-admin-display {
@@ -256,6 +303,12 @@ textarea {
     display: grid;
     grid-template-columns: 40% 60%;
     width: 400px;
+    margin: auto;
+}
+
+.registration-form-spacing {
+    height: 20px;
+    width: 100%;
     margin: auto;
 }
 
@@ -901,6 +954,21 @@ body, html {
 .avator-img {
     height: 100px;
     width: 100px;
+    margin: auto;
+    border-radius: 10%;        
+}
+
+.avator-img-profile {
+    height: 150px;
+    width: 150px;
+    margin: auto;
+    border-radius: 10%;    
+    margin-bottom: 20px;
+}
+
+.avator-img-profile-upload {
+    height: 120px;
+    width: 120px;
     margin: auto;    
 }
 
@@ -1136,4 +1204,28 @@ body, html {
 
 .active:after {
   content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+/*-------------------------Drag and Drop File-----------------------------------*/
+
+.dragdrop-box {
+  display: none;
+}
+
+.avator-upload-form.has-advanced-upload {
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  height: 200px;
+  width: 200px;
+  font-family: sans-serif;
+  margin: 10px auto;
+  text-align: center;
+  padding-top: 10px;
+}
+.avator-upload-form.has-advanced-upload .dragdrop-box {
+  display: inline;
+}
+
+.avator-upload-form.is-dragover {
+  background-color: rgb(202, 202, 202);
 }

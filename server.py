@@ -89,6 +89,7 @@ def add_user():
     lname = request.form.get("lname")
     email = request.form.get("email")
     password = request.form.get("password")
+    image_path = request.form.get("image_path")
 
     if crud.get_user_by_username(username):
         flash = "Username already exist."
@@ -97,7 +98,7 @@ def add_user():
     elif username == '' or email == '' or password == '':
         flash = "Username, email and password is required."
     else:
-        crud.create_user(username, fname, lname, email, password)
+        crud.create_user(username, fname, lname, email, password, image_path)
         flash = "User created. Please log in."
 
     return flash
@@ -163,11 +164,36 @@ def get_user():
                 "lastname": user.last_name,
                 "image_path": user.image_path,
                 "email": user.email,
-                "password": user.password}
+                "password": user.password,
+                "image_path": user.image_path}
 
         return jsonify(data)
     
     return "None"
+
+
+@app.route('/edit-profile', methods=['POST'])
+def edit_profile():
+    """Edit logged user's profile."""
+
+    flash = ''
+    fname = request.form.get('fname')
+    lname = request.form.get('lname')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    image_path = request.form.get('image_path')
+
+    if session.get('user', 0):
+        if crud.set_user_profile(session['user'], fname, lname, email, password, image_path):
+            flash = 'Profile Changed'
+
+        else:
+            flash = 'Error: Profile could not be changed.' 
+
+    else:
+        flash = 'You must be logged in to edit your profile'
+
+    return flash
 
 
 @app.route('/user-schedules', methods=["GET"])
@@ -1018,10 +1044,6 @@ def view_admin_display(path):
         data = None                        
 
     return jsonify(data)
-
-
-
-
 
 
 

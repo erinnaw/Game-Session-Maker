@@ -6,6 +6,9 @@ from sqlalchemy import func, Time, cast
 def create_user(username, fname, lname, email, password, image_path='/static/img/avator-placeholder.jpg'):
     """Create and return a new user."""
 
+    if image_path == '':
+        image_path = '/static/img/avator-placeholder.jpg'
+
     user = User(username=username, first_name=fname, last_name=lname, image_path=image_path, email=email, password=password)
     db.session.add(user)
     db.session.commit()
@@ -317,6 +320,17 @@ def set_schedule_archived_by_id(schedule_id):
     return False
 
 
+def set_user_profile(user_id, fname, lname, email, password, image_path):
+    """Set user profile firstname, lastname, email and password."""
+
+    if User.query.get(user_id):
+        User.query.filter(User.user_id == user_id).update({"first_name": fname, "last_name": lname, "email": email, "password": password, "image_path": image_path})
+        db.session.commit()
+        return True
+    
+    return False
+
+
 #-----------------Boolean Wrappers------------------------------->
 def isScheduleUser(schedule_id, user_id):
     """Check if a user is in a schedule_id's waitlist."""
@@ -386,12 +400,14 @@ def remove_user_from_schedule(schedule_id, user_id):
 
 
 def delete_schedule(schedule_id):
-    """Delete a schedule by id."""
+    """Delete a schedule by id, along with it's requests."""
 
     schedule = Schedule.query.filter(Schedule.schedule_id == schedule_id).first()
-    
+
     for request in schedule.requests:
         db.session.delete(request)
+
+    schedules = User.query.filter().first()
 
     db.session.delete(schedule)
     db.session.commit()
