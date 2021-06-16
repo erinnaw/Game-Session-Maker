@@ -66,7 +66,7 @@ $('#create-account').on('click', () => {
     $('#homepage-display').append("<form class=\"registration-form\" id=\"registration-form\" action=\"/create-user\" method=\"POST\"></form>");
 
     $('#registration-form').append("<div class=\"avator-upload-form\" id=\"avator-upload-form\">");
-    $('#avator-upload-form').append("<img class=\"avator-img-profile-upload\" id=\"avator-img\" src=\"\"></img>");
+    $('#avator-upload-form').append("<img class=\"avator-img-profile-upload\" id=\"avator-img\" src=\"/static/img/avator-placeholder.jpg\"></img>");
     $('#avator-upload-form').append("<div class=\"drop-area\" id=\"drop-area\"></div>");
     $('#drop-area').append("<input accept=\"image/*\" type=\"file\" class=\"file-box\" name=\"files[]\" id=\"file\" data-multiple-caption=\"{count} files selected\" multiple></input>" +
         "<br><label for=\"file\"><strong>Select an image</strong><br>" +
