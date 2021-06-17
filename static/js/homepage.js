@@ -5,6 +5,10 @@ const MAX_PAGE_NUM_PER_SET = 10;
 let curr_schedule_search_page_num = 1;
 let curr_schedule_search_page_set = 1;
 
+//tracks page number for posts in schedule page
+let curr_post_page_num = 1;
+let curr_post_page_set = 1;
+
 let searchFlag = new Boolean(false);
 let searchHandler;
 const search_timer = 800;
@@ -371,7 +375,7 @@ function get_schedules() {
             $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max User:</div><div class=\"profile-schedules-item-text\">${schedule.max_user}</div>`);
             $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max Team:</div><div class=\"profile-schedules-item-text\">${schedule.max_team}</div>`);
             $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Description:</div><div class=\"profile-schedules-item-text\">${schedule.description}</div>`);
-            $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-schedule-button\" id=\"schedule-${schedule.schedule_id}\">view</div>`)
+            $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-schedule-button\" id=\"schedule-${schedule.schedule_id}\">view</div>`);
         }
 
         $('.view-schedule-button').hover(
@@ -460,6 +464,9 @@ function get_schedules() {
 }
 
 function view_schedule(schedule_id) {
+
+    curr_post_page_num = 1;
+    curr_post_page_set = 1;
 
     $.get(`/get-schedule-by-id/${schedule_id}`, (schedule) => {
 
@@ -750,7 +757,13 @@ function view_schedule(schedule_id) {
                             "<input type=\"submit\" value=\"submit\"></input>" +
                             "</form></div>" +
                             "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
+                        $('#homepage-display').append("<div class=\"search-schedule-item\">Show</div><select name=\"max_posts\" id=\"max_posts\" onchange=\"onKeyUp_loadPosts()\"></select></div>");
                         $('#homepage-display').append("<div class=\"schedule-post-canvas\" id=\"schedule-post-canvas\"></div>");
+                        $('#max_posts').append("<option value=\"10\">10</option>" +
+                            "<option value=\"20\" selected>20</option>" +
+                            "<option value=\"50\">50</option>" +
+                            "<option value=\"100\">100</option>");
+                        $('#homepage-display').append("<div class=\"display-page-num\" id=\"display-page-num\"></div>");
 
                         $('#post-form').on('submit', (evt) => {
 
@@ -775,18 +788,7 @@ function view_schedule(schedule_id) {
 
                                     $.get(`/get-posts/${schedule.schedule_id}`, (posts) => {
 
-                                        for (const post of posts) {
-
-                                            $('#schedule-post-canvas').append(`<div class=\"schedule-post-item\" id=\"scheduleposts-${post.post_id}\"></div>`);
-                                            $(`#scheduleposts-${post.post_id}`).append(`<div class=\"post-avator\" id=\"post-avatorbox-${post.post_id}\"></div>`);
-                                            $(`#post-avatorbox-${post.post_id}`).append(`<img class=\"avator-img\" id=\"avatorimg-${post.post_id}\" src=\"${post.image_path}\"></img>`);
-                                            $(`#post-avatorbox-${post.post_id}`).append(`<div class=\"avator-name\" id=\"avatorname-${post.post_id}\">${post.username}</div>`);
-
-                                            $(`#scheduleposts-${post.post_id}`).append(`<div class=\"grid-post-content\" id=\"postcontent-${post.post_id}\"></div>`);
-                                            $(`#postcontent-${post.post_id}`).append(`<div>${post.username} says:</div>`);
-                                            $(`#postcontent-${post.post_id}`).append(`<div class=\"postmsgbox\"><p>${post.content}</p></div>`);
-                                            $(`#postcontent-${post.post_id}`).append(`<div class=\"timestamp\">${post.time_stamp}</div>`);
-                                        }
+                                        get_scheduleposts_html(posts);
                                     });
                                 })
                             }
@@ -794,18 +796,7 @@ function view_schedule(schedule_id) {
 
                         $.get(`/get-posts/${schedule.schedule_id}`, (posts) => {
 
-                            for (const post of posts) {
-
-                                $('#schedule-post-canvas').append(`<div class=\"schedule-post-item\" id=\"scheduleposts-${post.post_id}\"></div>`);
-                                $(`#scheduleposts-${post.post_id}`).append(`<div class=\"post-avator\" id=\"post-avatorbox-${post.post_id}\"></div>`);
-                                $(`#post-avatorbox-${post.post_id}`).append(`<img class=\"avator-img\" id=\"avatorimg-${post.post_id}\" src=\"${post.image_path}\"></img>`);
-                                $(`#post-avatorbox-${post.post_id}`).append(`<div class=\"avator-name\" id=\"avatorname-${post.post_id}\">${post.username}</div>`);
-
-                                $(`#scheduleposts-${post.post_id}`).append(`<div class=\"grid-post-content\" id=\"postcontent-${post.post_id}\"></div>`);
-                                $(`#postcontent-${post.post_id}`).append(`<div>${post.username} says:</div>`);
-                                $(`#postcontent-${post.post_id}`).append(`<div class=\"postmsgbox\"><p>${post.content}</p></div>`);
-                                $(`#postcontent-${post.post_id}`).append(`<div class=\"timestamp\">${post.time_stamp}</div>`);
-                            }
+                            get_scheduleposts_html(posts)
                         });
                     }
                 });
@@ -816,6 +807,128 @@ function view_schedule(schedule_id) {
             }
         });
     });
+}
+
+function onKeyUp_loadPosts() {
+
+    
+
+}
+
+function get_scheduleposts_html(posts) {
+
+    $('#schedule-post-canvas').html('');
+
+    if (posts.length == 0) {
+
+        $('#schedule-post-canvas').append("<div class=\"error-page\">No posts yet.</div>");
+    }
+    else {
+
+        for (const post of posts[0]) {
+
+            $('#schedule-post-canvas').append(`<div class=\"schedule-post-item\" id=\"scheduleposts-${post.post_id}\"></div>`);
+            $(`#scheduleposts-${post.post_id}`).append(`<div class=\"post-avator\" id=\"post-avatorbox-${post.post_id}\"></div>`);
+            $(`#post-avatorbox-${post.post_id}`).append(`<img class=\"avator-img\" id=\"avatorimg-${post.post_id}\" src=\"${post.image_path}\"></img>`);
+            $(`#post-avatorbox-${post.post_id}`).append(`<div class=\"avator-name\" id=\"avatorname-${post.post_id}\">${post.username}</div>`);
+
+            $(`#scheduleposts-${post.post_id}`).append(`<div class=\"grid-post-content\" id=\"postcontent-${post.post_id}\"></div>`);
+            $(`#postcontent-${post.post_id}`).append(`<div>${post.username} says:</div>`);
+            $(`#postcontent-${post.post_id}`).append(`<div class=\"postmsgbox\"><p>${post.content}</p></div>`);
+            $(`#postcontent-${post.post_id}`).append(`<div class=\"timestamp\">${post.time_stamp}</div>`);
+        }
+    }
+
+    //generate paginatiom
+    $('#display-page-num').html("<div class=\"grid-num-pages\" id=\"num-pages-posts\"></div>")
+    const MAX_ITEM_PER_PAGE = $('#max_posts').val();
+    const total_pages = Math.ceil(posts[1].post_count / MAX_ITEM_PER_PAGE);
+    const total_page_sets = Math.ceil(total_pages / MAX_PAGE_NUM_PER_SET);
+    let num_pages = total_pages;
+
+    if (total_pages > MAX_PAGE_NUM_PER_SET) {
+
+        num_pages = MAX_PAGE_NUM_PER_SET;
+    }
+
+    //checks if last set of pages
+    if (curr_schedule_search_page_set == total_page_sets) {
+
+        num_pages = total_pages - (MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1));
+    }
+
+    if (curr_post_page_set != 1) {
+
+        $('#num-pages-posts').append(`<div class=\"triangle-left\" id=\"prev-page-set-${curr_post_page_set}\"></div>`);
+
+        $(`#prev-page-set-${curr_post_page_set}`).on('click', () => {
+
+            curr_post_page_set -= 1;
+            curr_post_page_num = MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1) + 1;
+            get_scheduleposts_html(posts);
+        });
+    }
+
+    for (let i = 1; i <= num_pages; i++) {
+
+        const offset = MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1);
+
+        $('#num-pages-posts').append(`<div class=\"page-num\" id=\"page-num-${offset + i}\">${offset + i}</div>`);
+
+        $(`#page-num-${offset + i}`).on('click', () => {
+
+            curr_post_page_num = offset + i;
+            get_scheduleposts_html(posts);
+        });
+
+        if (curr_post_page_num === offset + i) {
+
+            $(`#page-num-${offset + i}`).addClass("page-num-selected");
+        }
+        else {
+            $(`#page-num-${offset + i}`).removeClass("page-num-selected");
+        }
+    }
+
+    if (curr_post_page_set < total_page_sets) {
+
+        $('#num-pages-posts').append(`<div class=\"triangle-right\" id=\"next-page-set-${curr_post_page_set}\"></div>`);
+
+        $(`#next-page-set-${curr_post_page_set}`).on('click', () => {
+
+            curr_post_page_set += 1;
+            curr_post_page_num = MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1) + 1;
+            get_scheduleposts_html(posts);
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 function get_userdetails_html(user) {

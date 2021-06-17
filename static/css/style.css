@@ -974,6 +974,21 @@ body, html {
     padding: 10px 10px 10px 10px;  
 }
 
+.grid-display-bar {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 10% 10% ;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 20px;
+    width: 80%;
+    margin: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 20px;
+    border: 1px solid rgb(0, 0, 0);  
+}
+
 /*------------------------Display Avator Box---------------------------*/
 
 .post-avator {

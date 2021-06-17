@@ -333,10 +333,16 @@ def get_posts_by_user_id(user_id):
     return Post.query.filter(Post.user_id == user_id).all()
 
 
-def get_posts_by_schedule_id(schedule_id):
+def get_posts_by_schedule_id(schedule_id, limit_size=10, offset_num=0):
     """Return all posts from schedule_id."""
 
-    return Post.query.filter(Post.schedule_id == schedule_id).all()
+    return Post.query.filter(Post.schedule_id == schedule_id).limit(limit_size).offset(offset_num)
+
+
+def get_posts_by_schedule_id_count(schedule_id):
+    """Return the size of the query."""
+
+    return Post.query.filter(Post.schedule_id == schedule_id).count()
 
 
 def get_schedule_users():
