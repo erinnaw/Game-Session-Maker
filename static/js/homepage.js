@@ -757,7 +757,7 @@ function view_schedule(schedule_id) {
                             "<input type=\"submit\" value=\"submit\"></input>" +
                             "</form></div>" +
                             "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
-                        $('#homepage-display').append("<div class=\"search-schedule-item\">Show</div><select name=\"max_posts\" id=\"max_posts\" onchange=\"onKeyUp_loadPosts()\"></select></div>");
+                        $('#homepage-display').append("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_posts\" id=\"max_posts\" onchange=\"onKeyUp_loadPosts()\"></select></div>");
                         $('#homepage-display').append("<div class=\"schedule-post-canvas\" id=\"schedule-post-canvas\"></div>");
                         $('#max_posts').append("<option value=\"10\">10</option>" +
                             "<option value=\"20\" selected>20</option>" +
@@ -811,8 +811,8 @@ function view_schedule(schedule_id) {
 
 function onKeyUp_loadPosts() {
 
-    
 
+    
 }
 
 function get_scheduleposts_html(posts) {
