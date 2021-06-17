@@ -275,25 +275,25 @@ def get_user_schedules_created():
     return jsonify(data_list)
 
 
-@app.route('/get-schedules-active', methods=["GET"])
-def get_schedules_active():
-    """Get all non archived schedules."""
+@app.route('/get-schedules', methods=["GET"])
+def get_schedules():
+    """Get all schedules."""
 
     username = request.args.get("username")
     game_name = request.args.get("game_name")
     date = request.args.get("date")
-    time = request.args.get("time") 
+    time = request.args.get("time")
+    offset_page = request.args.get("offset_page")
+    limit_size =  request.args.get("limit_size")
+    offset_num = int(offset_page) * int(limit_size)
     data = list()
 
-    if username == '' and game_name == '' and date == '' and time == '':
-        schedules = crud.get_schedules_active()
-
-    else:
-        formData = {"username": username,
-                    "game_name": game_name,
-                    "date": date,
-                    "time": time}
-        schedules = crud.get_schedules_by_criteria(formData)
+    formData = {"username": username,
+                "game_name": game_name,
+                "date": date,
+                "time": time}
+    schedules = crud.get_schedules_by_criteria(formData, limit_size, offset_num)
+    query_count = crud.get_schedules_count(formData)
 
     for schedule in schedules:
         user = crud.get_user_by_id(schedule.user_id)
@@ -311,7 +311,46 @@ def get_schedules_active():
                     "max_team": schedule.max_team,
                     "isArchived": schedule.isArchived})
 
-    return jsonify(data)
+    return jsonify([data, {"query_count": query_count}])
+
+
+@app.route('/get-schedules-active', methods=["GET"])
+def get_schedules_active():
+    """Get all non archived schedules."""
+
+    username = request.args.get("username")
+    game_name = request.args.get("game_name")
+    date = request.args.get("date")
+    time = request.args.get("time") 
+    offset_page = request.args.get("offset_page")
+    limit_size =  request.args.get("limit_size")
+    offset_num = int(offset_page) * int(limit_size)
+    data = list()
+
+    formData = {"username": username,
+                "game_name": game_name,
+                "date": date,
+                "time": time}
+    schedules = crud.get_schedules_by_criteria(formData, limit_size, offset_num)
+    query_count = crud.get_schedules_count(formData)
+
+    for schedule in schedules:
+        user = crud.get_user_by_id(schedule.user_id)
+        game = crud.get_game_by_id(schedule.game_id)
+        data.append({"schedule_id": schedule.schedule_id,
+                    "user_id": schedule.user_id,
+                    "username": user.username,
+                    "game_id": schedule.game_id,
+                    "game_name": game.name,
+                    "datetime": schedule.datetime,
+                    "timezone": schedule.timezone,
+                    "platform": schedule.platform,
+                    "description": schedule.description,
+                    "max_user": schedule.max_user,
+                    "max_team": schedule.max_team,
+                    "isArchived": schedule.isArchived})
+
+    return jsonify([data, {"query_count": query_count}])
 
 
 @app.route('/user-schedules-joined', methods=["GET"])
@@ -650,44 +689,6 @@ def create_schedule_by_search_game():
         flash = "You need to be logged in to create a schedule."
         
     return jsonify({"flash": flash, "status": status, "schedule_id": schedule_id})
-
-
-@app.route('/get-schedules', methods=["GET"])
-def get_schedules():
-    """Get all schedules."""
-
-    username = request.args.get("username")
-    game_name = request.args.get("game_name")
-    date = request.args.get("date")
-    time = request.args.get("time") 
-    data = list()
-
-    if username == '' and game_name == '' and date == '' and time == '':
-        schedules = crud.get_schedules()
-
-    else:
-        formData = {"username": username,
-                    "game_name": game_name,
-                    "date": date,
-                    "time": time}
-        schedules = crud.get_schedules_by_criteria(formData)
-
-    for schedule in schedules:
-        user = crud.get_user_by_id(schedule.user_id)
-        game = crud.get_game_by_id(schedule.game_id)
-        data.append({"schedule_id": schedule.schedule_id,
-                    "user_id": schedule.user_id,
-                    "username": user.username,
-                    "game_id": schedule.game_id,
-                    "game_name": game.name,
-                    "datetime": schedule.datetime,
-                    "timezone": schedule.timezone,
-                    "platform": schedule.platform,
-                    "description": schedule.description,
-                    "max_user": schedule.max_user,
-                    "max_team": schedule.max_team})
-
-    return jsonify(data)
 
 
 @app.route('/get-games', methods=["GET"])

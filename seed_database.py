@@ -28,14 +28,16 @@ crud.add_game('Starcraft', '/static/img/image-placeholder.jpg')
 crud.add_game('Rocket League', '/static/img/image-placeholder.jpg')
 crud.add_game('Among Us', '/static/img/image-placeholder.jpg')
 
-for i in range(10):
+
+#datetime generates seconds: change it
+for i in range(100):
     crud.add_schedule(1, 1, datetime.now(), "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", "pc", "generating via seed_database", 4, 1)
 
-for i in range(10):
+for i in range(100):
     crud.add_schedule(2, 4, datetime.now(), "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", "pc", "generating via seed_database", 4, 1)
 
-for i in range(10):
+for i in range(100):
     crud.add_schedule(3, 5, datetime.now(), "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", "pc", "generating via seed_database", 4, 1)
 
-for i in range(10):
+for i in range(100):
     crud.add_schedule(4, 6, datetime.now(), "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", "pc", "generating via seed_database", 4, 1)

@@ -1,4 +1,9 @@
-"use strict";
+"use-strict";
+
+//tracks page number for all-schedules pages
+const MAX_PAGE_NUM_PER_SET = 10;
+let curr_schedule_search_page_num = 1;
+let curr_schedule_search_page_set = 1;
 
 let searchFlag = new Boolean(false);
 let searchHandler;
@@ -38,7 +43,6 @@ $(document).ready(function () {
             $('#snackbar').html(`You have signed signed in with ${res.email}.`);
             document.getElementById("snackbar").className = "show";
             setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
-
         });
     }
 
@@ -290,12 +294,17 @@ $('#all-schedules').on('click', () => {
 
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Schedules</div>");
     $('#homepage-display').append("<form class=\"display-search-schedule-bar\" method=\"GET\" id=\"search-schedule-bar\"></form>");
-    $('#search-schedule-bar').append("<div>Search by</div>");
+    $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Show</div><select name=\"limit_size\" id=\"limit_size\" onchange=\"onKeyUp_searchSchedules()\"></select>");
+    $('#limit_size').append("<option value=\"10\">10</option>" +
+                                    "<option value=\"20\" selected>20</option>" +
+                                    "<option value=\"50\">50</option>" +
+                                    "<option value=\"100\">100</option>");
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Host Username</div><input onkeyup=\"onKeyUp_searchSchedules()\" onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"username\" id=\"username\"></input>");
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Game Name</div><input onkeyup=\"onKeyUp_searchSchedules()\" onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"game_name\" id=\"game_name\"></input>");
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Date</div><input onchange=\"onKeyUp_searchSchedules()\" type=\"date\" name=\"date\" id=\"date\"></input>");
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Time</div><input onchange=\"onKeyUp_searchSchedules()\" type=\"time\" name=\"time\" id=\"time\"></input>");
     $('#homepage-display').append("<div class=\"grid-display-schedules\" id=\"display-schedules\"></div>");
+    $('#homepage-display').append("<div class=\"display-page-num\" id=\"display-page-num\"></div>");
 
     if (back_button_flag == true) {
 
@@ -307,17 +316,23 @@ $('#all-schedules').on('click', () => {
             arr.push(value);
         }
 
-        $('#username').val(arr[0]);
-        $('#game_name').val(arr[1]);
-        $('#date').val(arr[2]);
-        $('#time').val(arr[3]);
+        $('#limit_size').val(arr[0]);
+        $('#username').val(arr[1]);
+        $('#game_name').val(arr[2]);
+        $('#date').val(arr[3]);
+        $('#time').val(arr[4]);
         back_button_flag = false;
     }
 
+    curr_schedule_search_page_num = 1;
+    curr_schedule_search_page_set = 1;
     get_schedules();
 });
 
 function onKeyUp_searchSchedules() {
+
+    curr_schedule_search_page_num = 1;
+    curr_schedule_search_page_set = 1;
 
     if (schedule_search_Flag) {
 
@@ -334,14 +349,15 @@ function onKeyUp_searchSchedules() {
 
 function get_schedules() {
 
-    const formData = $('#search-schedule-bar').serialize();
+    const formData = $('#search-schedule-bar').serialize() + "&offset_page=" + (curr_schedule_search_page_num - 1);
     prev_formData = formData;
+    console.log(formData);
 
     $('#display-schedules').html('');
 
-    $.get('/get-schedules', formData, (schedules) => {
+    $.get('/get-schedules-active', formData, (schedules) => {
 
-        for (const schedule of schedules) {
+        for (const schedule of schedules[0]) {
 
             $('#display-schedules').append(`<div class=\"grid-display-schedule-item\" id=\"schedule-item-${schedule.schedule_id}\"></div>`);
             $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Host:</div><div class=\"profile-schedules-item-text\">${schedule.username}</div>`);
@@ -377,6 +393,69 @@ function get_schedules() {
             back_button_flag = true;
             view_schedule(evt.target.id.slice(9));
         });
+
+        //generate paginatiom
+        $('#display-page-num').html("<div class=\"grid-num-pages\" id=\"num-pages\"></div>")
+        const MAX_ITEM_PER_PAGE = $('#limit_size').val();
+        const total_pages = Math.ceil(schedules[1].query_count/MAX_ITEM_PER_PAGE);
+        const total_page_sets = Math.ceil(total_pages/MAX_PAGE_NUM_PER_SET);
+        let num_pages = total_pages;
+
+        if (total_pages > MAX_PAGE_NUM_PER_SET) {
+
+            num_pages = MAX_PAGE_NUM_PER_SET;
+        }
+        
+        //checks if last set of pages
+        if (curr_schedule_search_page_set == total_page_sets) {
+
+            num_pages = total_pages - (MAX_PAGE_NUM_PER_SET * (curr_schedule_search_page_set - 1));
+        }
+
+        if (curr_schedule_search_page_set != 1) {
+
+            $('#num-pages').append(`<div class=\"triangle-left\" id=\"prev-page-set-${curr_schedule_search_page_set}\"></div>`);
+
+            $(`#prev-page-set-${curr_schedule_search_page_set}`).on('click', () => {
+
+                curr_schedule_search_page_set -= 1;
+                curr_schedule_search_page_num = MAX_PAGE_NUM_PER_SET * (curr_schedule_search_page_set - 1) + 1;
+                get_schedules();
+            });
+        }
+
+        for (let i = 1; i <= num_pages; i++) {
+
+            const offset = MAX_PAGE_NUM_PER_SET * (curr_schedule_search_page_set - 1);
+
+            $('#num-pages').append(`<div class=\"page-num\" id=\"page-num-${offset + i}\">${offset + i}</div>`);
+
+            $(`#page-num-${offset + i}`).on('click', () => {
+
+                curr_schedule_search_page_num = offset + i;
+                get_schedules();
+            });
+
+            if (curr_schedule_search_page_num === offset + i) {
+
+                $(`#page-num-${offset + i}`).addClass("page-num-selected");
+            }
+            else {
+                $(`#page-num-${offset + i}`).removeClass("page-num-selected");
+            }
+        }
+
+        if (curr_schedule_search_page_set < total_page_sets) {
+            
+            $('#num-pages').append(`<div class=\"triangle-right\" id=\"next-page-set-${curr_schedule_search_page_set}\"></div>`);
+
+            $(`#next-page-set-${curr_schedule_search_page_set}`).on('click', () => {
+                
+                curr_schedule_search_page_set += 1;
+                curr_schedule_search_page_num = MAX_PAGE_NUM_PER_SET * (curr_schedule_search_page_set - 1) + 1;
+                get_schedules();
+            });
+        }        
     });
 }
 
