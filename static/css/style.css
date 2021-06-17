@@ -989,6 +989,20 @@ body, html {
     border: 1px solid rgb(0, 0, 0);  
 }
 
+.grid-display-bar-userposts {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 10% 10% ;
+    height: 20px;
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 20px;
+    border: 1px solid rgb(0, 0, 0);  
+}
+
 /*------------------------Display Avator Box---------------------------*/
 
 .post-avator {

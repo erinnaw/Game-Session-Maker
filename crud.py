@@ -151,16 +151,28 @@ def get_schedules_by_game_id(game_id):
     return Schedule.query.filter(Schedule.game_id == game_id).all()
 
 
-def get_schedules_by_user_id(user_id):
+def get_schedules_by_user_id(user_id, limit_size=10, offset_num=0):
     """Return all schedules by user_id."""
 
-    return Schedule.query.filter((Schedule.user_id == user_id) & (Schedule.isArchived == False)).all()
+    return Schedule.query.filter((Schedule.user_id == user_id) & (Schedule.isArchived == False)).limit(limit_size).offset(offset_num)
 
 
-def get_archived_schedules_by_user_id(user_id):
+def get_schedules_by_user_id_count(user_id):
+    """Return the size of the query."""
+
+    return Schedule.query.filter((Schedule.user_id == user_id) & (Schedule.isArchived == False)).count()
+
+
+def get_archived_schedules_by_user_id(user_id, limit_size=10, offset_num=0):
     """Return all schedules created by user_id."""
 
-    return Schedule.query.filter((Schedule.user_id == user_id) & (Schedule.isArchived == True)).all()
+    return Schedule.query.filter((Schedule.user_id == user_id) & (Schedule.isArchived == True)).limit(limit_size).offset(offset_num)
+
+
+def get_archived_schedules_by_user_id_count(user_id):
+    """Return the size of the query."""
+
+    return Schedule.query.filter((Schedule.user_id == user_id) & (Schedule.isArchived == True)).count()
 
 
 def get_schedules_by_criteria(formData, limit_size=10, offset_num=0):
@@ -327,10 +339,16 @@ def get_posts():
     return Post.query.all()
 
 
-def get_posts_by_user_id(user_id):
+def get_posts_by_user_id(user_id, limit_size=10, offset_num=0):
     """Return all posts by user_id."""
 
-    return Post.query.filter(Post.user_id == user_id).all()
+    return Post.query.filter(Post.user_id == user_id).limit(limit_size).offset(offset_num)
+
+
+def get_posts_by_user_id_count(user_id):
+    """Return all posts by user_id."""
+
+    return Post.query.filter(Post.user_id == user_id).count()
 
 
 def get_posts_by_schedule_id(schedule_id, limit_size=10, offset_num=0):
@@ -363,10 +381,16 @@ def get_schedule_users_by_schedule_id(schedule_id):
     return Schedule_Users.query.filter(Schedule_Users.schedule_id == schedule_id).all()
 
 
-def get_schedule_users_by_user_id(user_id):
+def get_schedule_users_by_user_id(user_id, limit_size=10, offset_num=0):
     """Return schedules associated with user as user."""
 
-    return Schedule_Users.query.filter(Schedule_Users.user_id == user_id).all()
+    return Schedule_Users.query.filter(Schedule_Users.user_id == user_id).limit(limit_size).offset(offset_num)
+
+
+def get_schedule_users_by_user_id_count(user_id):
+    """Return size of query."""
+
+    return Schedule_Users.query.filter(Schedule_Users.user_id == user_id).count()
 
 
 #-----------------Set Wrappers------------------------------->

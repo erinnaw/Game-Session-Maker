@@ -250,10 +250,14 @@ def get_user_schedules():
 def get_user_schedules_created():
     """Get logged user's created schedules."""
 
+    offset_page = request.args.get('offset_page')
+    limit_size =  request.args.get('limit_size')
+    offset_num = int(offset_page) * int(limit_size)
     data_list = list()
 
     if session.get('user',0):
-        schedules = crud.get_schedules_by_user_id(session['user'])
+        query_count = crud.get_schedules_by_user_id_count(session['user'])
+        schedules = crud.get_schedules_by_user_id(session['user'], limit_size, offset_num)
 
         for schedule in schedules:
             game = crud.get_game_by_id(schedule.game_id)
@@ -272,7 +276,7 @@ def get_user_schedules_created():
                     "description": schedule.description}
             data_list.append(data)
 
-    return jsonify(data_list)
+    return jsonify([data_list, {"query_count": query_count}])
 
 
 @app.route('/get-schedules', methods=["GET"])
@@ -357,10 +361,14 @@ def get_schedules_active():
 def get_user_schedules_joined():
     """Get logged user's joined schedules."""
 
+    offset_page = request.args.get("offset_page")
+    limit_size =  request.args.get("limit_size")
+    offset_num = int(offset_page) * int(limit_size)
     data_list = list()
 
     if session.get('user',0):
-        schedules_user = crud.get_schedule_users_by_user_id(session['user'])
+        schedules_user = crud.get_schedule_users_by_user_id(session['user'], limit_size, offset_num)
+        query_count = crud.get_schedule_users_by_user_id_count(session['user'])
 
         for schedule_user in schedules_user:
             schedule = crud.get_schedule_by_id(schedule_user.schedule_id)
@@ -381,17 +389,22 @@ def get_user_schedules_joined():
                     "isArchived": schedule.isArchived}
             data_list.append(data)            
 
-    return jsonify(data_list)
+    return jsonify([data_list, {"query_count": query_count}])
 
 
 @app.route('/user-schedules-archived', methods=["GET"])
 def get_user_schedules_archived():
     """Get logged user's archived schedules."""
 
+
+    offset_page = request.args.get("offset_page")
+    limit_size =  request.args.get("limit_size")
+    offset_num = int(offset_page) * int(limit_size)
     data_list = list()
 
     if session.get('user', 0):
-        schedules = crud.get_archived_schedules_by_user_id(session['user'])
+        schedules = crud.get_archived_schedules_by_user_id(session['user'], limit_size, offset_num)
+        query_count = crud.get_archived_schedules_by_user_id_count(session['user'])
 
         for schedule in schedules:
             game = crud.get_game_by_id(schedule.game_id)
@@ -411,7 +424,7 @@ def get_user_schedules_archived():
                     "isArchived": schedule.isArchived}
             data_list.append(data)
 
-    return jsonify(data_list)
+    return jsonify([data_list, {"query_count": query_count}])
 
 
 @app.route('/archive-schedule/<schedule_id>', methods=["POST"])
@@ -574,8 +587,12 @@ def get_user_received_requests():
 def get_user_posts():
     """Get logged user posts."""
     
+    offset_page = request.args.get("offset_page")
+    limit_size =  request.args.get("limit_size")
+    offset_num = int(offset_page) * int(limit_size)
     data_list = list()
-    posts = crud.get_posts_by_user_id(session['user'])
+    posts = crud.get_posts_by_user_id(session['user'], limit_size, offset_num)
+    query_count = crud.get_posts_by_user_id_count(session['user'])
 
     for post in posts:
         data = {"post_id": post.post_id,
@@ -585,7 +602,7 @@ def get_user_posts():
 
         data_list.append(data)
 
-    return jsonify(data_list)
+    return jsonify([data_list, {"query_count": query_count}])
 
 
 @app.route('/create-schedule', methods=["POST"])
