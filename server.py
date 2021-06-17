@@ -744,8 +744,9 @@ def get_timezones():
 def get_posts_by_schedule_id(schedule_id):
     """Get posts in schedule_id."""
     
-    limit_size = request.args.get('limit_size')
-    offset_num = request.args.get('')
+    offset_page = request.args.get('offset_page')
+    limit_size =  request.args.get('limit_size')
+    offset_num = int(offset_page) * int(limit_size)
     data = list()
     posts = crud.get_posts_by_schedule_id(schedule_id, limit_size, offset_num)
     post_count = crud.get_posts_by_schedule_id_count(schedule_id)
@@ -760,7 +761,7 @@ def get_posts_by_schedule_id(schedule_id):
                     "time_stamp": post.time_stamp,
                     "content": post.content})
 
-    return jsonify(data, {"post_count": post_count})
+    return jsonify([data, {"post_count": post_count}])
 
 
 @app.route('/add-post', methods=["POST"])

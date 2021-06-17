@@ -757,13 +757,18 @@ function view_schedule(schedule_id) {
                             "<input type=\"submit\" value=\"submit\"></input>" +
                             "</form></div>" +
                             "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
-                        $('#homepage-display').append("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_posts\" id=\"max_posts\" onchange=\"onKeyUp_loadPosts()\"></select></div>");
-                        $('#homepage-display').append("<div class=\"schedule-post-canvas\" id=\"schedule-post-canvas\"></div>");
+                        $('#homepage-display').append("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_posts\" id=\"max_posts\"></select></div>");
                         $('#max_posts').append("<option value=\"10\">10</option>" +
                             "<option value=\"20\" selected>20</option>" +
                             "<option value=\"50\">50</option>" +
                             "<option value=\"100\">100</option>");
+                        $('#homepage-display').append("<div class=\"schedule-post-canvas\" id=\"schedule-post-canvas\"></div>");
                         $('#homepage-display').append("<div class=\"display-page-num\" id=\"display-page-num\"></div>");
+
+                        $('#max_posts').on('change', (evt) => {
+
+                            get_scheduleposts_html(schedule.schedule_id);
+                        });
 
                         $('#post-form').on('submit', (evt) => {
 
@@ -774,6 +779,7 @@ function view_schedule(schedule_id) {
                                 $('#flash-msg').html("Message cannot be blank.");
                             }
                             else {
+
                                 const formData = {
                                     "user_id": user.user_id,
                                     "schedule_id": schedule.schedule_id,
@@ -786,18 +792,12 @@ function view_schedule(schedule_id) {
                                     $('#flash-msg').html(res);
                                     $('#schedule-post-canvas').html("");
 
-                                    $.get(`/get-posts/${schedule.schedule_id}`, (posts) => {
-
-                                        get_scheduleposts_html(posts);
-                                    });
-                                })
+                                    get_scheduleposts_html(schedule.schedule_id);
+                                });
                             }
                         });
 
-                        $.get(`/get-posts/${schedule.schedule_id}`, (posts) => {
-
-                            get_scheduleposts_html(posts)
-                        });
+                        get_scheduleposts_html(schedule.schedule_id)
                     }
                 });
             }
@@ -809,98 +809,95 @@ function view_schedule(schedule_id) {
     });
 }
 
-function onKeyUp_loadPosts() {
+function get_scheduleposts_html(schedule_id) {
 
+    $.get(`/get-posts/${schedule_id}`, { "limit_size": $('#max_posts').val(), "offset_page": curr_post_page_num - 1}, (posts) => {
 
-    
-}
+        $('#schedule-post-canvas').html('');
 
-function get_scheduleposts_html(posts) {
+        if (posts.length == 0) {
 
-    $('#schedule-post-canvas').html('');
-
-    if (posts.length == 0) {
-
-        $('#schedule-post-canvas').append("<div class=\"error-page\">No posts yet.</div>");
-    }
-    else {
-
-        for (const post of posts[0]) {
-
-            $('#schedule-post-canvas').append(`<div class=\"schedule-post-item\" id=\"scheduleposts-${post.post_id}\"></div>`);
-            $(`#scheduleposts-${post.post_id}`).append(`<div class=\"post-avator\" id=\"post-avatorbox-${post.post_id}\"></div>`);
-            $(`#post-avatorbox-${post.post_id}`).append(`<img class=\"avator-img\" id=\"avatorimg-${post.post_id}\" src=\"${post.image_path}\"></img>`);
-            $(`#post-avatorbox-${post.post_id}`).append(`<div class=\"avator-name\" id=\"avatorname-${post.post_id}\">${post.username}</div>`);
-
-            $(`#scheduleposts-${post.post_id}`).append(`<div class=\"grid-post-content\" id=\"postcontent-${post.post_id}\"></div>`);
-            $(`#postcontent-${post.post_id}`).append(`<div>${post.username} says:</div>`);
-            $(`#postcontent-${post.post_id}`).append(`<div class=\"postmsgbox\"><p>${post.content}</p></div>`);
-            $(`#postcontent-${post.post_id}`).append(`<div class=\"timestamp\">${post.time_stamp}</div>`);
-        }
-    }
-
-    //generate paginatiom
-    $('#display-page-num').html("<div class=\"grid-num-pages\" id=\"num-pages-posts\"></div>")
-    const MAX_ITEM_PER_PAGE = $('#max_posts').val();
-    const total_pages = Math.ceil(posts[1].post_count / MAX_ITEM_PER_PAGE);
-    const total_page_sets = Math.ceil(total_pages / MAX_PAGE_NUM_PER_SET);
-    let num_pages = total_pages;
-
-    if (total_pages > MAX_PAGE_NUM_PER_SET) {
-
-        num_pages = MAX_PAGE_NUM_PER_SET;
-    }
-
-    //checks if last set of pages
-    if (curr_schedule_search_page_set == total_page_sets) {
-
-        num_pages = total_pages - (MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1));
-    }
-
-    if (curr_post_page_set != 1) {
-
-        $('#num-pages-posts').append(`<div class=\"triangle-left\" id=\"prev-page-set-${curr_post_page_set}\"></div>`);
-
-        $(`#prev-page-set-${curr_post_page_set}`).on('click', () => {
-
-            curr_post_page_set -= 1;
-            curr_post_page_num = MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1) + 1;
-            get_scheduleposts_html(posts);
-        });
-    }
-
-    for (let i = 1; i <= num_pages; i++) {
-
-        const offset = MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1);
-
-        $('#num-pages-posts').append(`<div class=\"page-num\" id=\"page-num-${offset + i}\">${offset + i}</div>`);
-
-        $(`#page-num-${offset + i}`).on('click', () => {
-
-            curr_post_page_num = offset + i;
-            get_scheduleposts_html(posts);
-        });
-
-        if (curr_post_page_num === offset + i) {
-
-            $(`#page-num-${offset + i}`).addClass("page-num-selected");
+            $('#schedule-post-canvas').append("<div class=\"error-page\">No posts yet.</div>");
         }
         else {
-            $(`#page-num-${offset + i}`).removeClass("page-num-selected");
+
+            for (const post of posts[0]) {
+
+                $('#schedule-post-canvas').append(`<div class=\"schedule-post-item\" id=\"scheduleposts-${post.post_id}\"></div>`);
+                $(`#scheduleposts-${post.post_id}`).append(`<div class=\"post-avator\" id=\"post-avatorbox-${post.post_id}\"></div>`);
+                $(`#post-avatorbox-${post.post_id}`).append(`<img class=\"avator-img\" id=\"avatorimg-${post.post_id}\" src=\"${post.image_path}\"></img>`);
+                $(`#post-avatorbox-${post.post_id}`).append(`<div class=\"avator-name\" id=\"avatorname-${post.post_id}\">${post.username}</div>`);
+
+                $(`#scheduleposts-${post.post_id}`).append(`<div class=\"grid-post-content\" id=\"postcontent-${post.post_id}\"></div>`);
+                $(`#postcontent-${post.post_id}`).append(`<div>${post.username} says:</div>`);
+                $(`#postcontent-${post.post_id}`).append(`<div class=\"postmsgbox\"><p>${post.content}</p></div>`);
+                $(`#postcontent-${post.post_id}`).append(`<div class=\"timestamp\">${post.time_stamp}</div>`);
+            }
         }
-    }
 
-    if (curr_post_page_set < total_page_sets) {
+        //generate paginatiom
+        $('#display-page-num').html("<div class=\"grid-num-pages\" id=\"num-pages-posts\"></div>")
+        const MAX_ITEM_PER_PAGE = $('#max_posts').val();
+        const total_pages = Math.ceil(posts[1].post_count / MAX_ITEM_PER_PAGE);
+        const total_page_sets = Math.ceil(total_pages / MAX_PAGE_NUM_PER_SET);
+        let num_pages = total_pages;
 
-        $('#num-pages-posts').append(`<div class=\"triangle-right\" id=\"next-page-set-${curr_post_page_set}\"></div>`);
+        if (total_pages > MAX_PAGE_NUM_PER_SET) {
 
-        $(`#next-page-set-${curr_post_page_set}`).on('click', () => {
+            num_pages = MAX_PAGE_NUM_PER_SET;
+        }
 
-            curr_post_page_set += 1;
-            curr_post_page_num = MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1) + 1;
-            get_scheduleposts_html(posts);
-        });
-    }
+        //checks if last set of pages
+        if (curr_schedule_search_page_set == total_page_sets) {
+
+            num_pages = total_pages - (MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1));
+        }
+
+        if (curr_post_page_set != 1) {
+
+            $('#num-pages-posts').append(`<div class=\"triangle-left\" id=\"prev-page-set-${curr_post_page_set}\"></div>`);
+
+            $(`#prev-page-set-${curr_post_page_set}`).on('click', () => {
+
+                curr_post_page_set -= 1;
+                curr_post_page_num = MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1) + 1;
+                get_scheduleposts_html(schedule_id);
+            });
+        }
+
+        for (let i = 1; i <= num_pages; i++) {
+
+            const offset = MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1);
+
+            $('#num-pages-posts').append(`<div class=\"page-num\" id=\"page-num-${offset + i}\">${offset + i}</div>`);
+
+            $(`#page-num-${offset + i}`).on('click', () => {
+
+                curr_post_page_num = offset + i;
+                get_scheduleposts_html(schedule_id);
+            });
+
+            if (curr_post_page_num === offset + i) {
+
+                $(`#page-num-${offset + i}`).addClass("page-num-selected");
+            }
+            else {
+                $(`#page-num-${offset + i}`).removeClass("page-num-selected");
+            }
+        }
+
+        if (curr_post_page_set < total_page_sets) {
+
+            $('#num-pages-posts').append(`<div class=\"triangle-right\" id=\"next-page-set-${curr_post_page_set}\"></div>`);
+
+            $(`#next-page-set-${curr_post_page_set}`).on('click', () => {
+
+                curr_post_page_set += 1;
+                curr_post_page_num = MAX_PAGE_NUM_PER_SET * (curr_post_page_set - 1) + 1;
+                get_scheduleposts_html(schedule_id);
+            });
+        }
+    });
 
 
 
