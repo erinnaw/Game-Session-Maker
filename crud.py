@@ -1,6 +1,6 @@
 from model import db, User, Game, Schedule, Request, Post, Schedule_Users, connect_to_db
 from datetime import datetime
-from sqlalchemy import func, Time, cast
+from sqlalchemy import func, Time, cast, text
 
 #-----------------Add Wrappers------------------------------->
 def create_user(username, fname, lname, email, password, image_path='/static/img/avator-placeholder.jpg'):
@@ -121,10 +121,26 @@ def get_game_by_name(name):
     return Game.query.filter(Game.name == name).first()
 
 
-def get_games_by_criteria(formData):
+def get_games_by_criteria(formData, limit_size=20, offset_num=0):
     """Get games by criteria."""
+
+    if formData["game_name"] == '' and (formData["sort_by"] == '' or formData["sort_by"] == None):
+        return Game.query.limit(limit_size).offset(offset_num)
     
-    return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).all()
+    elif formData["game_name"] != '' and formData["sort_by"] == "alphabetical":
+        return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).order_by(Game.name.asc()).limit(limit_size).offset(offset_num)
+
+    elif formData["game_name"] != '' and formData["sort_by"] == "most-active":
+        return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).outerjoin(Schedule).group_by(Game.game_id).order_by(func.count(Game.game_id).asc()).limit(limit_size).offset(offset_num)
+
+    elif formData["game_name"] != '' and (formData["sort_by"] == '' or formData["sort_by"] == None):
+        return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).limit(limit_size).offset(offset_num)
+
+    elif formData["game_name"] == '' and formData["sort_by"] == "alphabetical":
+        return Game.query.order_by(Game.name.asc()).limit(limit_size).offset(offset_num)
+
+    elif formData["game_name"] == '' and formData["sort_by"] == "most-active":
+        return Game.query.outerjoin(Schedule).group_by(Game.game_id).order_by(func.count(Game.game_id).asc()).limit(limit_size).offset(offset_num)
 
 
 def get_schedules():

@@ -340,7 +340,7 @@ textarea {
 .display-search-game-bar {
     position: relative;
     display: grid;
-    grid-template-columns: 15% 20% 65%;
+    grid-template-columns: 15% 20% 40% 10% 15%;
     width: 100%;
     margin: auto;
     text-align: right;
@@ -788,12 +788,21 @@ body, html {
 
 /*------------------------Display Games---------------------------*/
 
+.display-games {
+    height: 800px;
+    width: 900px;
+    margin: auto;
+}
+
 .grid-display-games {
     position: relative;
     display: inline-grid;
-    grid-template-columns: auto auto auto auto auto auto;
-    width: 90%;
+    grid-template-columns: auto auto auto auto auto;
+    width: 900px;
     margin: auto;
+    margin-top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .grid-display-game-item-hover {
@@ -830,6 +839,55 @@ body, html {
     height: 20px;
     text-align: center;
     line-height: 20px;
+}
+
+.arrow-right {
+    position: absolute;
+    width: 0; 
+    height: 0; 
+    border-top: 100px solid transparent;
+    border-bottom: 100px solid transparent;
+    border-left: 50px solid rgb(148, 148, 148);
+    top: 35%;
+    left: 92%;
+    transform: translateY(-35%);
+    cursor: pointer;
+}
+
+.arrow-right:hover {
+    border-top: 130px solid transparent;
+    border-bottom: 130px solid transparent;
+    border-left: 65px solid rgb(148, 148, 148);
+}
+
+.arrow-left {
+    position: absolute;
+    width: 0; 
+    height: 0; 
+    border-top: 100px solid transparent;
+    border-bottom: 100px solid transparent;
+    border-right: 50px solid rgb(148, 148, 148);
+    top: 35%;
+    right: 92%;
+    transform: translateY(-35%);
+    cursor: pointer;
+}
+
+.arrow-left:hover {
+    border-top: 130px solid transparent;
+    border-bottom: 130px solid transparent;
+    border-right: 65px solid rgb(148, 148, 148);
+}
+
+.page-indicator-bar {
+    text-align: center;
+    font-size: 18px;
+    width: 500px;
+    height: 30px;
+    border: 1px solid red;
+    border-radius: 12px;
+    margin: auto;
+    line-height: 30px;
 }
 
 /*------------------------Display Schedules---------------------------*/

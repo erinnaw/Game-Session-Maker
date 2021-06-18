@@ -708,19 +708,32 @@ def create_schedule_by_search_game():
     return jsonify({"flash": flash, "status": status, "schedule_id": schedule_id})
 
 
+@app.route('/get-all-games', methods=["GET"])
+def get_all_games():
+    """Get all games."""
+    
+    data = list()
+    games = crud.get_games()
+
+    for game in games:
+        data.append({"name": game.name, 
+                    "game_id": game.game_id, 
+                    "image_path": game.image_path})
+
+    return jsonify(data)
+
+
 @app.route('/get-games', methods=["GET"])
 def get_games():
-    """Get all games."""
+    """Get all games by criteria."""
 
-    game_name = request.args.get("game_name")
+    game_name = request.args.get("game-name")
+    sort_by = request.args.get("sort-by")
     data = list()
-    print(game_name)
-    if game_name == '' or game_name == None:
-        games = crud.get_games()
-
-    else:
-        formData = {"game_name": game_name}
-        games = crud.get_games_by_criteria(formData)
+    
+    formData = {"game_name": game_name,
+                "sort_by": sort_by}
+    games = crud.get_games_by_criteria(formData)
 
     for game in games:
         data.append({"name": game.name, 

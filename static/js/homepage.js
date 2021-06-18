@@ -233,67 +233,6 @@ $('#log-out').on('click', () => {
 
 $('#create-schedule').on('click', createSchedule_by_game_id);
 
-$('#all-games').on('click', () => {
-
-    $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Games</div>");
-    $('#homepage-display').append("<form class=\"display-search-game-bar\" method=\"GET\" id=\"search-game-bar\"></form>");
-    $('#search-game-bar').append("<div class=\"search-schedule-item\">Search Database</div><input onkeyup=\"onKeyUp_searchGames_db()\" onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"game-name\" id=\"game-name\"></input>");
-    $('#homepage-display').append("<div class=\"grid-display-games\" id=\"display-games\"></div>");
-
-    get_games();
-});
-
-function onKeyUp_searchGames_db() {
-
-    if (game_search_Flag) {
-
-        clearTimeout(game_search_Handler);
-        game_search_Handler = window.setTimeout(get_games, game_search_timer);
-        game_search_Flag = false;
-    }
-    else {
-
-        game_search_Flag = true;
-        game_search_Handler = window.setTimeout(get_games, game_search_timer);
-    }
-}
-
-function get_games() {
-
-    const formData = {"game_name": $('#game-name').val()}
-    $('#display-games').html('');
-    
-    $.get('/get-games', formData, (games) => {
-        for (const game of games) {
-
-            name = game.name.charAt(0).toUpperCase() + game.name.slice(1);
-            $('#display-games').append(`<div class=\"grid-display-game-item-hover\" id=\"display-game-item-${game.game_id}\"></div>`);
-            $(`#display-game-item-${game.game_id}`).append(`<img class=\"display-game-item-img\" id=\"display-game-item-img-${game.game_id}\" src=\"${game.image_path}\"></div>` +
-                `<div class=\"display-game-item-name\" id=\"display-game-item-name-${game.game_id}\"></div>`);
-            $(`#display-game-item-name-${game.game_id}`).append(`${game.name}`);
-            $(`#display-game-item-${game.game_id}`).append(`<div class=\"create-schedule-hover\" id=\"create-schedule-${game.game_id}\">Create Schedule</div>`);
-        }
-
-        $('.create-schedule-hover').on('click', (evt) => {
-
-            const game_id = evt.target.id.slice(16);
-
-            $.post(`/create-schedule-from-gamedb/${game_id}`, (game) => {
-
-                if (game === "None") {
-
-                    $('#homepage-display').html("<div class=\"error-page\" id=\"error-page\">Error: Game Not Found</div>");
-                }
-                else {
-
-                    createSchedule_by_game_id(game_id);
-                }
-            });
-        });
-    });
-}
-
-
 $('#all-schedules').on('click', () => {
 
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Schedules</div>");
@@ -355,7 +294,6 @@ function get_schedules() {
 
     const formData = $('#search-schedule-bar').serialize() + "&offset_page=" + (curr_schedule_search_page_num - 1);
     prev_formData = formData;
-    console.log(formData);
 
     $('#display-schedules').html('');
 
@@ -999,7 +937,7 @@ function createSchedule_by_game_id(game_id = 1) {
             $('#schedule-form').append("<div class=\"grid-create-schedule-form\" id=\"create-schedule-form\"></div>");
             $('#create-schedule-form').append(`<Label for=\"game\">Game*</Label><select name=\"game\" id=\"gameselect\"></select>`);
             
-            $.get('/get-games', (games) => {
+            $.get('/get-all-games', (games) => {
                 for (const game of games) {
 
                     name = game.name.charAt(0).toUpperCase() + game.name.slice(1);
