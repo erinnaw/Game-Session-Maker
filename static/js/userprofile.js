@@ -150,7 +150,7 @@ $('#my-profile').on('click', () => {
                 $('#profile-schedules').append('<div id=\"joined\" class=\"tabcontent\"></div>');
                 $('#profile-schedules').append('<div id=\"archived\" class=\"tabcontent\"></div>');
 
-                $('#created').append("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userschedules\" id=\"max_userschedules\" onchange=\"get_userschedules_created()\"></select></div>");
+                $('#created').append("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userschedules\" id=\"max_userschedules\" onchange=\"onKeyUp_userschedules_created()\"></select></div>");
                 $('#max_userschedules').append("<option value=\"10\">10</option>" +
                     "<option value=\"20\" selected>20</option>" +
                     "<option value=\"50\">50</option>" +
@@ -167,7 +167,7 @@ $('#my-profile').on('click', () => {
 
                 $('#joined-tab').on('click', () => {
 
-                    $('#joined').html("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userschedules_joined\" id=\"max_userschedules_joined\" onchange=\"get_userschedules_joined()\"></select></div>");
+                    $('#joined').html("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userschedules_joined\" id=\"max_userschedules_joined\" onchange=\"onKeyUp_userschedules_joined()\"></select></div>");
                     $('#max_userschedules_joined').append("<option value=\"10\">10</option>" +
                         "<option value=\"20\" selected>20</option>" +
                         "<option value=\"50\">50</option>" +
@@ -182,7 +182,7 @@ $('#my-profile').on('click', () => {
 
                 $('#archived-tab').on('click', () => {
 
-                    $('#archived').html("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userschedules_archived\" id=\"max_userschedules_archived\" onchange=\"get_userschedules_archived()\"></select></div>");
+                    $('#archived').html("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userschedules_archived\" id=\"max_userschedules_archived\" onchange=\"onKeyUp_userschedules_archived()\"></select></div>");
                     $('#max_userschedules_archived').append("<option value=\"10\">10</option>" +
                         "<option value=\"20\" selected>20</option>" +
                         "<option value=\"50\">50</option>" +
@@ -340,7 +340,7 @@ $('#my-profile').on('click', () => {
 
                 $('#profile-display').html("<div class=\"profile-subheader\">Post History</div>");
 
-                $('#profile-display').append("<div class=\"grid-display-bar-userposts\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userposts\" id=\"max_userposts\" onchange=\"get_userposts()\"></select></div>");
+                $('#profile-display').append("<div class=\"grid-display-bar-userposts\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userposts\" id=\"max_userposts\" onchange=\"onKeyUp_userposts()\"></select></div>");
                 $('#max_userposts').append("<option value=\"10\">10</option>" +
                     "<option value=\"20\" selected>20</option>" +
                     "<option value=\"50\">50</option>" +
@@ -378,6 +378,34 @@ $('#my-profile').on('click', () => {
         }
     });
 });
+
+function onKeyUp_userschedules_created() {
+
+    curr_userpost_page_num = 1;
+    curr_userpost_page_set = 1;
+    get_userschedules_created();
+}
+
+function onKeyUp_userschedules_joined() {
+
+    curr_userpost_page_num = 1;
+    curr_userpost_page_set = 1;
+    get_userschedules_joined();
+}
+
+function onKeyUp_userschedules_archived() {
+
+    curr_userpost_page_num = 1;
+    curr_userpost_page_set = 1;
+    get_userschedules_archived();
+}
+
+function onKeyUp_userposts() {
+
+    curr_userpost_page_num = 1;
+    curr_userpost_page_set = 1;
+    get_userposts();    
+}
 
 function get_userschedules_created() {
 
@@ -731,7 +759,7 @@ function get_userposts() {
             }
 
             //checks if last set of pages
-            if (curr_schedule_search_page_set == total_page_sets) {
+            if (curr_userpost_page_set == total_page_sets) {
 
                 num_pages = total_pages - (MAX_PAGE_NUM_PER_SET * (curr_userpost_page_set - 1));
             }
