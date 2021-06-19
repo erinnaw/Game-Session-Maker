@@ -25,6 +25,8 @@ let prev_formData;
 let back_button_flag = new Boolean(false);
 let searchParams;
 
+let back_state;
+
 $(document).ready(function () {
 
     let key = new String();
@@ -93,8 +95,8 @@ $('#create-account').on('click', () => {
         "<input type =\"email\" name=\"email\" id=\"email\">" +
         "<Label for= \"password\">Password*</Label>" +
         "<input type=\"password\" name=\"password\" id=\"password\">" +
-        "<div></div>" +
-        "<input type=\"submit\" value=\"Submit\">" +
+        "<div></div><div><input type=\"checkbox\" onclick=\"showPassword()\"></input>Show Password</div>" +
+        "<div></div><input type=\"submit\" value=\"Submit\">" +
         "<div></div>* required fields" +
         "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
 
@@ -163,6 +165,18 @@ $('#create-account').on('click', () => {
     });
 });
 
+function showPassword() {
+
+    if (document.getElementById("password").type === "password") {
+
+        document.getElementById("password").type = "text";
+    }
+    else {
+
+        document.getElementById("password").type = "password";
+    }
+}
+
 $('#log-in').on('click', () => {
 
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Log In</div>");
@@ -173,8 +187,8 @@ $('#log-in').on('click', () => {
         "<input type =\"email\" name=\"email\" id=\"email\">" +
         "<Label for= \"password\">Password</Label>" +
         "<input type=\"password\" name=\"password\" id=\"password\">" +
-        "<div></div>" +
-        "<input type=\"submit\" value=\"Submit\">" +
+        "<div></div><div><input type=\"checkbox\" onclick=\"showPassword()\"></input>Show Password</div>" +
+        "<div></div><input type=\"submit\" value=\"Submit\">" +
         "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
 
     $('#login-form').on('submit', (evt) => {
@@ -426,8 +440,31 @@ function view_schedule(schedule_id) {
 
         $('.back-button').on('click', () => {
 
-            back_button_flag = true;
-            $('#all-schedules').trigger('click');
+            if (back_state === "created"){
+
+                $('#my-profile').trigger('click');
+            }
+            else if(back_state === "joined") {
+
+                $('#my-profile').trigger('click');
+            }
+            else if(back_state === "archived") {
+            
+                $('#my-profile').trigger('click');
+            }
+            else if(back_state === "sent") {
+
+                $('#my-profile').trigger('click');
+            }
+            else if(back_state === "received") {
+
+                $('#my-profile').trigger('click');
+            }
+            else {
+
+                back_button_flag = true;
+                $('#all-schedules').trigger('click');
+            }
         });
 
         $.get(`/get-schedule-user-status/${schedule.schedule_id}`, (status) => {

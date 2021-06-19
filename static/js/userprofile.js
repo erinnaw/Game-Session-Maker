@@ -195,7 +195,20 @@ $('#my-profile').on('click', () => {
                     get_userschedules_archived();
                 });
 
-                $('#created-tab').trigger('click');
+                if (back_state === "joined") {
+
+                    back_state = "";
+                    $('#joined-tab').trigger('click');
+                }
+                else if (back_state === "archived") {
+
+                    back_state = "";
+                    $('#archived-tab').trigger('click');
+                }
+                else {
+
+                    $('#created-tab').trigger('click');
+                }
             });
 
             $('#profile-menu-requests').on('click', () => {
@@ -231,6 +244,7 @@ $('#my-profile').on('click', () => {
 
                             $(`#view-schedule-user-${request["schedule_id"]}`).on('click', () => {
 
+                                back_state = "sent";
                                 view_schedule(`${request["schedule_id"]}`);
                             });
 
@@ -272,6 +286,7 @@ $('#my-profile').on('click', () => {
 
                             $(`#view-schedule-user-${request["schedule_id"]}`).on('click', () => {
 
+                                back_state = "received";
                                 view_schedule(`${request["schedule_id"]}`);
                             });
 
@@ -305,7 +320,20 @@ $('#my-profile').on('click', () => {
                     });
                 });
 
-                $('#sent-tab').trigger('click');
+                if (back_state === "sent") {
+
+                    back_state = "";
+                    $('#sent-tab').trigger('click');
+                }
+                else if (back_state === "received") {
+
+                    back_state = "";
+                    $('#received-tab').trigger('click');
+                }
+                else {
+
+                    $('#sent-tab').trigger('click');
+                }
             });
 
             $('#profile-menu-posts').on('click', () => {
@@ -325,6 +353,28 @@ $('#my-profile').on('click', () => {
                 curr_userpost_page_num = 1;
                 get_userposts();
             });
+
+            if (back_state === "created") {
+
+                back_state = "";
+                $('#profile-menu-schedules').trigger('click');
+            }
+            else if (back_state === "joined") {
+
+                $('#profile-menu-schedules').trigger('click');
+            }
+            else if (back_state === "archived") {
+
+                $('#profile-menu-schedules').trigger('click');
+            }
+            else if (back_state === "sent") {
+
+                $('#profile-menu-requests').trigger('click');
+            }
+            else if (back_state === "received") {
+
+                $('#profile-menu-requests').trigger('click');
+            }
         }
     });
 });
@@ -353,6 +403,7 @@ function get_userschedules_created() {
 
                 $(`#view-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 
+                    back_state = "created";
                     view_schedule(`${schedule["schedule_id"]}`);
                 });
 
@@ -473,6 +524,7 @@ function get_userschedules_joined() {
 
                 $(`#view-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 
+                    back_state = "joined";
                     view_schedule(`${schedule["schedule_id"]}`);
                 });
 
@@ -577,6 +629,7 @@ function get_userschedules_archived() {
 
                 $(`#view-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 
+                    back_state = "archived";
                     view_schedule(`${schedule["schedule_id"]}`);
                 });
             }
