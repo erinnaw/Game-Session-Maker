@@ -880,14 +880,40 @@ body, html {
 }
 
 .page-indicator-bar {
-    text-align: center;
+    position: relative;
     font-size: 18px;
-    width: 500px;
+    width: 400px;
     height: 30px;
-    border: 1px solid red;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(228, 228, 228);
     border-radius: 12px;
     margin: auto;
     line-height: 30px;
+    overflow:hidden;
+}
+
+.loading-bar {
+    position: relative;
+    font-size: 18px;
+    width: 0;
+    height: 30px;
+    background-color: rgb(143, 190, 122);
+    border-radius: 12px 0px 0px 12px;
+    margin-left: 0px;
+    line-height: 30px;
+
+    transition: width .3s ease-in-out;
+    -moz-transition: width .3s ease-in-out;
+    -webkit-transition: width .3s ease-in-out;
+    -o-transition: width .3s ease-in-out;
+}
+
+.all-games-page-num {
+    position:absolute;
+    font-weight: bold;
+    z-index: 99;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /*------------------------Display Schedules---------------------------*/

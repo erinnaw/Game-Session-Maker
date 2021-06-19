@@ -2,10 +2,10 @@
 
 const MAX_ITEM_PER_PAGE_ALLGAMES = 20;
 let curr_allgames_page_num = 1;
+let max_pages = 1;
 
 $('#all-games').on('click', () => {
 
-    curr_allgames_page_set = 1;
     curr_allgames_page_num = 1;
 
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Games</div>");
@@ -16,21 +16,32 @@ $('#all-games').on('click', () => {
                                 "<option value=\"alphabetical\">Alphabetical</option>" +
                                 "<option value=\"most-active\">Most Popular</option></select>");
 
-    $('#homepage-display').append("<div class=\"arrow-left\"></div>");
+    $('#homepage-display').append("<div class=\"arrow-left\" id=\"arrow-left\"></div>");
     $('#homepage-display').append("<div class=\"display-games\"></div>");
     $('.display-games').append("<div class=\"grid-display-games\" id=\"display-games\"></div>");
-    $('#homepage-display').append("<div class=\"page-indicator-bar\" id=\"page-indicator\">(8/100)</div>");
-    $('#homepage-display').append("<div class=\"arrow-right\"></div>");
+    $('#homepage-display').append(`<div class=\"page-indicator-bar\" id=\"page-indicator\"><span class=\"all-games-page-num\" id=\"all-games-page-num\"></span></div>`);
+    $('#page-indicator').append(`<div class=\"loading-bar\" id=\"loading-indicator\"></div>`);
+    $('#homepage-display').append("<div class=\"arrow-right\" id=\"arrow-right\"></div>");
 
     $('#arrow-left').on('click', () => {
 
         curr_allgames_page_num -= 1;
+
+        if(curr_allgames_page_num < 1){
+            curr_allgames_page_num = max_pages;
+        }
+
         get_games();
     });
 
     $('#arrow-right').on('click', () => {
 
         curr_allgames_page_num += 1;
+
+        if (curr_allgames_page_num > max_pages) {
+            curr_allgames_page_num = 1;
+        }
+
         get_games();
     });
 
@@ -60,7 +71,9 @@ function get_games() {
 
     $.get('/get-games', formData, (games) => {
 
-        for (const game of games) {
+        max_pages = Math.ceil(games[1].query_count/MAX_ITEM_PER_PAGE_ALLGAMES);
+
+        for (const game of games[0]) {
 
             name = game.name.charAt(0).toUpperCase() + game.name.slice(1);
             $('#display-games').append(`<div class=\"grid-display-game-item-hover\" id=\"display-game-item-${game.game_id}\"></div>`);
@@ -88,15 +101,14 @@ function get_games() {
         });
 
         //code for the loading bar
+        //games[1].query_count
+        //curr_allgames_page_num
+        //$('#page-indicator').css
+        //current page / total pages or shown items (max_item_per_page * curr_page_num) / total items
 
+        pageload_percentage = curr_allgames_page_num / max_pages * 100;
 
-
-
-        
-
-
-
-
-
+        $('#all-games-page-num').html(`(${curr_allgames_page_num}/${max_pages})`);
+        $('#loading-indicator').css("width", `${pageload_percentage}%`);
     });
 }

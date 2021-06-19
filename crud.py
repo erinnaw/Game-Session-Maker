@@ -143,6 +143,28 @@ def get_games_by_criteria(formData, limit_size=20, offset_num=0):
         return Game.query.outerjoin(Schedule).group_by(Game.game_id).order_by(func.count(Game.game_id).asc()).limit(limit_size).offset(offset_num)
 
 
+def get_games_by_criteria_count(formData):
+    """Return the size of the query."""
+
+    if formData["game_name"] == '' and (formData["sort_by"] == '' or formData["sort_by"] == None):
+        return Game.query.count()
+    
+    elif formData["game_name"] != '' and formData["sort_by"] == "alphabetical":
+        return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).count()
+
+    elif formData["game_name"] != '' and formData["sort_by"] == "most-active":
+        return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).outerjoin(Schedule).group_by(Game.game_id).count()
+
+    elif formData["game_name"] != '' and (formData["sort_by"] == '' or formData["sort_by"] == None):
+        return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).count()
+
+    elif formData["game_name"] == '' and formData["sort_by"] == "alphabetical":
+        return Game.query.order_by(Game.name.asc()).count()
+
+    elif formData["game_name"] == '' and formData["sort_by"] == "most-active":
+        return Game.query.outerjoin(Schedule).count()
+
+
 def get_schedules():
     """Return all schedules."""
 
@@ -421,6 +443,17 @@ def set_game_image_by_game_id(game_id, image_path):
     return False
 
 
+def set_game_image_by_name(game_name, image_path):
+    """Set image in a game and return true if successful and false if failed."""
+
+    if get_game_by_name(game_name):
+        Game.query.filter(Game.name == game_name).update({"image_path": image_path})
+        db.session.commit()
+        return True
+    
+    return False
+
+
 def set_schedule_archived_by_id(schedule_id):
     """Set a schedule to archived."""
 
@@ -523,6 +556,26 @@ def delete_schedule(schedule_id):
 
     db.session.delete(schedule)
     db.session.commit()
+
+
+#-----------------Count Wrappers------------------------------->
+def count_schedules():
+    """Get the count of schedules."""
+
+    return Schedule.query.count()
+
+
+def count_requests():
+    """Get the count of requets."""
+
+    return Request.query.count()
+
+
+#-----------------Misc Wrappers------------------------------->
+def get_users_by_schedule_id(schedule_id):
+    """Get the users from a schedule."""
+
+    return User.query.join(Schedule_Users, Schedule_Users.user_id==User.user_id).filter(Schedule_Users.schedule_id == schedule_id).all()
 
 
 
