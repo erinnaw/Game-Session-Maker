@@ -19,8 +19,7 @@ $('#all-games').on('click', () => {
     $('#homepage-display').append("<div class=\"arrow-left\" id=\"arrow-left\"></div>");
     $('#homepage-display').append("<div class=\"display-games\"></div>");
     $('.display-games').append("<div class=\"grid-display-games\" id=\"display-games\"></div>");
-    $('#homepage-display').append(`<div class=\"page-indicator-bar\" id=\"page-indicator\"><span class=\"all-games-page-num\" id=\"all-games-page-num\"></span></div>`);
-    $('#page-indicator').append(`<div class=\"loading-bar\" id=\"loading-indicator\"></div>`);
+    $('#homepage-display').append(`<div class=\"page-indicator-bar\" id=\"page-indicator\"></div>`);
     $('#homepage-display').append("<div class=\"arrow-right\" id=\"arrow-right\"></div>");
 
     $('#arrow-left').on('click', () => {
@@ -50,6 +49,9 @@ $('#all-games').on('click', () => {
 
 function onKeyUp_searchGames_db() {
 
+    curr_allgames_page_num = 1;
+    max_pages = 1;
+
     if (game_search_Flag) {
 
         clearTimeout(game_search_Handler);
@@ -67,7 +69,6 @@ function get_games() {
 
     const formData = $('#search-game-bar').serialize() + "&limit_size=" + MAX_ITEM_PER_PAGE_ALLGAMES + "&offset_page=" + (curr_allgames_page_num - 1);
     $('#display-games').html('');
-    console.log(formData);
 
     $.get('/get-games', formData, (games) => {
 
@@ -101,6 +102,9 @@ function get_games() {
         });
 
         pageload_percentage = curr_allgames_page_num / max_pages * 100;
+
+        $('#page-indicator').html(`<span class=\"all-games-page-num\" id=\"all-games-page-num\"></span>`);
+        $('#page-indicator').append(`<div class=\"loading-bar\" id=\"loading-indicator\"></div>`);
 
         $('#all-games-page-num').html(`(${curr_allgames_page_num}/${max_pages})`);
         $('#loading-indicator').css("width", `${pageload_percentage}%`);

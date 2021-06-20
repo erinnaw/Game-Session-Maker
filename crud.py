@@ -153,16 +153,16 @@ def get_games_by_criteria_count(formData):
         return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).count()
 
     elif formData["game_name"] != '' and formData["sort_by"] == "most-active":
-        return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).outerjoin(Schedule).group_by(Game.game_id).count()
+        return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).count()
 
     elif formData["game_name"] != '' and (formData["sort_by"] == '' or formData["sort_by"] == None):
         return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).count()
 
     elif formData["game_name"] == '' and formData["sort_by"] == "alphabetical":
-        return Game.query.order_by(Game.name.asc()).count()
+        return Game.query.count()
 
     elif formData["game_name"] == '' and formData["sort_by"] == "most-active":
-        return Game.query.outerjoin(Schedule).count()
+        return Game.query.count()
 
 
 def get_schedules():
