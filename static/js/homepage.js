@@ -353,6 +353,7 @@ function get_schedules() {
 
         $('.view-schedule-button').on('click', (evt) => {
 
+            back_state = "";
             back_button_flag = true;
             view_schedule(evt.target.id.slice(9));
         });
@@ -466,6 +467,11 @@ function view_schedule(schedule_id) {
             else if(back_state === "received") {
 
                 $('#my-profile').trigger('click');
+            }
+            else if(back_state === "createaschedule") {
+
+                back_state = "";
+                $('#all-schedules').trigger('click');
             }
             else {
 
@@ -1038,6 +1044,7 @@ function createSchedule_by_game_id(game_id = 1) {
                         $('#snackbar').html(`${data.flash}`);
                         document.getElementById("snackbar").className = "show";
                         setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+                        back_state = "createaschedule";
                         view_schedule(data.schedule_id);
                     }
                 });
@@ -1110,6 +1117,7 @@ function createSchedule_by_game_name(game_name, image_path) {
                         $('#snackbar').html(`${data.flash}`);
                         document.getElementById("snackbar").className = "show";
                         setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+                        back_state = "createaschedule";
                         view_schedule(data.schedule_id);
                     }
                 });
@@ -1178,7 +1186,7 @@ function search_games() {
                 date = "NA";
             }
 
-            if (results[i]['artworks']) {
+            if (results[i].artworks) {
                 artwork_url = results[i]['artworks'][0]['url'];
             }
             else {
@@ -1218,13 +1226,13 @@ function search_games() {
             $(`#search-result-item-hover-${results[i].id}`).on('click', (evt) => {
                 
                 $.get(`/get-game/${results[i].name}`, (game) => {
-                    console.log(game.length);
+                    
                     if (game.length !== 0) {
                         
                         createSchedule_by_game_id(game.game_id);
                     }
                     else {
-                        if (results[i]['artworks'][0]['url']) {
+                        if (results[i].artworks) {
 
                             createSchedule_by_game_name(results[i].name, results[i]['artworks'][0]['url']);
                         }
