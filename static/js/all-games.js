@@ -86,7 +86,7 @@ function get_games() {
         $('.create-schedule-hover').on('click', (evt) => {
 
             const game_id = evt.target.id.slice(16);
-
+            
             $.post(`/create-schedule-from-gamedb/${game_id}`, (game) => {
 
                 if (game === "None") {
@@ -99,12 +99,6 @@ function get_games() {
                 }
             });
         });
-
-        //code for the loading bar
-        //games[1].query_count
-        //curr_allgames_page_num
-        //$('#page-indicator').css
-        //current page / total pages or shown items (max_item_per_page * curr_page_num) / total items
 
         pageload_percentage = curr_allgames_page_num / max_pages * 100;
 

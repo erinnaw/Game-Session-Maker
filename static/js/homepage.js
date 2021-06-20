@@ -982,7 +982,7 @@ function createSchedule_by_game_id(game_id = 1) {
                     $('#gameselect').append(`<option value=${game.game_id}>${name}</option>`);
                 }
 
-                document.getElementById('gameselect').selectedIndex = game_id - 1;
+                $(`#gameselect option[value=\"${game_id}\"]`).attr("selected", true);
             });
 
             $('#create-schedule-form').append("<Label for=\"date\">Date*</Label>" +
@@ -1211,14 +1211,20 @@ function search_games() {
             $(`#search-result-item-hover-${results[i].id}`).on('click', (evt) => {
                 
                 $.get(`/get-game/${results[i].name}`, (game) => {
-
+                    console.log(game.length);
                     if (game.length !== 0) {
-
-                        createSchedule_by_game_id(`${game.game_id}`);
+                        
+                        createSchedule_by_game_id(game.game_id);
                     }
                     else {
+                        if (results[i]['artworks'][0]['url']) {
 
-                        createSchedule_by_game_name(results[i].name, results[i]['artworks'][0]['url']);
+                            createSchedule_by_game_name(results[i].name, results[i]['artworks'][0]['url']);
+                        }
+                        else {
+
+                            createSchedule_by_game_name(results[i].name, artwork_url);
+                        }
                     }
                 });
             });
