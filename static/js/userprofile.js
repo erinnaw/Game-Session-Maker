@@ -544,8 +544,6 @@ function get_userschedules_joined() {
 
                 $('#user-post-joined-canvas').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
                 $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
-
-
                 $(`#profile-schedule-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-joined-schedule-hover-${schedule["schedule_id"]}\"></div>`);
                 $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).html(`<div class=\"view-schedule-button-2\" id=\"view-schedule-user-${schedule["schedule_id"]}\">View</div><div></div>`);
                 $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"leave-schedule-button\" id=\"leave-button-${schedule["schedule_id"]}\">Leave Schedule</div>`);
@@ -562,9 +560,9 @@ function get_userschedules_joined() {
 
                         $(`#view-schedule-user-${schedule["schedule_id"]}`).remove();
                         $(`#leave-button-${schedule["schedule_id"]}`).remove();
-                        $(`#user-request-sent-hover-${schedule["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${schedule["schedule_id"]}\">${msg}</div>`);
-                        $(`#user-request-sent-hover-${schedule["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
-                        $(`#user-request-sent-hover-${schedule["schedule_id"]}`).css('opacity', '1');
+                        $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${schedule["schedule_id"]}\">${msg}</div>`);
+                        $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
+                        $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).css('opacity', '1');
                     });
                 });
             }

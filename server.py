@@ -1028,7 +1028,7 @@ def leave_schedule(schedule_id):
     flash = ""
     if session.get("user", 0):
         if crud.isUserinSchedule(session["user"], schedule_id):
-            crud.remove_user_from_schedule(schedule_id, user_id)
+            crud.remove_user_from_schedule(schedule_id, session["user"])
             flash = "Left Schedule"
         else:
             flash = "You must be a user in the schedule to leave."
