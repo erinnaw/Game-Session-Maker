@@ -110,18 +110,24 @@ def add_user():
     email = request.form.get("email")
     password = request.form.get("password")
     image_path = request.form.get("image_path")
+    flash = ''
+    status = 0
 
     if crud.get_user_by_username(username):
         flash = "Username already exist."
+        status = 1
     elif crud.get_user_by_email(email):
         flash = "User\"s email already exist."
+        status = 2
     elif username == "" or email == "" or password == "":
         flash = "Username, email and password is required."
+        status = 3
     else:
         crud.create_user(username, fname, lname, email, password, image_path)
         flash = "User created. Please log in."
+        status = 0
 
-    return flash
+    return jsonify({"flash": flash, "status": status})
 
 
 @app.route("/login", methods=["POST"])

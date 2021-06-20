@@ -157,10 +157,17 @@ $('#create-account').on('click', () => {
 
         $.post('/add-user', formData, (res) => {
 
-            $('#snackbar').html(res);
-            document.getElementById("snackbar").className = "show";
-            setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
-            $('#all-games').trigger('click');
+            if(!res.status) {
+
+                $('#snackbar').html(res.flash);
+                document.getElementById("snackbar").className = "show";
+                setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+                $('#all-games').trigger('click');
+            }
+            else {
+
+                $('#flash-msg').html(res.flash);
+            }
         })
     });
 });
