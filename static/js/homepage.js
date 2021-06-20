@@ -697,7 +697,8 @@ function view_schedule(schedule_id) {
                                         });
                                     }
                                     else {
-                                        $('.grid-users-list').append(`<div class=\"post-avator\" id=\"post-avator-${user.user_id}\"></div>`);
+
+                                        $('#users-list').append(`<div class=\"post-avator\" id=\"post-avator-${user.user_id}\"></div>`);
                                         $(`#post-avator-${user.user_id}`).html(`<img class=\"avator-img\" id=\"avator-img-${user.user_id}\" src=\"${user.image_path}\"></img>`);
                                         $(`#post-avator-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avator-name${user.user_id}\">${user.username}</div>`);
                                     }

@@ -90,6 +90,7 @@ class Schedule(db.Model):
 
     requests = db.relationship('Request')
     posts = db.relationship('Post')
+    schedule_users = db.relationship('Schedule_Users', cascade="all, delete")
 
     def __repr__(self):
         return f'<schedule_id={self.schedule_id} user_id={self.user_id} game_id={self.game_id} datetime={self.datetime} timezone={self.timezone} platform={self.platform} description={self.description} max_user={self.max_user} max_team={self.max_team}>'

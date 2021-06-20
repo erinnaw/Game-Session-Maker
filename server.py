@@ -986,13 +986,13 @@ def get_schedule_users(schedule_id):
         schedule = crud.get_schedule_by_id(schedule_id)
 
         for user in users:
-            if session["user"] == user.user_id or session["user"] == schedule.user_id:
+            if session["user"] == (user.user_id) or session["user"] == schedule.user_id:
                 for user in users:
                     user_ = crud.get_user_by_id(user.user_id)
-                    data.append({"user_id": user.user_id, 
+                    data.append({"user_id": user_.user_id, 
                                 "username": user_.username, 
                                 "image_path": user_.image_path})
-            break
+                break
         
     return jsonify(data)
 

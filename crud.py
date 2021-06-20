@@ -522,7 +522,7 @@ def hasGame_by_name(game_name):
 def isUserinSchedule(user_id, schedule_id):
     """Check if a user is in a schedule."""
 
-    schedule = Schedule_Users.query.filter(Schedule_Users.user_id == user_id and Schedule_Users.schedule_id == schedule_id).first()
+    schedule = Schedule_Users.query.filter((Schedule_Users.user_id == user_id) & (Schedule_Users.schedule_id == schedule_id)).first()
     if schedule:
         return True
 
@@ -539,7 +539,7 @@ def remove_request(request_id):
 def remove_user_from_schedule(schedule_id, user_id):
     """Remove a user from a schedule."""
 
-    schedule_user = Schedule_Users.query.filter(Schedule_Users.schedule_id == schedule_id and Schedule_Users.user_id == user_id).first()
+    schedule_user = Schedule_Users.query.filter((Schedule_Users.schedule_id == schedule_id) & (Schedule_Users.user_id == user_id)).first()
     db.session.delete(schedule_user)
     db.session.commit()
 
@@ -552,7 +552,9 @@ def delete_schedule(schedule_id):
     for request in schedule.requests:
         db.session.delete(request)
 
-    schedules = User.query.filter().first()
+    s_u = Schedule_Users.query.filter(Schedule_Users.schedule_id == schedule_id).first()
+    if s_u:
+        db.session.delete(s_u)
 
     db.session.delete(schedule)
     db.session.commit()
