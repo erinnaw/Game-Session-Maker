@@ -5,14 +5,17 @@ import crud
 from datetime import datetime
 import requests
 import json
+import os
+import sys
+os.system("sh keys.sh")
 
 app = Flask(__name__)
 app.secret_key = "secret"
 app.jinja_env.undefined = StrictUndefined
 
 igdb = {
-    "client_id": "761m6x4eageu6w69f5tnxamjtufjgv",
-    "client_secret": "tmmr6zuwv5rovvzh4ifvkx0t5v5hog",
+    "client_id": os.environ['CLIENT_ID'],
+    "client_secret": os.environ['CLIENT_SECRET'],
     "grant_type": "client_credentials"
 }
 
