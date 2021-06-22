@@ -201,16 +201,19 @@ $('#log-in').on('click', () => {
     $('#login-form').on('submit', (evt) => {
         
         evt.preventDefault();
-        const formData = {
+
+        let formData = {
             "email": $('#email').val(),
             "password": $('#password').val()
         };
 
+        formData.password = md5($('#password').val());
+        
         $.post('/login', formData, (res) => {
-            
+
             $('#flash-msg').html(res["flash"]);
-            
-            if(res.status === "1") {
+
+            if (res.status === "1") {
 
                 let key = new String();
                 let new_href = new String();

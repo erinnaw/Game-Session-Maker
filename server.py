@@ -6,6 +6,7 @@ from datetime import datetime
 import requests
 import json
 import os
+import hashlib
 import sys
 os.system("sh keys.sh")
 
@@ -119,18 +120,37 @@ def add_user():
     if crud.get_user_by_username(username):
         flash = "Username already exist."
         status = 1
+
     elif crud.get_user_by_email(email):
         flash = "User\"s email already exist."
         status = 2
+
     elif username == "" or email == "" or password == "":
         flash = "Username, email and password is required."
         status = 3
+
     else:
-        crud.create_user(username, fname, lname, email, password, image_path)
-        flash = "User created. Please log in."
-        status = 0
+        if len(password) < 6 or len(password) > 20:
+            flash = "Password must be between 6 to 20 characters."
+            status = 4           
+
+        else:
+            crud.create_user(username, fname, lname, email, password, image_path)
+            flash = "User created. Please log in."
+            status = 0
 
     return jsonify({"flash": flash, "status": status})
+
+
+@app.route("/get-hashkey", methods=["POST"])
+def get_hashkey():
+    """Send user a hash key."""
+
+    email = request.form.get("email")
+    user = crud.get_user_by_email(email)
+    h = hashlib.md5(user.password.encode('utf-8'))
+
+    return jsonify(h.hexdigest())
 
 
 @app.route("/login", methods=["POST"])
@@ -138,15 +158,17 @@ def log_in():
     """Find user and log in user to session."""
 
     email = request.form.get("email")
-    password = request.form.get("password")
+    password_hashed = request.form.get("password")
     user = crud.get_user_by_email(email)
     user_email = ""
 
-    if email == "" or password == "":
+    if email == "" or password_hashed == "":
         flash = "All field input is required."
         status = "0"
     elif user:
-        if user.password == password:
+        password = hashlib.md5(user.password.encode('utf-8'))
+        
+        if password.hexdigest() == password_hashed:
             session["user"] = user.user_id
             flash = f"Logged in as {user.username}"
             user_email = user.email
@@ -167,7 +189,6 @@ def log_in():
 def log_out():
     """View log in page."""
     
-    #get id="log" html element to be "log out", else render log in 
     if session.get("user", 0):
         session.pop("user")
         flash = "You have been logged out."
