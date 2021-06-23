@@ -54,6 +54,7 @@ class Game(db.Model):
     name = db.Column(db.String, 
                     unique=True)
     image_path = db.Column(db.String)                                                          
+    icon_path = db.Column(db.String)
 
     schedules = db.relationship('Schedule')
     requests = db.relationship('Request')

@@ -1071,7 +1071,7 @@ function createSchedule_by_game_id(game_id = 1) {
     });
 }
 
-function createSchedule_by_game_name(game_name, image_path, description, platforms) {
+function createSchedule_by_game_name(game_name, image_path, icon_path, description, platforms, site_detail_url) {
 
     $.get('/profile', (user) => {
 
@@ -1084,11 +1084,12 @@ function createSchedule_by_game_name(game_name, image_path, description, platfor
             $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create a Schedule</div>");
             $('#homepage-display').append(`<div class=\"grid-display-game\" id=\"display-game\"></div>`);
             $('#display-game').append(`<img class=\"display-game-icon\" src=\"${image_path}\"></img>`);
-            $('#display-game').append(`<div class=\"game-description\"><h3>${game_name}</h3><p>${description}</p></div>`);
+            $('#display-game').append(`<div class=\"game-description\"><h3>${game_name}</h3><p>${description}</p><p><a href=\"${site_detail_url}\" target=\"_blank\">Link to game details provided by GiantBomb</a></p></div>`);
             $('#homepage-display').append("<form class=\"schedule-form\" id=\"schedule-form\" action=\"/create-schedule\" method=\"POST\"></form>");
             $('#schedule-form').append("<div class=\"grid-create-schedule-form\" id=\"create-schedule-form\"></div>");
             $('#create-schedule-form').append(`<Label for=\"game\">Game*</Label><input type=\"hidden\" name=\"game\" id=\"gameselect\" value=\"${game_name}\"></input><div>${game_name}</div>`);
             $('#create-schedule-form').append(`<input type=\"hidden\" name=\"image_path\" id=\"image_path\" value=\"${image_path}\"></input>`);
+            $('#create-schedule-form').append(`<input type=\"hidden\" name=\"icon_path\" id=\"icon_path\" value=\"${icon_path}\"></input>`);
 
             $('#create-schedule-form').append("<Label for=\"date\">Date*</Label>" +
                 "<input type=\"date\" name=\"date\" id=\"date\">" +
@@ -1106,7 +1107,7 @@ function createSchedule_by_game_name(game_name, image_path, description, platfor
 
             for (const platform of platforms) {
 
-                $('#platform').append(`<option value=\"${platform}\">${platform.name.charAt(0).toUpperCase() + platform.name.slice(1)}</option>`);
+                $('#platform').append(`<option value=\"${platform}\">${platform.charAt(0).toUpperCase() + platform.slice(1)}</option>`);
             }
 
             $('#create-schedule-form').append("<Label for=\"max_user\">Max Users*</Label>" +
@@ -1125,7 +1126,6 @@ function createSchedule_by_game_name(game_name, image_path, description, platfor
             $('#schedule-form').on('submit', (evt) => {
 
                 const formData = $('#schedule-form').serialize() + JSON.stringify(platforms);
-                console.log(formData);
                 evt.preventDefault();
                 
                 $.post('/create-schedule-by-search-game', formData, (data) => {
@@ -1190,9 +1190,8 @@ function search_games() {
     $.get('/game-info.json', { 'search': searchData }, (results_json) => {
 
         let icon_url = '';
-        let super_url = '';
-        let platforms;
         const results = JSON.parse(results_json);
+
         $('#homepage-display').html(`<div class=\"display-search-text\" id=\"display-search-text\">Showing ${results.num_page_results} out of ${results.num_total_results} results:</div>`);
         $('#homepage-display').append("<div class=\"grid-display-search-results\" id=\"display-search-results\"></div>");
 
@@ -1202,11 +1201,9 @@ function search_games() {
             
             if (results[i].image) {
                 icon_url = results[i].image['icon_url'];
-                super_url = results[i].image['super_url'];
             }
             else {
                 icon_url = "/static/img/image-placeholder.jpg";
-                super_url = "/static/img/image-placeholder.jpg";
             }
 
             $('#display-search-results').append(`
@@ -1235,28 +1232,30 @@ function search_games() {
                         $(`#platforms-${results[i].id}`).append(`${results[i].platforms[j].name}, `);
                     }
                 }
-
-                platforms = results[i].platforms;
             }
             else {
                
-                $(`#platforms-${results[i].id}`).append("N/A");
-                platforms = [{ "name": "N/A"}];
+                $(`#platforms-${results[i].id}`).append({"":"N/A"});
             }
 
             $(`#item-${results[i].id}`).append(`<div class=\"search-result-item-hover\" id=\"search-result-item-hover-${results[i].id}\">Create A Schedule</div>`);
 
             $(`#search-result-item-hover-${results[i].id}`).on('click', (evt) => {
-                
-                $.get(`/get-game/${results[i].name}`, (game) => {
-                    
+
+                $.get('/get-game', {"name": results[i].name}, (game) => {
+
                     if (game.length !== 0) {
-                        
+
                         createSchedule_by_game_id(game.game_id);
                     }
                     else {
 
-                        createSchedule_by_game_name(results[i].name, super_url, results[i].deck, platforms);
+                        loading_screen();
+                        console.log(evt.target.id.slice(25))
+                        $.get('/get-game-info-GB', {"game_id": evt.target.id.slice(25)}, (res) => {
+
+                            createSchedule_by_game_name(results[i].name, res.super_url, res.icon_url, res.deck, res.platforms, res.site_detail_url);
+                        });
                     }
                 });              
             });
@@ -1265,9 +1264,10 @@ function search_games() {
     });
 }
 
+function loading_screen () {
 
-
-
+    $('#homepage-display').html('<div class=\"grid-loading-display\" id=\"loading-display\"><img src=\"/static/img/load-icon.gif\" class=\"load-icon\"/><p>Retrieving Data...</p></div>');
+}
 
 
 

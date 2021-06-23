@@ -16,10 +16,10 @@ def create_user(username, fname, lname, email, password, image_path='/static/img
     return user
 
 
-def add_game(name, url):
+def add_game(name, image_path='/static/img/game-url-not-found.jpg', icon_path='/static/img/icon-not-found.png'):
     """Add a game."""
 
-    game = Game(name=name, image_path=url)
+    game = Game(name=name, image_path=image_path, icon_path=icon_path)
     db.session.add(game)
     db.session.commit()
 
@@ -98,7 +98,7 @@ def get_platforms():
 def get_platform_by_id(platform_id):
     """Get platform by id."""
 
-    return Platform.query.filter(Platform.platform_id == platform_id).all()
+    return Platform.query.filter(Platform.platform_id == platform_id).first()
 
 
 def get_platform_by_name(platform_name):
@@ -481,6 +481,26 @@ def set_game_image_by_name(game_name, image_path):
 
     if get_game_by_name(game_name):
         Game.query.filter(Game.name == game_name).update({"image_path": image_path})
+        db.session.commit()
+    
+    return Game.query.filter(Game.name == game_name).first()
+
+
+def set_game_icon_by_game_id(game_id, icon_path):
+    """Set icon in a game and return true if successful and false if failed."""
+
+    if Game.query.get(game_id):
+        game = Game.query.filter(Game.game_id == game_id).update({"icon_path": icon_path})
+        db.session.commit()
+    
+    return Game.query.filter(Game.game_id == game_id).first()
+
+
+def set_game_icon_by_name(game_name, icon_path):
+    """Set icon in a game and return true if successful and false if failed."""
+
+    if get_game_by_name(game_name):
+        Game.query.filter(Game.name == game_name).update({"icon_path": icon_path})
         db.session.commit()
     
     return Game.query.filter(Game.name == game_name).first()

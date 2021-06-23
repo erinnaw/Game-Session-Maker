@@ -77,7 +77,10 @@ textarea {
 }
 
 .homepage-display-bottom {
+    padding-top: 30px;
+    text-align: center;
     height: 100px;
+    margin: auto;
 }
 
 .status-archived { 
@@ -221,7 +224,7 @@ textarea {
 .homepage-display {
     position: relative;
     display: block;
-    height: 100%;
+    height: auto;
     width: 1200px;
     margin: auto;
     font-family:'Courier New', Courier, monospace;
@@ -803,8 +806,8 @@ body, html {
 }
 
 .game-description {
-    height: 200px;
-    width: 300px;
+    height: 300px;
+    width: 400px;
     margin: auto;
     margin-left: 30px;
 }
@@ -1426,4 +1429,24 @@ body, html {
 
 .avator-upload-form.is-dragover {
   background-color: rgb(202, 202, 202);
+}
+
+
+/*-------------------------loading icon-----------------------------------*/
+
+.grid-loading-display {
+    position: relative;
+    display: grid;
+    text-align: center;
+    grid-template-columns: auto ;
+    height: 500px;
+    width: 500px;
+    margin: auto;
+    margin-top: 100px;
+}
+
+.load-icon {
+    height: 150px;
+    width: 450px;
+    transform: translateY(50%);
 }

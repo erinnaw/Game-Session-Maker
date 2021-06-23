@@ -32,7 +32,8 @@ $('.adminbutton').on('click', (evt) => {
                 $('.grid-admin-display').append(`<div class=\"admin-display-item\" id=\"admin-display-item-${i}\"></div>`);
                 $(`#admin-display-item-${i}`).append(`Game ID: ${data[i].game_id} |
                                                 Name: ${data[i].name} |
-                                                Image Path: ${data[i].image_path}`);
+                                                Image Path: ${data[i].image_path} |
+                                                icon_path: ${data[i].icon_path}`);
             }
         }
         else if (evt.target.id === "schedules") {

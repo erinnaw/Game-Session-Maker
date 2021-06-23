@@ -141,13 +141,13 @@ def seed_games(game_name):
 
     if len(response.results):
         if response.results[0]['name']:
-            game = crud.add_game(response.results[0]['name'], "/static/img/image-placeholder.jpg")
+            game = crud.add_game(response.results[0]['name'])
 
             if response.results[0]['image']['super_url']:
                 crud.set_game_image_by_name(game_name, response.results[0]['image']['super_url'])
             
-            elif response.results[0]['image']:
-                crud.set_game_image_by_name(game_name, response.results[0]['image']['icon_url'])
+            if response.results[0]['image']['icon_url']:
+                crud.set_game_icon_by_name(game_name, response.results[0]['image']['icon_url'])
 
             if response.results[0]['platforms']:
                 for platform in response.results[0]['platforms']:
@@ -157,6 +157,56 @@ def seed_games(game_name):
 
     return json.dumps(response)
 
+
+@app.route("/get-game-info-GB", methods=["GET"])
+def get_game_details_GB():
+    """Return details for a game from the GB database."""
+
+    results = dict()
+    platforms = list()
+    game_id = request.args.get("game_id")
+
+    filter_by = {'id': game_id}
+    return_fields = ('name', 'deck', 'image', 'platforms', 'site_detail_url')
+    response = GB_client.search(
+        filter_by=filter_by,
+        return_fields=return_fields,
+        limit=1,
+    )
+
+    if len(response.results):
+        if response.results[0]['name']:
+            results['name'] = response.results[0]['name']
+        
+        else :
+            results['super_url'] = 'game-url-not-found.jpg'
+
+        if response.results[0]['image']['super_url']:
+            results['super_url'] = response.results[0]['image']['super_url']
+        
+        else :
+            results['super_url'] = 'game-url-not-found.jpg'
+
+        if response.results[0]['deck']:
+            results['deck'] = response.results[0]['deck']
+        else:
+            results['deck'] = 'N/A'
+
+        if response.results[0]['platforms']:
+            for platform in response.results[0]['platforms']:
+                platforms.append(platform['name'])
+        else:
+            platforms.append('N/A')
+        
+        results['platforms'] = platforms
+
+        if response.results[0]['site_detail_url']:
+            results['site_detail_url'] = response.results[0]['site_detail_url']
+        else:
+            results['site_detail_url'] = 'N/A'
+
+    return jsonify(results)
+    
 
 @app.route("/get-platforms/<game_id>")
 def get_platforms_by_game(game_id):
@@ -281,8 +331,7 @@ def get_user():
                 "lastname": user.last_name,
                 "image_path": user.image_path,
                 "email": user.email,
-                "password": user.password,
-                "image_path": user.image_path}
+                "password": user.password}
 
         return jsonify(data)
     
@@ -325,6 +374,7 @@ def get_user_schedules():
         for schedule in schedules:
             game = crud.get_game_by_id(schedule.game_id)
             host = crud.get_user_by_id(schedule.user_id)
+            platform = crud.get_platform_by_id(schedule.platform_id)
 
             data = {"type": "host",
                     "host_username": host.username,
@@ -333,7 +383,7 @@ def get_user_schedules():
                     "game_name": game.name,
                     "datetime": schedule.datetime, 
                     "timezone": schedule.timezone, 
-                    "platform": schedule.platform,
+                    "platform": platform.name,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
                     "description": schedule.description,
@@ -380,7 +430,7 @@ def get_user_schedules_created():
         for schedule in schedules:
             game = crud.get_game_by_id(schedule.game_id)
             host = crud.get_user_by_id(schedule.user_id)
-
+            platform = crud.get_platform_by_id(schedule.platform_id)
             data = {"type": "host",
                     "host_username": host.username,
                     "schedule_id": schedule.schedule_id,
@@ -388,7 +438,7 @@ def get_user_schedules_created():
                     "game_name": game.name,
                     "datetime": schedule.datetime, 
                     "timezone": schedule.timezone, 
-                    "platform": schedule.platform_id,
+                    "platform": platform.name,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
                     "description": schedule.description}
@@ -421,6 +471,7 @@ def get_schedules():
         user = crud.get_user_by_id(schedule.user_id)
         game = crud.get_game_by_id(schedule.game_id)
         platform = crud.get_platform_by_id(schedule.platform_id)
+        
         data.append({"schedule_id": schedule.schedule_id,
                     "user_id": schedule.user_id,
                     "username": user.username,
@@ -460,6 +511,8 @@ def get_schedules_active():
     for schedule in schedules:
         user = crud.get_user_by_id(schedule.user_id)
         game = crud.get_game_by_id(schedule.game_id)
+        platform = crud.get_platform_by_id(schedule.platform_id)
+
         data.append({"schedule_id": schedule.schedule_id,
                     "user_id": schedule.user_id,
                     "username": user.username,
@@ -467,7 +520,7 @@ def get_schedules_active():
                     "game_name": game.name,
                     "datetime": schedule.datetime,
                     "timezone": schedule.timezone,
-                    "platform": schedule.platform,
+                    "platform": platform.name,
                     "description": schedule.description,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
@@ -493,6 +546,7 @@ def get_user_schedules_joined():
             schedule = crud.get_schedule_by_id(schedule_user.schedule_id)
             game = crud.get_game_by_id(schedule.game_id)
             host = crud.get_user_by_id(schedule.user_id)
+            platform = crud.get_platform_by_id(schedule.platform_id)
 
             data = {"type": "user",
                     "host_username": host.username,
@@ -501,7 +555,7 @@ def get_user_schedules_joined():
                     "game_name": game.name,
                     "datetime": schedule.datetime, 
                     "timezone": schedule.timezone, 
-                    "platform": schedule.platform,
+                    "platform": platform.name,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
                     "description": schedule.description,
@@ -528,6 +582,7 @@ def get_user_schedules_archived():
         for schedule in schedules:
             game = crud.get_game_by_id(schedule.game_id)
             host = crud.get_user_by_id(schedule.user_id)
+            platform = crud.get_platform_by_id(schedule.platform_id)
 
             data = {"type": "host",
                     "host_username": host.username,
@@ -536,7 +591,7 @@ def get_user_schedules_archived():
                     "game_name": game.name,
                     "datetime": schedule.datetime, 
                     "timezone": schedule.timezone, 
-                    "platform": schedule.platform,
+                    "platform": platform.name,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
                     "description": schedule.description,
@@ -574,6 +629,8 @@ def get_schedule_by_id(schedule_id):
     schedule = crud.get_schedule_by_id(schedule_id)
     user = crud.get_user_by_id(schedule.user_id)
     game = crud.get_game_by_id(schedule.game_id)
+    platform = crud.get_platform_by_id(schedule.platform_id)
+
     data = {"schedule_id": schedule.schedule_id,
             "user_id": schedule.user_id,
             "username": user.username,
@@ -581,7 +638,7 @@ def get_schedule_by_id(schedule_id):
             "game_name": game.name,
             "datetime": schedule.datetime,
             "timezone": schedule.timezone,
-            "platform": schedule.platform,
+            "platform": platform.name,
             "description": schedule.description,
             "max_user": schedule.max_user,
             "max_team": schedule.max_team,
@@ -733,7 +790,7 @@ def create_schedule():
     date = request.form.get("date")
     time = request.form.get("time")
     timezone = request.form.get("timezone")
-    platform_id = request.form.get("platform_id")
+    platform_id = request.form.get("platform")
     description = request.form.get("description")
     max_user = request.form.get("max_user")
     max_team = request.form.get("max_team")
@@ -790,11 +847,12 @@ def create_schedule_from_gamedb(game_id):
 
 @app.route("/create-schedule-by-search-game", methods=["POST"])
 def create_schedule_by_search_game():
-    """Create a schedule by using the game search API. (via game_name)"""
+    """Create a schedule by using the game search API."""
 
     status = "fail"
     game_name = request.form.get("game")
     image_path = request.form.get("image_path")
+    icon_path = request.form.get("icon_path")
     date = request.form.get("date")
     time = request.form.get("time")
     timezone = request.form.get("timezone")
@@ -803,7 +861,7 @@ def create_schedule_by_search_game():
     max_user = request.form.get("max_user")
     max_team = request.form.get("max_team")
     platforms = request.form.get("platforms")
-
+    print(platforms)
     schedule_id = 0
     if max_team == "":
         max_team = 0
@@ -814,7 +872,7 @@ def create_schedule_by_search_game():
             datetime_date = datetime(int(date_[0]), int(date_[1]), int(date_[2]))
             time_ = datetime.strptime(time,"%H:%M").time()
             date_time = datetime.combine(datetime_date, time_)
-            game = crud.add_game(game_name, image_path)
+            game = crud.add_game(game_name, image_path, icon_path)
 
             for p in platforms:
                 crud.add_platform(game.game_id, p)
@@ -855,7 +913,7 @@ def get_all_games():
 
         data.append({"name": game.name, 
                     "game_id": game.game_id, 
-                    "image_path": game.image_path,
+                    "icon_path": game.icon_path,
                     "platforms": p_})
 
     return jsonify(data)
@@ -885,10 +943,32 @@ def get_games():
 
         data.append({"name": game.name, 
                     "game_id": game.game_id, 
-                    "image_path": game.image_path,
+                    "icon_path": game.icon_path,
                     "platforms": p_})
 
     return jsonify([data, {"query_count": query_count}])
+
+
+@app.route("/get-game", methods=["GET"])
+def get_game_by_name():
+    """Get a game by name."""
+
+    game_name = request.args.get("name")
+
+    data = list()
+    p_ = list()
+    if crud.get_game_by_name(game_name):
+        game = crud.get_game_by_name(game_name)
+        platforms_ = crud.get_game_platforms_by_id(game.game_id)
+ 
+        for platform in platforms_:
+            p_.append({"name": platform.name, "platform_id": platform.platform_id})
+
+        data.append({"name": game.name, 
+                    "game_id": game.game_id, 
+                    "platforms": p_})
+
+    return jsonify(data)
 
 
 @app.route("/get-game/<game_id>", methods=["GET"])
@@ -900,7 +980,7 @@ def get_game(game_id):
     if crud.hasGame(game_id):
         game = crud.get_game_by_id(game_id)
         platforms_ = crud.get_game_platforms_by_id(game_id)
-        print("------------------------------------")
+ 
         for platform in platforms_:
             p_.append({"name": platform.name, "platform_id": platform.platform_id})
 
@@ -1202,6 +1282,7 @@ def view_admin_display(path):
         for game in games:
             data.append({"game_id": game.game_id,
                         "name": game.name,
+                        "icon_path": game.icon_path,
                         "image_path": game.image_path})        
     elif path == "schedules":
         schedules = crud.get_schedules()

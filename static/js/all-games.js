@@ -78,7 +78,7 @@ function get_games() {
             
             name = game.name.charAt(0).toUpperCase() + game.name.slice(1);
             $('#display-games').append(`<div class=\"grid-display-game-item-hover\" id=\"display-game-item-${game.game_id}\"></div>`);
-            $(`#display-game-item-${game.game_id}`).append(`<img class=\"display-game-item-img\" id=\"display-game-item-img-${game.game_id}\" src=\"${game.image_path}\"></div>` +
+            $(`#display-game-item-${game.game_id}`).append(`<img class=\"display-game-item-img\" id=\"display-game-item-img-${game.game_id}\" src=\"${game.icon_path}\"></div>` +
                 `<div class=\"display-game-item-name\" id=\"display-game-item-name-${game.game_id}\"></div>`);
             $(`#display-game-item-name-${game.game_id}`).append(`${game.name}`);
             $(`#display-game-item-${game.game_id}`).append(`<div class=\"create-schedule-hover\" id=\"create-schedule-${game.game_id}\">Create Schedule</div>`);
