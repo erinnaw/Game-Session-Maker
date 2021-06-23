@@ -75,7 +75,7 @@ function get_games() {
         max_pages = Math.ceil(games[1].query_count/MAX_ITEM_PER_PAGE_ALLGAMES);
 
         for (const game of games[0]) {
-
+            
             name = game.name.charAt(0).toUpperCase() + game.name.slice(1);
             $('#display-games').append(`<div class=\"grid-display-game-item-hover\" id=\"display-game-item-${game.game_id}\"></div>`);
             $(`#display-game-item-${game.game_id}`).append(`<img class=\"display-game-item-img\" id=\"display-game-item-img-${game.game_id}\" src=\"${game.image_path}\"></div>` +
@@ -95,7 +95,7 @@ function get_games() {
                     $('#homepage-display').html("<div class=\"error-page\" id=\"error-page\">Error: Game Not Found</div>");
                 }
                 else {
-
+                    
                     createSchedule_by_game_id(game_id);
                 }
             });

@@ -7,6 +7,7 @@ import requests
 import json
 import os
 import hashlib
+import pybomb
 import sys
 os.system("sh keys.sh")
 
@@ -14,30 +15,32 @@ app = Flask(__name__)
 app.secret_key = "secret"
 app.jinja_env.undefined = StrictUndefined
 
-igdb = {
-    "client_id": os.environ['CLIENT_ID'],
-    "client_secret": os.environ['CLIENT_SECRET'],
-    "grant_type": "client_credentials"
-}
+# IGDB API call initialization
+#igdb = {
+#    "client_id": os.environ['CLIENT_ID_IGDB'],
+#    "client_secret": os.environ['CLIENT_SECRET_IGDB'],
+#    "grant_type": "client_credentials"
+#}
 
-igdb_token = "https://id.twitch.tv/oauth2/token?"
-igdb_baseURL = "https://api.igdb.com/v4/"
+#igdb_token = "https://id.twitch.tv/oauth2/token?"
+#igdb_baseURL = "https://api.igdb.com/v4/"
 
-for key, value in igdb.items():
-    if key == "client_id":
-        igdb_token += f"{key}={value}"
-    else:
-        igdb_token += f"&{key}={value}"
+#for key, value in igdb.items():
+#    if key == "client_id":
+#        igdb_token += f"{key}={value}"
+#    else:
+#        igdb_token += f"&{key}={value}"
 
-API_response = requests.post(igdb_token)
-API_response_json = API_response.json()
+#API_response = requests.post(igdb_token)
+#API_response_json = API_response.json()
 
-igdb_header = {
-    "content-type": "application/json",
-    "Client-ID": "761m6x4eageu6w69f5tnxamjtufjgv",
-    "Authorization": "Bearer "+API_response_json["access_token"]
-}
+#igdb_header = {
+#    "content-type": "application/json",
+#    "Client-ID": "761m6x4eageu6w69f5tnxamjtufjgv",
+#    "Authorization": "Bearer "+API_response_json["access_token"]
+#}
 
+# IGDB API fields
 # age_ratings,aggregated_rating,aggregated_rating_count,alternative_names,artworks,bundles,category,
 # checksum,collection,cover,created_at,dlcs,expanded_games,expansions,external_games,first_release_date,
 # follows,forks,franchise,franchises,game_engines,game_modes,genres,hypes,involved_companies,keywords,
@@ -45,10 +48,19 @@ igdb_header = {
 # remakes,remasters,screenshots,similar_games,slug,standalone_expansions,status,storyline,summary,tags,themes,
 # total_rating,total_rating_count,updated_at,url,version_parent,version_title,videos,websites
 
-fields = "fields name, game_modes.name, artworks.url, platforms.name, first_release_date;"
-limit = " limit 20;"
-where = " where game_modes != 1;"
-search = ""
+#fields = "fields name, game_modes.name, artworks.url, platforms.name, first_release_date;"
+#limit = " limit 20;"
+#where = " where game_modes != 1;"
+#search = ""
+
+# Giantbomb API call initialization
+API_KEY_GB = os.environ['API_KEY_GIANTBOMB']
+GB_client = pybomb.GamesClient(API_KEY_GB)
+
+GAMES_URL_GB = "http://www.giantbomb.com/api/games/"
+return_fields = ('deck', 'original_release_date', 'image', 'name', 'platforms', 'site_detail_url', 'id')
+sort_by = 'name'
+
 
 @app.route("/")
 def homepage():
@@ -58,18 +70,14 @@ def homepage():
 
 @app.route("/game-info.json", methods=["GET"])
 def get_game_info():
-    """Get game info from an igdb API call."""
-   
+    """Get game info from an API call."""
+
     data = request.args.get("search")
-    search = " search \""+data+"\";"
-    results = requests.post("https://api.igdb.com/v4/games", headers=igdb_header, data=fields+limit+where+search)
-    results_json = results.json()
 
-    print("------------------IGDB API call----------------->")
-    for result in results_json:
-        print(result)
-
-    #print(results_json)
+    # IGDB API call
+    #search = " search \""+data+"\";"
+    #results = requests.post("https://api.igdb.com/v4/games", headers=igdb_header, data=fields+limit+where+search)
+    #results_json = results.json()
 
     #game modes
     #fields1 = "fields checksum,created_at,name,slug,updated_at,url;"
@@ -81,27 +89,86 @@ def get_game_info():
     #artwork = requests.post("https://api.igdb.com/v4/game_modes", headers=igdb_header, data=fields2)
     #print(artwork.json())
 
-    return json.dumps(results_json)
+    # Giantbomb call code
+    # Documentation: https://www.giantbomb.com/api/documentation/#toc-0-17
+    # Pybomb: https://pybomb.readthedocs.io/_/downloads/en/stable/pdf/
+    offset = 0
+    limit = 10
+    filter_by = {'name': data}
+
+    response = GB_client.search(
+        filter_by=filter_by,
+        return_fields=return_fields,
+        sort_by=sort_by,
+        desc=True,
+        limit=limit,
+        offset=offset
+    )
+
+    #print("------------------IGDB API call----------------->")
+    #for result in response.results:
+    #    print(result)
+
+    return json.dumps(response.results)
 
 
-@app.route("/add-game-artwork")
-def add_game_artwork(game_name):
+@app.route("/seed-games")
+def seed_games(game_name):
     """Add artwork to all games in the db."""
 
-    fields2 = "fields name, artworks.url;"
-    search = " search \""+game_name+"\";"
+    #fields2 = "fields name, artworks.url;"
+    #search = " search \""+game_name+"\";"
     #fields = "fields alpha_channel,animated,checksum,game,height,image_id,url,width;"
-    games = requests.post("https://api.igdb.com/v4/games", headers=igdb_header, data=fields2+search)
-    games_json = games.json()
-    games_ = json.dumps(games_json)
+    #games = requests.post("https://api.igdb.com/v4/games", headers=igdb_header, data=fields2+search)
+    #games_json = games.json()
+    #games_ = json.dumps(games_json)
 
-    print("------------------IGDB API call----------------->")
-    print(games_)
+    #print("------------------IGDB API call----------------->")
+    #print(games_)
 
-    for game in games_json:
-        if game.get("artworks", 0):
-            artwork_url = game["artworks"][0]["url"]
-            crud.set_game_image_by_name(game_name, artwork_url)
+    #for game in games_json:
+    #    if game.get("artworks", 0):
+    #        artwork_url = game["artworks"][0]["url"]
+    #        crud.set_game_image_by_name(game_name, artwork_url)
+
+    filter_by = {'name': game_name}
+    return_fields = ('name', 'image', 'platforms')
+    response = GB_client.search(
+        filter_by=filter_by,
+        return_fields=return_fields,
+        limit=1,
+    )
+
+    if len(response.results):
+        if response.results[0]['name']:
+            game = crud.add_game(response.results[0]['name'], "/static/img/image-placeholder.jpg")
+
+            if response.results[0]['image']['super_url']:
+                crud.set_game_image_by_name(game_name, response.results[0]['image']['super_url'])
+            
+            elif response.results[0]['image']:
+                crud.set_game_image_by_name(game_name, response.results[0]['image']['icon_url'])
+
+            if response.results[0]['platforms']:
+                for platform in response.results[0]['platforms']:
+                    crud.add_platform(game.game_id, platform['name'])
+            else:
+                crud.add_platform(game.game_id, 'N/A')
+
+    return json.dumps(response)
+
+
+@app.route("/get-platforms/<game_id>")
+def get_platforms_by_game(game_id):
+    """Return the platforms for a game."""
+
+    platforms = crud.get_game_platforms_by_id(game_id)
+    p_ = list()
+
+    for platform in platforms:
+        p_.append({"name": platform.name, "platform_id": platform.platform_id})
+
+    return jsonify(p_)
 
 
 @app.route("/add-user", methods=["POST"])
@@ -278,6 +345,7 @@ def get_user_schedules():
             schedule = crud.get_schedule_by_id(schedule_user.schedule_id)
             game = crud.get_game_by_id(schedule.game_id)
             host = crud.get_user_by_id(schedule.user_id)
+            platform = crud.get_platform_by_id(schedule.platform_id)
 
             data = {"type": "user",
                     "host_username": host.username,
@@ -286,7 +354,7 @@ def get_user_schedules():
                     "game_name": game.name,
                     "datetime": schedule.datetime, 
                     "timezone": schedule.timezone, 
-                    "platform": schedule.platform,
+                    "platform": platform.name,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
                     "description": schedule.description,
@@ -320,7 +388,7 @@ def get_user_schedules_created():
                     "game_name": game.name,
                     "datetime": schedule.datetime, 
                     "timezone": schedule.timezone, 
-                    "platform": schedule.platform,
+                    "platform": schedule.platform_id,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
                     "description": schedule.description}
@@ -352,6 +420,7 @@ def get_schedules():
     for schedule in schedules:
         user = crud.get_user_by_id(schedule.user_id)
         game = crud.get_game_by_id(schedule.game_id)
+        platform = crud.get_platform_by_id(schedule.platform_id)
         data.append({"schedule_id": schedule.schedule_id,
                     "user_id": schedule.user_id,
                     "username": user.username,
@@ -359,7 +428,7 @@ def get_schedules():
                     "game_name": game.name,
                     "datetime": schedule.datetime,
                     "timezone": schedule.timezone,
-                    "platform": schedule.platform,
+                    "platform": platform.name,
                     "description": schedule.description,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
@@ -664,7 +733,7 @@ def create_schedule():
     date = request.form.get("date")
     time = request.form.get("time")
     timezone = request.form.get("timezone")
-    platform = request.form.get("platform")
+    platform_id = request.form.get("platform_id")
     description = request.form.get("description")
     max_user = request.form.get("max_user")
     max_team = request.form.get("max_team")
@@ -682,7 +751,7 @@ def create_schedule():
                                         game_id, 
                                         date_time, 
                                         timezone, 
-                                        platform, 
+                                        platform_id, 
                                         description, 
                                         max_user, 
                                         max_team)
@@ -703,9 +772,15 @@ def create_schedule_from_gamedb(game_id):
 
     if crud.hasGame(game_id):
         game = crud.get_game_by_id(game_id)
+
+        p_ = list()
+        for platform in game.platforms:
+            p_.append({"name": platform.name, "platform_id": platform.platform_id})
+
         data = {
             "game_id": game.game_id,
-            "game_name": game.name
+            "game_name": game.name,
+            "platforms": p_
         }
         
         return data
@@ -727,6 +802,8 @@ def create_schedule_by_search_game():
     description = request.form.get("description")
     max_user = request.form.get("max_user")
     max_team = request.form.get("max_team")
+    platforms = request.form.get("platforms")
+
     schedule_id = 0
     if max_team == "":
         max_team = 0
@@ -738,15 +815,21 @@ def create_schedule_by_search_game():
             time_ = datetime.strptime(time,"%H:%M").time()
             date_time = datetime.combine(datetime_date, time_)
             game = crud.add_game(game_name, image_path)
+
+            for p in platforms:
+                crud.add_platform(game.game_id, p)
+            
+            platform = crud.get_platform_by_name(platform)
             game_id = game.game_id
             schedule = crud.add_schedule(session["user"], 
                                         game_id, 
                                         date_time, 
                                         timezone, 
-                                        platform, 
+                                        platform.platform_id, 
                                         description, 
                                         max_user, 
                                         max_team)
+
             schedule_id = schedule.schedule_id
             flash = "Schedule has been submitted."
             status = "success"
@@ -763,12 +846,17 @@ def get_all_games():
     """Get all games."""
 
     data = list()
+    p_ = list()
     games = crud.get_games()
 
     for game in games:
+        for platform in game.platforms:
+            p_.append({"name": platform.name, "platform_id": platform.platform_id})
+
         data.append({"name": game.name, 
                     "game_id": game.game_id, 
-                    "image_path": game.image_path})
+                    "image_path": game.image_path,
+                    "platforms": p_})
 
     return jsonify(data)
 
@@ -788,25 +876,37 @@ def get_games():
                 "sort_by": sort_by}
     games = crud.get_games_by_criteria(formData, limit_size, offset_num)
     query_count = crud.get_games_by_criteria_count(formData)
-    
+
+    p_ = list()
     for game in games:
+        platforms_ = crud.get_game_platforms_by_id(game.game_id)
+        for platform in platforms_:
+            p_.append({"name": platform.name, "platform_id": platform.platform_id})
+
         data.append({"name": game.name, 
                     "game_id": game.game_id, 
-                    "image_path": game.image_path})
+                    "image_path": game.image_path,
+                    "platforms": p_})
 
     return jsonify([data, {"query_count": query_count}])
 
 
-@app.route("/get-game/<name>", methods=["GET"])
-def get_game(name):
+@app.route("/get-game/<game_id>", methods=["GET"])
+def get_game(game_id):
     """Get a game by id."""
 
     data = list()
+    p_ = list()
+    if crud.hasGame(game_id):
+        game = crud.get_game_by_id(game_id)
+        platforms_ = crud.get_game_platforms_by_id(game_id)
+        print("------------------------------------")
+        for platform in platforms_:
+            p_.append({"name": platform.name, "platform_id": platform.platform_id})
 
-    if crud.hasGame_by_name(name):
-        game = crud.get_game_by_name(name)
-        data = {"name": game.name, "game_id": game.game_id}
-
+        data.append({"name": game.name, 
+                    "game_id": game.game_id, 
+                    "platforms": p_})
 
     return jsonify(data)
 
@@ -1129,6 +1229,12 @@ def view_admin_display(path):
             data.append({"post_id": post.post_id,
                         "schedule_id": post.schedule_id,
                         "user_id": post.user_id})         
+    elif path == "platforms":
+        platforms = crud.get_platforms()
+        for platform in platforms:
+            data.append({"platform_id": platform.platform_id,
+                        "game_id": platform.game_id,
+                        "name": platform.name})     
     else:
         data = None                        
 

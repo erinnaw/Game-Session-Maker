@@ -57,9 +57,28 @@ class Game(db.Model):
 
     schedules = db.relationship('Schedule')
     requests = db.relationship('Request')
+    platforms = db.relationship('Platform')
 
     def __repr__(self):
         return f'<game_id={self.game_id} name={self.name} image_path={self.image_path}>'
+
+
+class Platform(db.Model):
+    """A Platform."""
+
+    __tablename__ = 'platforms'
+
+    platform_id = db.Column(db.Integer,
+                            autoincrement=True,
+                            primary_key=True)
+    game_id = db.Column(db.Integer,
+                        db.ForeignKey('games.game_id'))
+    name = db.Column(db.String)
+    games = db.relationship('Game', viewonly=True)
+    schedules = db.relationship('Schedule')
+
+    def __repr__(self):
+        return f'<platform_id={self.platform_id} name={self.name}>'
 
 
 class Schedule(db.Model):
@@ -73,12 +92,13 @@ class Schedule(db.Model):
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.user_id'))
     game_id = db.Column(db.Integer,
-                        db.ForeignKey('games.game_id'))                    
+                        db.ForeignKey('games.game_id'))         
+    platform_id = db.Column(db.Integer,
+                        db.ForeignKey('platforms.platform_id'))            
     datetime = db.Column(db.DateTime,
                         nullable=False)
     timezone = db.Column(db.String,
                         nullable=False)
-    platform = db.Column(db.String)
     description = db.Column(db.Text,
                         nullable=False)
     max_user = db.Column(db.Integer,

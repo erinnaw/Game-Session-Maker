@@ -89,5 +89,18 @@ $('.adminbutton').on('click', (evt) => {
                                                 User ID: ${data[i].user_id}`);
             }
         }
+        else if (evt.target.id === "platforms") {
+
+            $('#homepage-display').html('<div class=\"subheader\">All Platforms</div>');
+            $('#homepage-display').append('<div class=\"grid-admin-display\"></div>');
+
+            for (let i = 0; i < data.length; i++) {
+
+                $('.grid-admin-display').append(`<div class=\"admin-display-item\" id=\"admin-display-item-${i}\"></div>`);
+                $(`#admin-display-item-${i}`).append(`Platform ID: ${data[i].platform_id} |
+                                                Game ID: ${data[i].game_id} |
+                                                Name: ${data[i].name}`);
+            }
+        }
     });
 });

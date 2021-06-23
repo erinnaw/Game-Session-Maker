@@ -6,7 +6,7 @@ from datetime import datetime
 import time
 
 import crud
-from model import db, User, Game, Schedule, Request, Post, Schedule_Users, connect_to_db
+from model import db, User, Game, Schedule, Request, Post, Schedule_Users, connect_to_db, Platform
 import server
 
 os.system('dropdb scheduler')
@@ -16,9 +16,9 @@ connect_to_db(server.app)
 db.create_all()
 
 
-MAX_USERS = 100
+MAX_USERS = 10
 MAX_SCHEDULES_PER_USER = 5
-MAX_REQUESTS_PER_USER = 100
+MAX_REQUESTS_PER_USER = 10
 MAX_POSTS_PER_USER = 1
 
 first_names = ["Abby", "Becca", "Cathy", "Darren", "Eric", "Fran", "Garry", "Harry", "Ingrid", "Jackie", "Karen", "Larry", 
@@ -45,10 +45,6 @@ for line in gamelist_file:
     word = line.rstrip()
     game_list.append(word)
 
-for game in game_list:
-    crud.add_game(game, "/static/img/image-placeholder.jpg")
-
-#set artwork for games
 start = 0
 counter = 0
 for i in range(0, len(game_list)-1):
@@ -57,7 +53,7 @@ for i in range(0, len(game_list)-1):
         counter = 0
 
     else:
-        server.add_game_artwork(game_list[i])
+        server.seed_games(game_list[i])
         counter+=1
 
 MAX_GAMES = len(game_list)
@@ -66,8 +62,15 @@ MAX_GAMES = len(game_list)
 #"%Y-%m-%d %H:%M"
 for i in range(1, MAX_USERS+1):
     for j in range(1, MAX_SCHEDULES_PER_USER+1):
-        crud.add_schedule(str(i), str(randint(1, MAX_GAMES)), datetime(2021, randint(7,12), randint(1, 28), randint(1,23), randint(1,59)),
-                            "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", platform[randint(0, len(platform)-1)], "Generated via seed_database.", str(randint(1,100)), str(randint(0,10)))
+        game_id = str(randint(1, 48))
+        platforms = crud.get_game_platforms_by_id(game_id)
+        if platforms:
+            crud.add_schedule(str(i), game_id, datetime(2021, randint(7,12), randint(1, 28), randint(1,23), randint(1,59)),
+                                "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", platforms[randint(0, len(platforms)-1)].platform_id, "Generated via seed_database.", str(randint(1,100)), str(randint(0,10)))
+        else:
+            platform_ = crud.get_platform_by_name('N/A')
+            crud.add_schedule(str(i), game_id, datetime(2021, randint(7,12), randint(1, 28), randint(1,23), randint(1,59)),
+                           "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", platform_.platform_id, "Generated via seed_database.", str(randint(1,100)), str(randint(0,10)))
 
 #create requests
 #add_request(user_id, schedule_id, msg)

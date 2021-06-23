@@ -1,4 +1,4 @@
-from model import db, User, Game, Schedule, Request, Post, Schedule_Users, connect_to_db
+from model import db, User, Game, Schedule, Request, Post, Schedule_Users, connect_to_db, Platform
 from datetime import datetime
 from sqlalchemy import func, Time, cast, text
 
@@ -26,14 +26,14 @@ def add_game(name, url):
     return game
 
 
-def add_schedule(user_id, game_id, datetime, timezone, platform, description, max_user, max_team=1):
+def add_schedule(user_id, game_id, datetime, timezone, platform_id, description, max_user, max_team=1):
     """Add a schedule."""
 
     schedule = Schedule(user_id=user_id,
                         game_id=game_id,
                         datetime=datetime, 
                         timezone=timezone, 
-                        platform=platform, 
+                        platform_id=platform_id, 
                         description=description, 
                         max_user=max_user, 
                         max_team=max_team)
@@ -78,7 +78,41 @@ def add_post(user_id, schedule_id, content):
     return post 
 
 
+def add_platform(game_id, platform_name):
+    """Add a platform."""
+
+    platform = Platform(game_id=game_id, name=platform_name)
+    db.session.add(platform)
+    db.session.commit()
+
+    return platform
+
+
 #-----------------Get Wrappers------------------------------->
+def get_platforms():
+    """Get all platforms."""
+
+    return Platform.query.all()
+
+
+def get_platform_by_id(platform_id):
+    """Get platform by id."""
+
+    return Platform.query.filter(Platform.platform_id == platform_id).all()
+
+
+def get_platform_by_name(platform_name):
+    """Get platform by id."""
+
+    return Platform.query.filter(Platform.name == platform_name).first()
+
+
+def get_game_platforms_by_id(game_id):
+    """Get all platforms of a game."""
+
+    return Platform.query.filter(Platform.game_id == game_id).all()
+
+
 def get_users():
     """Return all users."""
 
@@ -436,11 +470,10 @@ def set_game_image_by_game_id(game_id, image_path):
     """Set image in a game and return true if successful and false if failed."""
 
     if Game.query.get(game_id):
-        Game.query.filter(Game.game_id == game_id).update({"image_path": image_path})
+        game = Game.query.filter(Game.game_id == game_id).update({"image_path": image_path})
         db.session.commit()
-        return True
     
-    return False
+    return Game.query.filter(Game.game_id == game_id).first()
 
 
 def set_game_image_by_name(game_name, image_path):
@@ -449,9 +482,8 @@ def set_game_image_by_name(game_name, image_path):
     if get_game_by_name(game_name):
         Game.query.filter(Game.name == game_name).update({"image_path": image_path})
         db.session.commit()
-        return True
     
-    return False
+    return Game.query.filter(Game.name == game_name).first()
 
 
 def set_schedule_archived_by_id(schedule_id):
@@ -519,6 +551,7 @@ def hasGame_by_name(game_name):
     
     return False
 
+
 def isUserinSchedule(user_id, schedule_id):
     """Check if a user is in a schedule."""
 
@@ -526,6 +559,15 @@ def isUserinSchedule(user_id, schedule_id):
     if schedule:
         return True
 
+    return False
+
+
+def hasPlatform(platform_name):
+    """Check if db already has the platform."""
+
+    if get_platform_by_name(platform_name):
+        return True
+    
     return False
 
 #-----------------Remove Wrappers------------------------------->
