@@ -179,11 +179,11 @@ def get_game_details_GB():
     )
 
     if len(response.results):
-        if response.results[0]['name']:
-            results['name'] = response.results[0]['name']
+        if response.results[0]['image']['icon_url']:
+            results['icon_url'] = response.results[0]['image']['icon_url']
         
         else :
-            results['super_url'] = 'game-url-not-found.jpg'
+            results['icon_url'] = 'game-url-not-found.jpg'
 
         if response.results[0]['image']['super_url']:
             results['super_url'] = response.results[0]['image']['super_url']
