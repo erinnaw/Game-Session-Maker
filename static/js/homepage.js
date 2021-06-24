@@ -283,7 +283,7 @@ $('#all-schedules').on('click', () => {
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Game Name</div><input onkeyup=\"onKeyUp_searchSchedules()\" onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"game_name\" id=\"game_name\"></input>");
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Date</div><input onchange=\"onKeyUp_searchSchedules()\" type=\"date\" name=\"date\" id=\"date\"></input>");
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Time</div><input onchange=\"onKeyUp_searchSchedules()\" type=\"time\" name=\"time\" id=\"time\"></input>");
-    $('#homepage-display').append("<div class=\"grid-display-schedules\" id=\"display-schedules\"></div>");
+    $('#homepage-display').append("<div class=\"grid-display-schedules-results\" id=\"display-schedules-results\"></div>");
     $('#homepage-display').append("<div class=\"display-page-num\" id=\"display-page-num\"></div>");
 
     if (back_button_flag == true) {
@@ -332,13 +332,13 @@ function get_schedules() {
     const formData = $('#search-schedule-bar').serialize() + "&offset_page=" + (curr_schedule_search_page_num - 1);
     prev_formData = formData;
 
-    $('#display-schedules').html('');
+    $('#display-schedules-results').html('');
 
     $.get('/get-schedules-active', formData, (schedules) => {
 
         for (const schedule of schedules[0]) {
 
-            $('#display-schedules').append(`<div class=\"grid-display-schedule-item\" id=\"schedule-item-${schedule.schedule_id}\"></div>`);
+            $('#display-schedules-results').append(`<div class=\"grid-display-schedule-item\" id=\"schedule-item-${schedule.schedule_id}\"></div>`);
             $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Host:</div><div class=\"profile-schedules-item-text\">${schedule.username}</div>`);
             $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule ID:</div><div class=\"profile-schedules-item-text\">${schedule.schedule_id}</div>`);
             $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Game ID:</div><div class=\"profile-schedules-item-text\">${schedule.game_id}</div>`);
@@ -772,6 +772,7 @@ function view_schedule(schedule_id) {
 
                         $('#max_posts').on('change', () => {
 
+                            curr_post_page_num = 1;
                             get_scheduleposts(schedule.schedule_id);
                         });
 
