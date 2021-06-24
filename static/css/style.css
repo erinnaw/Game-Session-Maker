@@ -269,8 +269,10 @@ textarea {
 .grid-display-search-results {
     display: inline-grid;
     grid-template-columns: auto;
+    height: 1000px;
     width: 1200px;
     margin: auto;
+    overflow: auto;
 }
 
 .display-search-text {
@@ -810,6 +812,25 @@ body, html {
     width: 400px;
     margin: auto;
     margin-left: 30px;
+}
+
+.back-to-search-bar {
+    position: relative;
+    display: grid;
+    grid-template-columns: 75% 25%;
+    width: 1000px;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.back-to-search-button {
+    text-align: center;
+    width: 250px;
+    height: 30px;
+    border: 1px solid rgb(0, 0, 0);
+    cursor: pointer;
+    line-height: 30px;
 }
 
 /*------------------------Display Games---------------------------*/

@@ -9,6 +9,13 @@ let curr_schedule_search_page_set = 1;
 let curr_post_page_num = 1;
 let curr_post_page_set = 1;
 
+//tracks page number for games in GiantBomb search
+const MAX_GAMES_PER_PAGE = 20;
+let curr_game_page_num = 0;
+let num_page_results = 0;
+let num_total_results = 0;
+let total_pages = 0;
+
 let searchFlag = new Boolean(false);
 let searchHandler;
 const search_timer = 800;
@@ -26,6 +33,8 @@ let back_button_flag = new Boolean(false);
 let searchParams;
 
 let back_state;
+let fromSearch = new Boolean(false);
+let saved_search = '';
 
 $(document).ready(function () {
 
@@ -255,7 +264,11 @@ $('#log-out').on('click', () => {
     });
 });
 
-$('#create-schedule').on('click', createSchedule_by_game_id);
+$('#create-schedule').on('click', () => {
+    
+    fromSearch = false;
+    createSchedule_by_game_id();
+});
 
 $('#all-schedules').on('click', () => {
 
@@ -987,6 +1000,13 @@ function createSchedule_by_game_id(game_id = 1) {
         }
         else {
             $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create a Schedule</div>");
+
+            if(fromSearch) {
+
+                fromSearch = false;
+                append_back_to_search();
+            }
+
             $('#homepage-display').append("<form class=\"schedule-form\" id=\"schedule-form\" action=\"/create-schedule\" method=\"POST\"></form>");
             $('#schedule-form').append("<div class=\"grid-create-schedule-form\" id=\"create-schedule-form\"></div>");
             $('#create-schedule-form').append(`<Label for=\"game\">Game*</Label><select name=\"game\" id=\"gameselect\"></select>`);
@@ -1084,6 +1104,13 @@ function createSchedule_by_game_name(game_name, image_path, icon_path, descripti
             let platforms_query = '&platforms=';
            
             $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create a Schedule</div>");
+
+            if (fromSearch) {
+
+                fromSearch = false;
+                append_back_to_search();
+            }
+
             $('#homepage-display').append(`<div class=\"grid-display-game\" id=\"display-game\"></div>`);
             $('#display-game').append(`<img class=\"display-game-icon\" src=\"${image_path}\"></img>`);
             $('#display-game').append(`<div class=\"game-description\"><h3>${game_name}</h3><p>${description}</p><p><a href=\"${site_detail_url}\" target=\"_blank\">Link to game details provided by GiantBomb</a></p></div>`);
@@ -1188,94 +1215,110 @@ function onKeyUp_searchGames() {
 
 function search_games() {
 
+    curr_game_page_num = 0;
+    num_page_results = 0;
+    num_total_results = 0;
     const searchData = $('#search-game').val();
     loading_screen();
 
-    $.get('/game-info.json', { 'search': searchData }, (results_json) => {
+    $.get('/game-info.json', {'search': searchData, "limit": MAX_GAMES_PER_PAGE, "page_offset": curr_game_page_num}, (response) => {
 
+        //response index: [1] num_page_results [2] num_total_results [3] results
         let icon_url = '';
-        const results = JSON.parse(results_json);
+        const results_ = JSON.parse(response);
+        num_page_results = results_[1];
+        num_total_results = results_[2];
+        total_pages = Math.ceil(num_total_results/MAX_GAMES_PER_PAGE);
+        const results = results_[3];
 
-        $('#homepage-display').html(`<div class=\"display-search-text\" id=\"display-search-text\">Showing ${results.num_page_results} out of ${results.num_total_results} results:</div>`);
-        $('#homepage-display').append("<div class=\"grid-display-search-results\" id=\"display-search-results\"></div>");
-        $('#homepage-display').append("<div class=\"page-num\" id=\"display-page-num-search-results\">123</div>");
+        if (curr_game_page_num < total_pages) {
 
-        for (let i = 0; i < results.length; i++) {
+            $('#homepage-display').html(`<div class=\"display-search-text\" id=\"display-search-text\">Showing ${num_page_results} out of ${num_total_results} results:</div>`);
+            $('#homepage-display').append("<div class=\"grid-display-search-results\" id=\"display-search-results\"></div>");
 
-            const release_date = new Date(results[i].original_release_date);
-            
-            if (results[i].image) {
-                icon_url = results[i].image['icon_url'];
-            }
-            else {
-                icon_url = "/static/img/image-placeholder.jpg";
-            }
+            for (let i = 0; i < results.length; i++) {
 
-            $('#display-search-results').append(`
-                <div class=\"search-result-item\" id=\"item-${results[i].id}\">
-                    <img class=\"search-result-item-img\" src=${icon_url}></img>
-                    <div class=\"search-result-item-content\">
-                        Name: ${results[i].name}
-                        <div>Release Date: ${release_date.getMonth()}/${release_date.getDate()}/${release_date.getFullYear()}</div>
-                        <div class=\"platforms\" id=\"platforms-${results[i].id}\">Plaform(s): </div>
-                    </div>
-                    <div>
-                        <div class=\"select-game\" id=\"select-game\"></div>
-                    </div>
-                </div>`
-            );
+                const release_date = new Date(results[i].original_release_date);
+                
+                if (results[i].image) {
+                    icon_url = results[i].image['icon_url'];
+                }
+                else {
+                    icon_url = "/static/img/image-placeholder.jpg";
+                }
 
+                $('#display-search-results').append(`
+                    <div class=\"search-result-item\" id=\"item-${results[i].id}\">
+                        <img class=\"search-result-item-img\" src=${icon_url}></img>
+                        <div class=\"search-result-item-content\">
+                            Name: ${results[i].name}
+                            <div>Release Date: ${release_date.getMonth()}/${release_date.getDate()}/${release_date.getFullYear()}</div>
+                            <div class=\"platforms\" id=\"platforms-${results[i].id}\">Plaform(s): </div>
+                        </div>
+                        <div>
+                            <div class=\"select-game\" id=\"select-game\"></div>
+                        </div>
+                    </div>`
+                );
 
-            if(results[i].platforms) {
+                if(results[i].platforms) {
 
-                for (let j = 0; j < results[i].platforms.length; j++) {
+                    for (let j = 0; j < results[i].platforms.length; j++) {
 
-                    if (j == results[i].platforms.length - 1) {
-                        $(`#platforms-${results[i].id}`).append(`${results[i].platforms[j].name}`);
-                    }
-                    else {
-                        $(`#platforms-${results[i].id}`).append(`${results[i].platforms[j].name}, `);
+                        if (j == results[i].platforms.length - 1) {
+                            $(`#platforms-${results[i].id}`).append(`${results[i].platforms[j].name}`);
+                        }
+                        else {
+                            $(`#platforms-${results[i].id}`).append(`${results[i].platforms[j].name}, `);
+                        }
                     }
                 }
+                else {
+                
+                    $(`#platforms-${results[i].id}`).append({"":"N/A"});
+                }
+
+                $(`#item-${results[i].id}`).append(`<div class=\"search-result-item-hover\" id=\"search-result-item-hover-${results[i].id}\">Create A Schedule</div>`);
+
+                $(`#search-result-item-hover-${results[i].id}`).on('click', (evt) => {
+
+                    $.get('/get-game', {"name": results[i].name}, (game) => {
+
+                        if (game.length !== 0) {
+
+                            fromSearch = true;
+                            saved_search = $('#search-game').val();
+                            createSchedule_by_game_id(game.game_id);
+                        }
+                        else {
+
+                            loading_screen();
+                            
+                            $.get('/get-game-info-GB', {"game_id": evt.target.id.slice(25)}, (res) => {
+                                
+                                fromSearch = true;
+                                saved_search = $('#search-game').val();
+                                createSchedule_by_game_name(results[i].name, res.super_url, res.icon_url, res.deck, res.platforms, res.site_detail_url);
+                            });
+                        }
+                    });              
+                });
             }
-            else {
-               
-                $(`#platforms-${results[i].id}`).append({"":"N/A"});
-            }
+        
+            $("#display-search-results").on('scroll', () => {
 
-            $(`#item-${results[i].id}`).append(`<div class=\"search-result-item-hover\" id=\"search-result-item-hover-${results[i].id}\">Create A Schedule</div>`);
+                if ($("#display-search-results").scrollTop() + $("#display-search-results").innerHeight() >= $("#display-search-results")[0].scrollHeight * 0.75) {
 
-            $(`#search-result-item-hover-${results[i].id}`).on('click', (evt) => {
 
-                $.get('/get-game', {"name": results[i].name}, (game) => {
+                    if (curr_game_page_num < total_pages) {
 
-                    if (game.length !== 0) {
-
-                        createSchedule_by_game_id(game.game_id);
+                        curr_game_page_num += 1;
+                        saved_search = $('#search-game').val();
+                        lazy_loading();
                     }
-                    else {
-
-                        loading_screen();
-                        
-                        $.get('/get-game-info-GB', {"game_id": evt.target.id.slice(25)}, (res) => {
-
-                            createSchedule_by_game_name(results[i].name, res.super_url, res.icon_url, res.deck, res.platforms, res.site_detail_url);
-                        });
-                    }
-                });              
+                }
             });
         }
-
-        //generate paginatiom
-
-
-
-
-
-
-
-
-        
     });
 }
 
@@ -1284,6 +1327,101 @@ function loading_screen () {
     $('#homepage-display').html('<div class=\"grid-loading-display\" id=\"loading-display\"><img src=\"/static/img/load-icon.gif\" class=\"load-icon\"/><p>Retrieving Data...</p></div>');
 }
 
+function lazy_loading () {
 
+    if (curr_game_page_num < total_pages) {
+
+        $.get('/game-info.json', { 'search': saved_search, "limit": MAX_GAMES_PER_PAGE, "page_offset": curr_game_page_num }, (response) => {
+
+            //response index: [1] num_page_results [2] num_total_results [3] results
+            let icon_url = '';
+            const results_ = JSON.parse(response);
+            num_page_results += results_[1];
+            const results = results_[3];
+
+            $('#display-search-text').html(`Showing ${num_page_results} out of ${num_total_results} results:`);
+
+            for (let i = 0; i < results.length; i++) {
+
+                const release_date = new Date(results[i].original_release_date);
+
+                if (results[i].image) {
+                    icon_url = results[i].image['icon_url'];
+                }
+                else {
+                    icon_url = "/static/img/image-placeholder.jpg";
+                }
+
+                $('#display-search-results').append(`
+                    <div class=\"search-result-item\" id=\"item-${results[i].id}\">
+                        <img class=\"search-result-item-img\" src=${icon_url}></img>
+                        <div class=\"search-result-item-content\">
+                            Name: ${results[i].name}
+                            <div>Release Date: ${release_date.getMonth()}/${release_date.getDate()}/${release_date.getFullYear()}</div>
+                            <div class=\"platforms\" id=\"platforms-${results[i].id}\">Plaform(s): </div>
+                        </div>
+                        <div>
+                            <div class=\"select-game\" id=\"select-game\"></div>
+                        </div>
+                    </div>`
+                );
+
+                if (results[i].platforms) {
+
+                    for (let j = 0; j < results[i].platforms.length; j++) {
+
+                        if (j == results[i].platforms.length - 1) {
+                            $(`#platforms-${results[i].id}`).append(`${results[i].platforms[j].name}`);
+                        }
+                        else {
+                            $(`#platforms-${results[i].id}`).append(`${results[i].platforms[j].name}, `);
+                        }
+                    }
+                }
+                else {
+
+                    $(`#platforms-${results[i].id}`).append({ "": "N/A" });
+                }
+
+                $(`#item-${results[i].id}`).append(`<div class=\"search-result-item-hover\" id=\"search-result-item-hover-${results[i].id}\">Create A Schedule</div>`);
+
+                $(`#search-result-item-hover-${results[i].id}`).on('click', (evt) => {
+
+                    $.get('/get-game', { "name": results[i].name }, (game) => {
+
+                        if (game.length !== 0) {
+
+                            fromSearch = true;
+                            saved_search = $('#search-game').val();
+                            createSchedule_by_game_id(game.game_id);
+                        }
+                        else {
+
+                            loading_screen();
+
+                            $.get('/get-game-info-GB', { "game_id": evt.target.id.slice(25) }, (res) => {
+
+                                fromSearch = true;
+                                saved_search = $('#search-game').val();
+                                createSchedule_by_game_name(results[i].name, res.super_url, res.icon_url, res.deck, res.platforms, res.site_detail_url);
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    }
+}
+
+function append_back_to_search () {
+
+    $('#homepage-display').append('<div class=\"back-to-search-bar\" id=\"back-to-search\"><div/><div class=\"back-to-search-button\" id=\"back-to-search-button\">Back to search results</div></div>');
+
+    $('#back-to-search-button').on('click', () => {
+
+        $('#search-game').val(saved_search);
+        search_games();
+    });
+}
 
 

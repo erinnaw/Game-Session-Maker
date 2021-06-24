@@ -68,6 +68,7 @@ def homepage():
 
     return render_template("homepage.html")
 
+
 @app.route("/game-info.json", methods=["GET"])
 def get_game_info():
     """Get game info from an API call."""
@@ -92,8 +93,11 @@ def get_game_info():
     # Giantbomb call code
     # Documentation: https://www.giantbomb.com/api/documentation/#toc-0-17
     # Pybomb: https://pybomb.readthedocs.io/_/downloads/en/stable/pdf/
-    offset = 0
-    limit = 10
+    
+    
+    page_offset = request.args.get('page_offset')
+    limit = request.args.get('limit')
+    offset = int(limit) * int(page_offset)
     filter_by = {'name': data}
 
     response = GB_client.search(
@@ -109,7 +113,7 @@ def get_game_info():
     #for result in response.results:
     #    print(result)
 
-    return json.dumps(response.results)
+    return json.dumps(response)
 
 
 @app.route("/seed-games")

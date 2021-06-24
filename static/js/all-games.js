@@ -96,6 +96,7 @@ function get_games() {
                 }
                 else {
                     
+                    fromSearch = false;
                     createSchedule_by_game_id(game_id);
                 }
             });
