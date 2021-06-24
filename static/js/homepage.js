@@ -1080,6 +1080,8 @@ function createSchedule_by_game_name(game_name, image_path, icon_path, descripti
             $('#homepage-display').html("<div class=\"error-page\" id=\"error-page\">You must be signed in to create a schedule.</div>");
         }
         else {
+
+            let platforms_query = '&platforms=';
            
             $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create a Schedule</div>");
             $('#homepage-display').append(`<div class=\"grid-display-game\" id=\"display-game\"></div>`);
@@ -1108,6 +1110,7 @@ function createSchedule_by_game_name(game_name, image_path, icon_path, descripti
             for (const platform of platforms) {
 
                 $('#platform').append(`<option value=\"${platform}\">${platform.charAt(0).toUpperCase() + platform.slice(1)}</option>`);
+                platforms_query += `${platform}+`;
             }
 
             $('#create-schedule-form').append("<Label for=\"max_user\">Max Users*</Label>" +
@@ -1125,8 +1128,8 @@ function createSchedule_by_game_name(game_name, image_path, icon_path, descripti
 
             $('#schedule-form').on('submit', (evt) => {
 
-                const formData = $('#schedule-form').serialize() + JSON.stringify(platforms);
                 evt.preventDefault();
+                const formData = $('#schedule-form').serialize() + platforms_query;
                 
                 $.post('/create-schedule-by-search-game', formData, (data) => {
 
@@ -1186,6 +1189,7 @@ function onKeyUp_searchGames() {
 function search_games() {
 
     const searchData = $('#search-game').val();
+    loading_screen();
 
     $.get('/game-info.json', { 'search': searchData }, (results_json) => {
 
@@ -1194,6 +1198,7 @@ function search_games() {
 
         $('#homepage-display').html(`<div class=\"display-search-text\" id=\"display-search-text\">Showing ${results.num_page_results} out of ${results.num_total_results} results:</div>`);
         $('#homepage-display').append("<div class=\"grid-display-search-results\" id=\"display-search-results\"></div>");
+        $('#homepage-display').append("<div class=\"page-num\" id=\"display-page-num-search-results\">123</div>");
 
         for (let i = 0; i < results.length; i++) {
 
@@ -1251,7 +1256,7 @@ function search_games() {
                     else {
 
                         loading_screen();
-                        console.log(evt.target.id.slice(25))
+                        
                         $.get('/get-game-info-GB', {"game_id": evt.target.id.slice(25)}, (res) => {
 
                             createSchedule_by_game_name(results[i].name, res.super_url, res.icon_url, res.deck, res.platforms, res.site_detail_url);
@@ -1259,8 +1264,18 @@ function search_games() {
                     }
                 });              
             });
-        
         }
+
+        //generate paginatiom
+
+
+
+
+
+
+
+
+        
     });
 }
 

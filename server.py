@@ -88,7 +88,7 @@ def get_game_info():
     #fields2 = "fields alpha_channel,animated,checksum,game,height,image_id,url,width;"
     #artwork = requests.post("https://api.igdb.com/v4/game_modes", headers=igdb_header, data=fields2)
     #print(artwork.json())
-
+    # ----------------------------------------------------------------------------------------------------------->>
     # Giantbomb call code
     # Documentation: https://www.giantbomb.com/api/documentation/#toc-0-17
     # Pybomb: https://pybomb.readthedocs.io/_/downloads/en/stable/pdf/
@@ -114,7 +114,7 @@ def get_game_info():
 
 @app.route("/seed-games")
 def seed_games(game_name):
-    """Add artwork to all games in the db."""
+    """Seed games into db."""
 
     #fields2 = "fields name, artworks.url;"
     #search = " search \""+game_name+"\";"
@@ -856,16 +856,17 @@ def create_schedule_by_search_game():
     date = request.form.get("date")
     time = request.form.get("time")
     timezone = request.form.get("timezone")
-    platform = request.form.get("platform")
+    platform_name = request.form.get("platform")
     description = request.form.get("description")
     max_user = request.form.get("max_user")
     max_team = request.form.get("max_team")
-    platforms = request.form.get("platforms")
-    print(platforms)
+    platforms_query = request.form.get("platforms")
+    platforms = platforms_query.split('+') 
+
     schedule_id = 0
     if max_team == "":
         max_team = 0
-
+    
     if session.get("user", 0):
         if description != "" and max_user != "" and date != "" and time != "":
             date_ = date.split("-")
@@ -877,7 +878,7 @@ def create_schedule_by_search_game():
             for p in platforms:
                 crud.add_platform(game.game_id, p)
             
-            platform = crud.get_platform_by_name(platform)
+            platform = crud.get_platform_by_name(platform_name)
             game_id = game.game_id
             schedule = crud.add_schedule(session["user"], 
                                         game_id, 

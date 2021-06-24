@@ -874,9 +874,9 @@ body, html {
     border-top: 100px solid transparent;
     border-bottom: 100px solid transparent;
     border-left: 50px solid rgb(148, 148, 148);
-    top: 35%;
+    top: 50%;
     left: 92%;
-    transform: translateY(-35%);
+    transform: translateY(-50%);
     cursor: pointer;
 }
 
@@ -893,9 +893,9 @@ body, html {
     border-top: 100px solid transparent;
     border-bottom: 100px solid transparent;
     border-right: 50px solid rgb(148, 148, 148);
-    top: 35%;
+    top: 50%;
     right: 92%;
-    transform: translateY(-35%);
+    transform: translateY(-50%);
     cursor: pointer;
 }
 
