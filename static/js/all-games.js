@@ -10,7 +10,7 @@ $('#all-games').on('click', () => {
 
     curr_allgames_page_num = 1;
 
-    $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Games</div>");
+    $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\"><i class=\"bi bi-controller header-symbol\"></i> All Games</div>");
     $('#homepage-display').append("<form class=\"display-search-game-bar\" method=\"GET\" id=\"search-game-bar\"></form>");
     $('#search-game-bar').append("<div class=\"search-schedule-item\">Search Database</div><input onkeyup=\"onKeyUp_searchGames_db()\" onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"game-name\" id=\"game-name\"></input>");
     $('#search-game-bar').append("<div></div><div class=\"search-schedule-item\">Sort by</div>");
@@ -18,11 +18,13 @@ $('#all-games').on('click', () => {
                                 "<option value=\"alphabetical\">Alphabetical</option>" +
                                 "<option value=\"most-active\">Most Popular</option></select>");
 
-    $('#homepage-display').append("<div class=\"arrow-left\" id=\"arrow-left\"></div>");
+    //$('#homepage-display').append("<div class=\"arrow-left\" id=\"arrow-left\"></div>");
+    $('#homepage-display').append("<i class=\"bi bi-chevron-left arrow-left\" id=\"arrow-left\"></i>");
     $('#homepage-display').append("<div class=\"display-games\"></div>");
     $('.display-games').append("<div class=\"grid-display-games\" id=\"display-games\"></div>");
     $('#homepage-display').append(`<div class=\"page-indicator-bar\" id=\"page-indicator\"></div>`);
-    $('#homepage-display').append("<div class=\"arrow-right\" id=\"arrow-right\"></div>");
+    $('#homepage-display').append("<i class=\"bi bi-chevron-right arrow-right\" id=\"arrow-right\"></i>");
+    //$('#homepage-display').append("<div class=\"arrow-right\" id=\"arrow-right\"></div>");
 
     $('#arrow-left').on('click', () => {
 

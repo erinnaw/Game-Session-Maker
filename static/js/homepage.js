@@ -81,7 +81,7 @@ const isAdvancedUpload = function () {
 
 $('#create-account').on('click', () => {
 
-    $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create Account</div>");
+    $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\"><i class=\"bi bi-person-plus header-symbol\"></i> Create Account</div>");
     $('#homepage-display').append("<form class=\"registration-form\" id=\"registration-form\" action=\"/create-user\" method=\"POST\"></form>");
 
     $('#registration-form').append("<div class=\"avator-upload-form\" id=\"avator-upload-form\">");
@@ -272,7 +272,7 @@ $('#create-schedule').on('click', () => {
 
 $('#all-schedules').on('click', () => {
 
-    $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">All Schedules</div>");
+    $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\"><i class=\"bi bi-calendar3 header-symbol\"></i> All Schedules</div>");
     $('#homepage-display').append("<form class=\"display-search-schedule-bar\" method=\"GET\" id=\"search-schedule-bar\"></form>");
     $('#search-schedule-bar').append("<div class=\"search-schedule-item\">Show</div><select name=\"limit_size\" id=\"limit_size\" onchange=\"onKeyUp_searchSchedules()\"></select>");
     $('#limit_size').append("<option value=\"10\">10</option>" +
@@ -655,30 +655,8 @@ function view_schedule(schedule_id) {
                                             $(`#request-content-${request.request_id}`).append(`<div class=\"timestamp\" id=\"timestamp-request-${request.request_id}\">${request.time_stamp}</div>`);
 
                                             $(`#request-item-${request.request_id}`).append(`<div class=\"grid-approval\" id=\"approval-${request.request_id}\"></div>`);
-                                            $(`#approval-${request.request_id}`).append(`<div class=\"approve-button\" id=\"approve-button-${request.request_id}\">Approve</div>`);
-                                            $(`#approval-${request.request_id}`).append(`<div class=\"decline-button\" id=\"decline-button-${request.request_id}\">Decline</div>`);
-
-                                            $('.approve-button').hover(
-
-                                                (evt) => {
-                                                    evt.target.style.background = "green";
-                                                },
-
-                                                (evt) => {
-                                                    evt.target.style.removeProperty('background');
-                                                }
-                                            );
-
-                                            $('.decline-button').hover(
-
-                                                (evt) => {
-                                                    evt.target.style.background = "red";
-                                                },
-
-                                                (evt) => {
-                                                    evt.target.style.removeProperty('background');
-                                                }
-                                            );
+                                            $(`#approval-${request.request_id}`).append(`<div class=\"approve-button\" id=\"approve-button-${request.request_id}\"><i class=\"bi bi-check-square button-symbol\"></i></div>`);
+                                            $(`#approval-${request.request_id}`).append(`<div class=\"decline-button\" id=\"decline-button-${request.request_id}\"><i class=\"bi bi-x-square button-symbol\"></i></div>`);
 
                                             $(`#approve-button-${request.request_id}`).on('click', () => {
 
@@ -688,8 +666,8 @@ function view_schedule(schedule_id) {
                                                     document.getElementById("snackbar").className = "show";
                                                     setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
 
-                                                    $(`#decline-button-${request.request_id}`).replaceWith("<div class=\"decline\" id=\"decline\">Decline</div>");
-                                                    $(`#approve-button-${request.request_id}`).replaceWith("<div class=\"approved\" id=\"approved\">Approved</div>");
+                                                    $(`#decline-button-${request.request_id}`).replaceWith("<div class=\"decline\" id=\"decline\"><i class=\"bi bi-x-square-fill button-symbol\"></i></div>");
+                                                    $(`#approve-button-${request.request_id}`).replaceWith("<div class=\"approved\" id=\"approved\"><i class=\"bi bi-check-square-fill button-symbol\"></i></div>");
                                                 });
                                             });
 
@@ -701,8 +679,8 @@ function view_schedule(schedule_id) {
                                                     document.getElementById("snackbar").className = "show";
                                                     setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
 
-                                                    $(`#decline-button-${request.request_id}`).replaceWith("<div class=\"declined\" id=\"declined\">Declined</div>");
-                                                    $(`#approve-button-${request.request_id}`).replaceWith("<div class=\"approve\" id=\"approve\">Approve</div>");
+                                                    $(`#decline-button-${request.request_id}`).replaceWith("<div class=\"declined\" id=\"declined\"><i class=\"bi bi-x-square-fill button-symbol\"></i></div>");
+                                                    $(`#approve-button-${request.request_id}`).replaceWith("<div class=\"approve\" id=\"approve\"><i class=\"bi bi-check-square-fill button-symbol\"></i></div>");
                                                 });
                                             });
                                         }
@@ -1018,7 +996,7 @@ function createSchedule_by_game_id(game_id = 1) {
             $('#homepage-display').html("<div class=\"error-page\" id=\"error-page\">You must be signed in to create a schedule.</div>");
         }
         else {
-            $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create a Schedule</div>");
+            $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\"><i class=\"bi bi-calendar2-plus header-symbol\"></i> Create a Schedule</div>");
 
             if(fromSearch) {
 
@@ -1122,7 +1100,7 @@ function createSchedule_by_game_name(game_name, image_path, icon_path, descripti
 
             let platforms_query = '&platforms=';
            
-            $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\">Create a Schedule</div>");
+            $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\"><i class=\"bi bi-calendar2-plus header-symbol\"></i> Create a Schedule</div>");
 
             if (fromSearch) {
 
@@ -1134,7 +1112,7 @@ function createSchedule_by_game_name(game_name, image_path, icon_path, descripti
             $('#display-game').append(`<img class=\"display-game-icon\" src=\"${image_path}\"></img>`);
             $('#display-game').append(`<div class=\"game-description\"><h3>${game_name}</h3><p>${description}</p>` + 
                                         `<div class=\"grid-gb-link\"><p><a href=\"${site_detail_url}\" target=\"_blank\">Link to game details provided by GiantBomb ` +
-                                        `<img src=\"/static/img/external-link-symbol.png\" class=\"external-link-symbol\"></a></p>` + 
+                                        `<i class="bi bi-box-arrow-up-right"></i></p>` +
                                         `<img class=\"giantbomb-logo\" src=\"/static/img/giantbomb.jpg\"/></div></div>`);
             
             $('#homepage-display').append("<form class=\"schedule-form\" id=\"schedule-form\" action=\"/create-schedule\" method=\"POST\"></form>");

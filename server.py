@@ -355,7 +355,7 @@ def edit_profile():
 
     if session.get("user", 0):
         if crud.set_user_profile(session["user"], fname, lname, email, password, image_path):
-            flash = "Profile Changed"
+            flash = "Profile Updated"
 
         else:
             flash = "Error: Profile could not be changed." 

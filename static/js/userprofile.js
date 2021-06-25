@@ -23,7 +23,7 @@ $('#my-profile').on('click', () => {
             $('#profile-display').append(`<img class=\"avator-img-profile\" id=\"avator-img-edit\" src=\"${res.image_path}\"></img>`);
             $('#profile-display').append("<div class=\"grid-profile-user\" id=\"profile-user\"></div>");
             $('#profile-user').html(get_userdetails_html(res));
-            $('#profile-display').append("<div class=\"edit-profile-button\" id=\"edit-profile\">Edit Profile</div>");
+            $('#profile-display').append("<span class=\"edit-profile-button\" id=\"edit-profile\"><i class=\"bi bi-pencil-square button-symbol\"></i></span>");
             $('#profile-display').append("<div class=\"flash-msg\" id=\"flash-msg\"></div");
 
             $('.grid-profile-item').hover(
@@ -96,7 +96,7 @@ $('#my-profile').on('click', () => {
                 $('#edit-lastname').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"lastname\" id=\"lastname\" class=\"edit-lastname-text\"></input>");
                 $('#edit-email').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"email\" name=\"email\" id=\"email\" class=\"edit-email-text\"></input>");
                 $('#edit-password').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"\" name=\"password\" id=\"password\" class=\"edit-password-text\"></input>");
-                $('#edit-profile').replaceWith("<div class=\"save-changes-button\" id=\"save-changes\">Save Changes</div></form>");
+                $('#edit-profile').replaceWith("<div class=\"edit-profile-button\" id=\"save-changes\"><i class=\"bi bi-save button-symbol\"></i></div></form>");
 
                 $('#firstname').val(`${res.firstname}`);
                 $('#lastname').val(`${res.lastname}`);
@@ -145,7 +145,7 @@ $('#my-profile').on('click', () => {
                 $('#profile-schedules').append('<div class=\"grid-schedules-tabs\" id=\"schedules-tabs\"></div>');
                 $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'created\', this, \'lightgrey\')\" id=\"created-tab\">Created</button>');
                 $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'joined\', this, \'lightgrey\')\" id=\"joined-tab\">Joined</button>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'archived\', this, \'lightgrey\')\" id=\"archived-tab\">Archived</button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'archived\', this, \'lightgrey\')\" id=\"archived-tab\">Archived <i class=\"bi bi-archive menu-symbol\"></i></button>');
                 $('#profile-schedules').append('<div id=\"created\" class=\"tabcontent\"></div>');
                 $('#profile-schedules').append('<div id=\"joined\" class=\"tabcontent\"></div>');
                 $('#profile-schedules').append('<div id=\"archived\" class=\"tabcontent\"></div>');
@@ -239,8 +239,8 @@ $('#my-profile').on('click', () => {
                             $(`#profile-request-sent-${request["request_id"]}`).append(get_userrequest_html(request));
 
                             $(`#profile-request-sent-${request["request_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-request-sent-hover-${request["schedule_id"]}\"></div>`);
-                            $(`#user-request-sent-hover-${request["schedule_id"]}`).html(`<div class=\"view-schedule-button-3\" id=\"view-schedule-user-${request["schedule_id"]}\">View Schedule</div><div></div>`);
-                            $(`#user-request-sent-hover-${request["schedule_id"]}`).append(`<div class=\"delete-request-button-2\" id=\"delete-request-user-${request["schedule_id"]}\">Cancel Request</div><div></div>`);
+                            $(`#user-request-sent-hover-${request["schedule_id"]}`).html(`<div class=\"view-schedule-button-3\" id=\"view-schedule-user-${request["schedule_id"]}\"><i class=\"bi bi-box-arrow-in-right button-symbol\"></i></div><div></div>`);
+                            $(`#user-request-sent-hover-${request["schedule_id"]}`).append(`<div class=\"delete-schedule-button\" id=\"delete-request-user-${request["schedule_id"]}\"><i class=\"bi bi-trash button-symbol\"></i></div><div></div>`);
 
                             $(`#view-schedule-user-${request["schedule_id"]}`).on('click', () => {
 
@@ -254,7 +254,7 @@ $('#my-profile').on('click', () => {
 
                                     $(`#delete-request-user-${request["schedule_id"]}`).remove();
                                     $(`#view-schedule-user-${request["schedule_id"]}`).remove();
-                                    $(`#user-request-sent-hover-${request["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${request["schedule_id"]}\">Request Cancelled</div>`);
+                                    $(`#user-request-sent-hover-${request["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${request["schedule_id"]}\">Request Deleted</div>`);
                                     $(`#user-request-sent-hover-${request["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
                                     $(`#user-request-sent-hover-${request["schedule_id"]}`).css('opacity', '1');
                                 });
@@ -280,9 +280,9 @@ $('#my-profile').on('click', () => {
                             $(`#profile-request-received-${request["request_id"]}`).append(get_userrequest_html(request));
 
                             $(`#profile-request-received-${request["request_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-request-received-hover-${request["schedule_id"]}\"></div>`);
-                            $(`#user-request-received-hover-${request["schedule_id"]}`).html(`<div class=\"view-schedule-button-4\" id=\"view-schedule-user-${request["schedule_id"]}\">View Schedule</div><div></div>`);
-                            $(`#user-request-received-hover-${request["schedule_id"]}`).append(`<div class=\"approve-request-button\" id=\"approve-request-user-${request["schedule_id"]}\">Approve</div><div></div>`);
-                            $(`#user-request-received-hover-${request["schedule_id"]}`).append(`<div class=\"decline-request-button\" id=\"decline-request-user-${request["schedule_id"]}\">Decline</div><div></div>`);
+                            $(`#user-request-received-hover-${request["schedule_id"]}`).html(`<div class=\"view-schedule-button-4\" id=\"view-schedule-user-${request["schedule_id"]}\"><i class=\"bi bi-box-arrow-in-right button-symbol\"></i></div><div></div>`);
+                            $(`#user-request-received-hover-${request["schedule_id"]}`).append(`<div class=\"approve-request-button\" id=\"approve-request-user-${request["schedule_id"]}\"><i class=\"bi bi-check-square button-symbol\"></i></div><div></div>`);
+                            $(`#user-request-received-hover-${request["schedule_id"]}`).append(`<div class=\"decline-request-button\" id=\"decline-request-user-${request["schedule_id"]}\"><i class=\"bi bi-x-square button-symbol\"></i></div><div></div>`);
 
                             $(`#view-schedule-user-${request["schedule_id"]}`).on('click', () => {
 
@@ -298,8 +298,8 @@ $('#my-profile').on('click', () => {
                                     document.getElementById("snackbar").className = "show";
                                     setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
 
-                                    $(`#decline-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"decline-2\" id=\"decline-2\">Decline</div>");
-                                    $(`#approve-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"approved-2\" id=\"approved-2\">Approved</div>");
+                                    $(`#decline-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"decline-2\" id=\"decline-2\"><i class=\"bi bi-x-square-fill button-symbol\"></i></div>");
+                                    $(`#approve-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"approved-2\" id=\"approved-2\"><i class=\"bi bi-check-square-fill button-symbol\"></i></div>");
                                 });
                             });
 
@@ -312,8 +312,8 @@ $('#my-profile').on('click', () => {
                                     setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
 
 
-                                    $(`#decline-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"declined-2\" id=\"declined-2\">Declined</div>");
-                                    $(`#approve-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"approve-2\" id=\"approve-2\">Approve</div>");
+                                    $(`#decline-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"declined-2\" id=\"declined-2\"><i class=\"bi bi-x-square-fill button-symbol\"></div>");
+                                    $(`#approve-request-user-${request["schedule_id"]}`).replaceWith("<div class=\"approve-2\" id=\"approve-2\"><i class=\"bi bi-check-square-fill button-symbol\"></i></div>");
                                 });
                             });
                         }
@@ -425,9 +425,9 @@ function get_userschedules_created() {
                 $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
 
                 $(`#profile-schedule-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-schedule-hover-${schedule["schedule_id"]}\"></div>`);
-                $(`#user-schedule-hover-${schedule["schedule_id"]}`).html(`<div class=\"view-schedule-button-2\" id=\"view-schedule-user-${schedule["schedule_id"]}\">View</div><div></div>`);
-                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div></div><div class=\"archive-schedule-button\" id=\"archive-schedule-user-${schedule["schedule_id"]}\">Archive</div><div></div>`);
-                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"delete-schedule-button\" id=\"delete-schedule-user-${schedule["schedule_id"]}\">Delete</div><div></div>`);
+                $(`#user-schedule-hover-${schedule["schedule_id"]}`).html(`<div class=\"view-schedule-button-2\" id=\"view-schedule-user-${schedule["schedule_id"]}\"><i class=\"bi bi-box-arrow-in-right button-symbol\"></i></div><div></div>`);
+                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div></div><div class=\"archive-schedule-button\" id=\"archive-schedule-user-${schedule["schedule_id"]}\"><i class=\"bi bi-archive button-symbol\"></i></div><div></div>`);
+                $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"delete-schedule-button\" id=\"delete-schedule-user-${schedule["schedule_id"]}\"><i class=\"bi bi-trash button-symbol\"></i></div><div></div>`);
 
                 $(`#view-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 
@@ -545,8 +545,8 @@ function get_userschedules_joined() {
                 $('#user-post-joined-canvas').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-schedule-${schedule["schedule_id"]}\"></div>`);
                 $(`#profile-schedule-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
                 $(`#profile-schedule-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-joined-schedule-hover-${schedule["schedule_id"]}\"></div>`);
-                $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).html(`<div class=\"view-schedule-button-2\" id=\"view-schedule-user-${schedule["schedule_id"]}\">View</div><div></div>`);
-                $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"leave-schedule-button\" id=\"leave-button-${schedule["schedule_id"]}\">Leave Schedule</div>`);
+                $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).html(`<div class=\"view-schedule-button-6\" id=\"view-schedule-user-${schedule["schedule_id"]}\"><i class=\"bi bi-box-arrow-in-right button-symbol\"></i></div><div></div>`);
+                $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"leave-schedule-button\" id=\"leave-button-${schedule["schedule_id"]}\"><i class=\"bi bi-box-arrow-right button-symbol\"></i></div>`);
 
                 $(`#view-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 
@@ -651,7 +651,7 @@ function get_userschedules_archived() {
                 $(`#profile-archived-${schedule["schedule_id"]}`).append(get_userschedule_html(schedule));
 
                 $(`#profile-archived-${schedule["schedule_id"]}`).append(`<div class=\"grid-user-schedule-hover\" id=\"user-joined-schedule-hover-${schedule["schedule_id"]}\"></div>`);
-                $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).html(`<div class=\"view-schedule-button-5\" id=\"view-schedule-user-${schedule["schedule_id"]}\">View Schedule</div>`);
+                $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).html(`<div class=\"view-schedule-button-5\" id=\"view-schedule-user-${schedule["schedule_id"]}\"><i class=\"bi bi-box-arrow-in-right button-symbol\"></i></div>`);
 
                 $(`#view-schedule-user-${schedule["schedule_id"]}`).on('click', () => {
 

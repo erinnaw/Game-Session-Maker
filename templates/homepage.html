@@ -8,15 +8,15 @@
 
     <div class="grid-homepage-menu" id="homepage-menu">
         {% if(session.get('user', 0)) %}
-            <div class="homepage-menu-item" id="my-profile">My Profile</div>
+            <div class="homepage-menu-item" id="my-profile"><i class="bi bi-person-circle menu-symbol"></i> My Profile</div>
             <div class="homepage-menu-item" id="log-out">Log Out</div>
         {% else %}
-            <div class="homepage-menu-item" id="create-account">Create Account</div>
+            <div class="homepage-menu-item" id="create-account"><i class="bi bi-person-plus menu-symbol"></i> Create Account</div>
             <div class="homepage-menu-item" id="log-in">Log In</div>
         {% endif %}
-        <div class="homepage-menu-item" id="create-schedule">Create Schedule</div>
-        <div class="homepage-menu-item" id="all-schedules">All Schedules</div>
-        <div class="homepage-menu-item" id="all-games">All Games</div>
+        <div class="homepage-menu-item" id="create-schedule"><i class="bi bi-calendar2-plus menu-symbol"></i> Create Schedule</div>
+        <div class="homepage-menu-item" id="all-schedules"><i class="bi bi-calendar3 menu-symbol"></i> All Schedules</div>
+        <div class="homepage-menu-item" id="all-games"><i class="bi bi-controller menu-symbol"></i> All Games</div>
         <form action="/search-game">
             <Label for="search-game">Search</Label>
             <input type="text" name="search-game" id="search-game" placeholder="GiantBomb database" 
@@ -28,7 +28,7 @@
     <div class="homepage-display-bottom" id="homepage-display-bottom">
         <center>
             Website powered by <a href="https://www.giantbomb.com/api/" target="_blank">GiantBomb
-            <img src="/static/img/external-link-symbol.png" class="external-link-symbol"></a>
+            <i class="bi bi-box-arrow-up-right"></i></a>
         </center>
     </div>
     <div id="snackbar"></div>
