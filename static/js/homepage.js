@@ -1236,7 +1236,7 @@ function search_games() {
 
             $('#homepage-display').html(`<div class=\"display-search-text\" id=\"display-search-text\">Showing ${num_page_results} out of ${num_total_results} results:</div>`);
             $('#homepage-display').append("<div class=\"grid-display-search-results\" id=\"display-search-results\"></div>");
-
+            
             for (let i = 0; i < results.length; i++) {
 
                 const release_date = new Date(results[i].original_release_date);
@@ -1305,19 +1305,43 @@ function search_games() {
                     });              
                 });
             }
-        
+
+            if (curr_game_page_num + 1 >= total_pages) {
+
+                $("#search-results-loading").remove();
+                $("#display-search-results").append("<div class=\"search-results-text\" id=\"search-results-text\"></div>");
+                $("#search-results-text").html("End of Search Results");
+            }
+            else {
+
+                $("#search-results-loading").remove();
+                $("#display-search-results").append("<div class=\"search-results-loading bounce\" id=\"search-results-loading\"></div>");
+                $("#search-results-loading").html("Scroll down to load more results");
+            }
+
             $("#display-search-results").on('scroll', () => {
 
-                if ($("#display-search-results").scrollTop() + $("#display-search-results").innerHeight() >= $("#display-search-results")[0].scrollHeight * 0.75) {
-
+                if ($("#display-search-results").scrollTop() + $("#display-search-results").innerHeight() >= $("#display-search-results")[0].scrollHeight) {
 
                     if (curr_game_page_num < total_pages) {
 
                         curr_game_page_num += 1;
                         saved_search = $('#search-game').val();
+
+                        $("#search-results-loading").remove();
+                        $("#display-search-results").append("<div class=\"search-results-loading bounce\" id=\"search-results-loading\"></div>");
+                        $("#search-results-loading").html("Scroll down to load more results");
+
                         lazy_loading();
+                                                
+                        if (curr_game_page_num >= total_pages) {
+
+                            $("#search-results-loading").remove();
+                            $("#display-search-results").append("<div class=\"search-results-text\" id=\"search-results-text\"></div>");
+                            $("#search-results-text").html("End of Search Results");
+                        }
                     }
-                }
+                }           
             });
         }
     });
