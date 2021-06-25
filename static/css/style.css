@@ -192,13 +192,29 @@ textarea {
 	border-bottom: 15px solid transparent;
 }
 
+.giantbomb-logo {
+    height: 30px;
+    width: 70px;
+    line-height: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.grid-gb-link {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto;
+    width: 400px;
+    height: 50px;
+}
+
 /*----------------------------Admin----------------------------*/
 
 .grid-admin-display {
     position: relative;
     display: grid;
     grid-template-columns: auto;
-    width: 100%
+    width: 100%;
 }
 
 .admin-display-item {
@@ -263,6 +279,14 @@ textarea {
   color: white;
 }
 
+.external-link-symbol {
+    height: 15px;
+    width: 15px;
+}
+
+a {
+    text-decoration: none;
+}
 
 /*----------------------------Search----------------------------*/
 
@@ -892,7 +916,7 @@ body, html {
 /*------------------------Display Games---------------------------*/
 
 .display-games {
-    height: 800px;
+    height: 850px;
     width: 900px;
     margin: auto;
 }
@@ -903,39 +927,74 @@ body, html {
     grid-template-columns: auto auto auto auto auto;
     width: 900px;
     margin: auto;
-    margin-top: 10px;
+    margin-top: 40px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 .grid-display-game-item-hover {
     position: relative;
+    height: 170px;
+    width: 180px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border: 1px solid rgb(0, 0, 0);
     cursor: pointer;
+    overflow: hidden;
+    border-radius: 10px;
 }
 
-.grid-display-game-item-hover:hover .create-schedule-hover{
-    opacity: 1; 
+.grid-display-game-item-hover:hover .create-schedule-hover {
+    top: 0px;
+    width: 100%;
+    transition: top 0.2s ease-in-out;
+}
+
+.grid-display-game-item-hover:hover .find-schedule-hover {
+    top: 95px;
+    width: 100%;
+    transition: top 0.2s ease-in-out;
+}
+
+.create-schedule-hover:hover {
+    background-color: rgba(51, 51, 51, 0.8);
+}
+
+.find-schedule-hover:hover {
+    background-color: rgba(51, 51, 51, 0.8);
 }
 
 .create-schedule-hover {
-  position: absolute;
-  transition: opacity 0.25s;
-  height: 100%; 
-  line-height: 155px;
-  top: 0px;
-  width: 100%;
-  text-align: center;
-  background-color: rgba(255, 255, 255, 0.8);
-  opacity: 0;
-  cursor: pointer;
+    position: absolute;
+    height: 50%; 
+    line-height: 100px;
+    top: -95px;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(119, 119, 119, 0.8);
+    color:white;
+    cursor: pointer;
+}
+
+.find-schedule-hover {
+    position: absolute;
+    height: 50%; 
+    line-height: 100px;
+    top: 190px;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(119, 119, 119, 0.8);
+    color:white;
+    cursor: pointer;
 }
 
 .display-game-item-img {
     display: block;
-    height: 150px;
-    width: 150px;
+    height: 120px;
+    width: 120px;
     margin: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .display-game-item-name {
@@ -951,9 +1010,9 @@ body, html {
     border-top: 100px solid transparent;
     border-bottom: 100px solid transparent;
     border-left: 50px solid rgb(148, 148, 148);
-    top: 50%;
+    top: 62%;
     left: 92%;
-    transform: translateY(-50%);
+    transform: translateY(-62%);
     cursor: pointer;
 }
 
@@ -970,9 +1029,9 @@ body, html {
     border-top: 100px solid transparent;
     border-bottom: 100px solid transparent;
     border-right: 50px solid rgb(148, 148, 148);
-    top: 50%;
+    top: 62%;
     right: 92%;
-    transform: translateY(-50%);
+    transform: translateY(-62%);
     cursor: pointer;
 }
 
@@ -1051,6 +1110,28 @@ body, html {
     border-bottom: 1px solid rgb(0, 0, 0);
     padding-top: 10px;
     padding-bottom: 10px;
+    overflow:hidden;
+}
+
+.grid-display-schedule-item-expanded {
+    position: relative;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    height: 300px;
+    width: 100%;
+    border-bottom: 1px solid rgb(0, 0, 0);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    overflow:hidden;
+}
+
+.schedule-background-img {
+    z-index: -1;
+    position: absolute;
+    height: 600px;
+    width: 960px;
+    margin: auto;
+    opacity: 0.5;
 }
 
 .view-schedule-button {

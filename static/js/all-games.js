@@ -3,6 +3,8 @@
 const MAX_ITEM_PER_PAGE_ALLGAMES = 20;
 let curr_allgames_page_num = 1;
 let max_pages = 1;
+let fromAllGames = new Boolean(false);
+let fromAllGames_game_name;
 
 $('#all-games').on('click', () => {
 
@@ -82,6 +84,7 @@ function get_games() {
                 `<div class=\"display-game-item-name\" id=\"display-game-item-name-${game.game_id}\"></div>`);
             $(`#display-game-item-name-${game.game_id}`).append(`${game.name}`);
             $(`#display-game-item-${game.game_id}`).append(`<div class=\"create-schedule-hover\" id=\"create-schedule-${game.game_id}\">Create Schedule</div>`);
+            $(`#display-game-item-${game.game_id}`).append(`<div class=\"find-schedule-hover\" id=\"find-schedule-${game.game_id}\">Find Schedule</div>`);
         }
 
         $('.create-schedule-hover').on('click', (evt) => {
@@ -99,6 +102,18 @@ function get_games() {
                     fromSearch = false;
                     createSchedule_by_game_id(game_id);
                 }
+            });
+        });
+
+        $('.find-schedule-hover').on('click', (evt) => {
+
+            const game_id = evt.target.id.slice(14);
+
+            $.get(`/get-game/${game_id}`, (res) => {
+
+                fromAllGames_game_name = res[0].name;
+                fromAllGames = true;
+                $('#all-schedules').trigger('click');
             });
         });
 

@@ -646,6 +646,8 @@ def get_schedule_by_id(schedule_id):
             "description": schedule.description,
             "max_user": schedule.max_user,
             "max_team": schedule.max_team,
+            "image_path": game.image_path,
+            "host_avator": user.image_path,
             "isArchived": schedule.isArchived}
 
     return jsonify(data)
