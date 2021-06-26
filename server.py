@@ -513,13 +513,26 @@ def get_schedules_active():
     query_count = crud.get_schedules_count(formData)
 
     for schedule in schedules:
-        user = crud.get_user_by_id(schedule.user_id)
+        host = crud.get_user_by_id(schedule.user_id)
         game = crud.get_game_by_id(schedule.game_id)
         platform = crud.get_platform_by_id(schedule.platform_id)
+        status = 'none'
+
+        if session.get('user', 0):
+            if session['user'] == host.user_id:
+                status = 'host'
+        
+            else:
+                users = crud.get_schedule_users_by_schedule_id(schedule.schedule_id)
+
+                for user in users:
+                    if user.user_id == session['user']:
+                        status = 'user'
+                        break
 
         data.append({"schedule_id": schedule.schedule_id,
                     "user_id": schedule.user_id,
-                    "username": user.username,
+                    "username": host.username,
                     "game_id": schedule.game_id,
                     "game_name": game.name,
                     "datetime": schedule.datetime,
@@ -528,7 +541,8 @@ def get_schedules_active():
                     "description": schedule.description,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
-                    "isArchived": schedule.isArchived})
+                    "isArchived": schedule.isArchived,
+                    "status": status})
 
     return jsonify([data, {"query_count": query_count}])
 
@@ -631,13 +645,26 @@ def get_schedule_by_id(schedule_id):
     """Get a schedule by schedule_id."""
 
     schedule = crud.get_schedule_by_id(schedule_id)
-    user = crud.get_user_by_id(schedule.user_id)
+    user_ = crud.get_user_by_id(schedule.user_id)
     game = crud.get_game_by_id(schedule.game_id)
     platform = crud.get_platform_by_id(schedule.platform_id)
+    status = 'none'
+
+    if session.get('user', 0):
+        if session['user'] == schedule.user_id:
+            status = 'host'
+        
+        else:
+            users = crud.get_schedule_users_by_schedule_id(schedule_id)
+            
+            for user in users:
+                if session['user'] == user.user_id:
+                    status = 'user'
+                    break
 
     data = {"schedule_id": schedule.schedule_id,
             "user_id": schedule.user_id,
-            "username": user.username,
+            "username": user_.username,
             "game_id": schedule.game_id,
             "game_name": game.name,
             "datetime": schedule.datetime,
@@ -647,8 +674,9 @@ def get_schedule_by_id(schedule_id):
             "max_user": schedule.max_user,
             "max_team": schedule.max_team,
             "image_path": game.image_path,
-            "host_avator": user.image_path,
-            "isArchived": schedule.isArchived}
+            "host_avator": user_.image_path,
+            "isArchived": schedule.isArchived,
+            "status": status}
 
     return jsonify(data)
 

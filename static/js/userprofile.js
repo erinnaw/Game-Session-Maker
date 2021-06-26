@@ -143,8 +143,8 @@ $('#my-profile').on('click', () => {
                 $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-schedules\"></div>");
 
                 $('#profile-schedules').append('<div class=\"grid-schedules-tabs\" id=\"schedules-tabs\"></div>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'created\', this, \'lightgrey\')\" id=\"created-tab\">Created</button>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'joined\', this, \'lightgrey\')\" id=\"joined-tab\">Joined</button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'created\', this, \'lightgrey\')\" id=\"created-tab\">Created <i class="bi bi-star menu-symbol"></i></button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'joined\', this, \'lightgrey\')\" id=\"joined-tab\">Joined <i class=\"bi bi-check2-square menu-symbol\"></i></button>');
                 $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'archived\', this, \'lightgrey\')\" id=\"archived-tab\">Archived <i class=\"bi bi-archive menu-symbol\"></i></button>');
                 $('#profile-schedules').append('<div id=\"created\" class=\"tabcontent\"></div>');
                 $('#profile-schedules').append('<div id=\"joined\" class=\"tabcontent\"></div>');
@@ -217,8 +217,8 @@ $('#my-profile').on('click', () => {
                 $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-requests\"></div>");
 
                 $('#profile-requests').append('<div class=\"grid-schedules-tabs\" id=\"requests-tabs\"></div>');
-                $('#requests-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'sent\', this, \'lightgrey\')\" id=\"sent-tab\">Sent</button>');
-                $('#requests-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'received\', this, \'lightgrey\')\" id=\"received-tab\">Received</button>');
+                $('#requests-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'sent\', this, \'lightgrey\')\" id=\"sent-tab\">Sent <i class=\"bi bi-envelope menu-symbol\"></i></button>');
+                $('#requests-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'received\', this, \'lightgrey\')\" id=\"received-tab\">Received <i class=\"bi bi-mailbox menu-symbol\"></i></button>');
                 $('#profile-requests').append('<div id=\"sent\" class=\"tabcontent\"></div>');
                 $('#profile-requests').append('<div id=\"received\" class=\"tabcontent\"></div>');
 

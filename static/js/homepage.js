@@ -361,25 +361,25 @@ function get_schedules() {
                 $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max User:</div><div class=\"profile-schedules-item-text\">${schedule.max_user}</div>`);
                 $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max Team:</div><div class=\"profile-schedules-item-text\">${schedule.max_team}</div>`);
                 $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Description:</div><div class=\"profile-schedules-item-text\">${schedule.description}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-schedule-button\" id=\"schedule-${schedule.schedule_id}\">view</div>`);
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-schedule-button\" id=\"schedule-${schedule.schedule_id}\"><i class=\"bi bi-box-arrow-in-right button-symbol\" id=\"schedule-${schedule.schedule_id}\"></i></div>`);
+            
+                if (schedule.status === "user") {
+
+                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-check2-square button-symbol\"></i></div>`);
+                    $(`#schedule-status-box-${schedule.schedule_id}`).css("color", "yellowgreen");
+                    $(`#schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Approved</div>');
+                }
+                else if (schedule.status === "host") {
+
+                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-star button-symbol\"></i></div>`);
+                    $(`#schedule-status-box-${schedule.schedule_id}`).css("color", "gold");
+                    $(`#schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Host</div>');
+                }
             }
 
-            $('.view-schedule-button').hover(
-
-                (evt) => {
-                    evt.target.style.background = "black";
-                    evt.target.style.color = "white";
-
-                },
-
-                (evt) => {
-                    evt.target.style.removeProperty('background');
-                    evt.target.style.removeProperty('color');
-                }
-            );
-
             $('.view-schedule-button').on('click', (evt) => {
-
+                console.log("---------------------")
+                console.log(evt.target.id);
                 back_state = "";
                 back_button_flag = true;
                 view_schedule(evt.target.id.slice(9));
@@ -513,15 +513,21 @@ function view_schedule(schedule_id) {
 
             if (status === "host") {
 
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-requests-button\" id=\"view-requests-${schedule.schedule_id}\">Host</div>`);
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-schedule-status-box\" id=\"view-schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-star button-symbol\"></i></div>`);
+                $(`#view-schedule-status-box-${schedule.schedule_id}`).css("color", "gold");
+                $(`#view-schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Host</div>');
             }
             else if (status === "requested") {
 
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"requested-button\" id=\"requested-${schedule.schedule_id}\">Requested</div>`);
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-schedule-status-box\" id=\"view-schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-envelope-fill button-symbol\"></i></div>`);
+                $(`#view-schedule-status-box-${schedule.schedule_id}`).css("color", "black");
+                $(`#view-schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Request Sent</div>');
             }
             else if (status === "approved") {
 
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"approved-button\" id=\"approved-${schedule.schedule_id}\">Approved</div>`);
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-schedule-status-box\" id=\"view-schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-check2-square button-symbol\"></i></div>`);
+                $(`#view-schedule-status-box-${schedule.schedule_id}`).css("color", "green");
+                $(`#view-schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Approved</div>');            
             }
             else if (status === "not approved") {
 
