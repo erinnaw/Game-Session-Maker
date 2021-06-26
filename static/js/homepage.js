@@ -379,7 +379,7 @@ function get_schedules() {
 
                     $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-envelope-fill button-symbol\"></i></div>`);
                     $(`#schedule-status-box-${schedule.schedule_id}`).css("color", "black");
-                    $(`#schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Request Sent</div>');
+                    $(`#schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Requested</div>');
                 }
             }
 
@@ -526,7 +526,7 @@ function view_schedule(schedule_id) {
 
                 $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-schedule-status-box\" id=\"view-schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-envelope-fill button-symbol\"></i></div>`);
                 $(`#view-schedule-status-box-${schedule.schedule_id}`).css("color", "black");
-                $(`#view-schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Request Sent</div>');
+                $(`#view-schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Requested</div>');
             }
             else if (status === "approved") {
 
