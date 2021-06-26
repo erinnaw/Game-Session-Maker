@@ -203,6 +203,27 @@ textarea {
     height: 50px;
 }
 
+textarea {
+    border-radius: 10px;
+}
+
+.button {
+    background-color: white;
+    border-radius: 10px;
+    color: black;
+    height: 64px;
+    width: 64px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: auto;
+}
+
+.button:hover {
+    background-color: black;
+    color: white;
+}
+
 /*----------------------------Admin----------------------------*/
 
 .grid-admin-display {
@@ -1280,11 +1301,12 @@ body, html {
 
 .back-button {
     text-align: center;
-    width: 80px;
-    height: 20px;
+    width: 50px;
+    height: 50px;
     border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
     cursor: pointer;
-    margin-left: 91%;
+    margin-left: 94%;
     margin-bottom: 5px;
     transition: 0.3s;
 }
@@ -1354,13 +1376,14 @@ body, html {
 .grid-post-box {
     position: relative;
     display: grid;
+    width: 757px;
     grid-template-columns: auto;
     margin: 10px 10px;  
 }
 
 .grid-post-msg {
     display: grid;
-    grid-template-columns: 90% 10%;
+    grid-template-columns: 85% 15%;
 }
 
 .schedule-post-item {
@@ -1501,6 +1524,8 @@ body, html {
     position: relative;
     display: grid;
     grid-template-columns: auto;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .grid-request-header {
@@ -1596,7 +1621,8 @@ body, html {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 800px;
+  border-radius: 10px;
 }
 
 /* The Close Button */

@@ -338,7 +338,7 @@ $('#my-profile').on('click', () => {
 
             $('#profile-menu-posts').on('click', () => {
 
-                $('#profile-display').html("<div class=\"profile-subheader\">Post History</div>");
+                $('#profile-display').html("<div class=\"profile-subheader\">Post History <i class=\"bi bi-pen header-symbol\"></i></div>");
 
                 $('#profile-display').append("<div class=\"grid-display-bar-userposts\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userposts\" id=\"max_userposts\" onchange=\"onKeyUp_userposts()\"></select></div>");
                 $('#max_userposts').append("<option value=\"10\">10</option>" +

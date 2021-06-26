@@ -465,7 +465,7 @@ function view_schedule(schedule_id) {
     $.get(`/get-schedule-by-id/${schedule_id}`, (schedule) => {
 
         $('#homepage-display').html(`<div class=\"subheader\" id=\"subheader\">Schedule ID: ${schedule.schedule_id}</div>`);
-        $('#homepage-display').append(`<div class=\"back-bar\"><div class=\"back-button\" id=\"back-button\">Back</div></div>`);
+        $('#homepage-display').append(`<div class=\"back-bar\"><div class=\"back-button\" id=\"back-button\"><i class="bi bi-arrow-left button-symbol" id=\"back-button\"></i></div></div>`);
         $('#homepage-display').append("<div class=\"grid-display-schedules\" id=\"display-schedules\"></div>");
         $('#display-schedules').append(`<div class=\"grid-display-schedule-item-expanded\" id=\"schedule-item-${schedule.schedule_id}\"></div>`);
         $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Host:</div><div class=\"profile-schedules-item-text\">${schedule.username}</div>`);
@@ -558,7 +558,7 @@ function view_schedule(schedule_id) {
                         $('#request-inner').append("<div class=\"grid-request-header\" id=\"request-header\">Request</div>");
                         $('#request-inner').append(`<form class=\"grid-requestform\" method=\"POST\" id=\"requestform\"></form>`);
                         $('#requestform').append("<textarea name=\"description\" id=\"request-content\" rows=\"8\" cols=\"50\"></textarea>" +
-                            "<input type=\"submit\" value=\"submit\">");
+                            "<button type=\"submit\" class=\"button\"><i class=\"bi bi-envelope-open button-symbol\"></i></button>");
                         $('#request-inner').append("<div class=\"flash-msg\" id=\"flash-msg-request\"></div>");
 
                         $('#requestform').on('submit', (evt) => {
@@ -581,8 +581,10 @@ function view_schedule(schedule_id) {
                                     $('#snackbar').html(`${msg}`);
                                     document.getElementById("snackbar").className = "show";
                                     setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
-                                    $(`#request-${schedule.schedule_id}`).replaceWith("<div class=\"requested-button\">Requested</div>");
+                                    $(`#request-${schedule.schedule_id}`).replaceWith("<div class=\"view-schedule-status-box\"><i class=\"bi bi-envelope-fill button-symbol\"></i></div>");
                                 });
+
+                                $('.button').html('<i class="bi bi-envelope button-symbol"></i>');
                             }
                         });
                     }
@@ -762,7 +764,7 @@ function view_schedule(schedule_id) {
                             "<Label for=\"message\">Post Message:</Label>" +
                             "<div class=\"grid-post-msg\">" +
                             "<textarea name=\"message\" id=\"message\" rows=\"6\" cols=\"60\"></textarea>" +
-                            "<input type=\"submit\" value=\"submit\"></input>" +
+                            "<button type=\"submit\" class=\"button\"><i class=\"bi bi-pen button-symbol button-symbol\"></i></button>" +
                             "</form></div>" +
                             "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
                         $('#homepage-display').append("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_posts\" id=\"max_posts\"></select></div>");
