@@ -384,8 +384,7 @@ function get_schedules() {
             }
 
             $('.view-schedule-button').on('click', (evt) => {
-                console.log("---------------------")
-                console.log(evt.target.id);
+
                 back_state = "";
                 back_button_flag = true;
                 view_schedule(evt.target.id.slice(9));
