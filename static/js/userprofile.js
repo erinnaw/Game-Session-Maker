@@ -26,20 +26,6 @@ $('#my-profile').on('click', () => {
             $('#profile-display').append("<span class=\"edit-profile-button\" id=\"edit-profile\"><i class=\"bi bi-pencil-square button-symbol\"></i></span>");
             $('#profile-display').append("<div class=\"flash-msg\" id=\"flash-msg\"></div");
 
-            $('.grid-profile-item').hover(
-
-                (evt) => {
-                    evt.target.style.background = "black";
-                    evt.target.style.color = "white";
-
-                },
-
-                (evt) => {
-                    evt.target.style.removeProperty('background');
-                    evt.target.style.removeProperty('color');
-                }
-            );
-
             $('#edit-profile').on('click', () => {
 
                 $('#avator-img-edit').replaceWith("<form class=\"avator-upload-form\" id=\"avator-upload-form\" method=\"post\">");
@@ -143,9 +129,9 @@ $('#my-profile').on('click', () => {
                 $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-schedules\"></div>");
 
                 $('#profile-schedules').append('<div class=\"grid-schedules-tabs\" id=\"schedules-tabs\"></div>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'created\', this, \'lightgrey\')\" id=\"created-tab\">Created <i class="bi bi-star menu-symbol"></i></button>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'joined\', this, \'lightgrey\')\" id=\"joined-tab\">Joined <i class=\"bi bi-check2-square menu-symbol\"></i></button>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'archived\', this, \'lightgrey\')\" id=\"archived-tab\">Archived <i class=\"bi bi-archive menu-symbol\"></i></button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'created\', this, \'gold\')\" id=\"created-tab\">Created <i class="bi bi-star menu-symbol"></i></button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'joined\', this, \'yellowgreen\')\" id=\"joined-tab\">Joined <i class=\"bi bi-check2-square menu-symbol\"></i></button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'archived\', this, \'lightcoral\')\" id=\"archived-tab\">Archived <i class=\"bi bi-archive menu-symbol\"></i></button>');
                 $('#profile-schedules').append('<div id=\"created\" class=\"tabcontent\"></div>');
                 $('#profile-schedules').append('<div id=\"joined\" class=\"tabcontent\"></div>');
                 $('#profile-schedules').append('<div id=\"archived\" class=\"tabcontent\"></div>');
@@ -340,14 +326,15 @@ $('#my-profile').on('click', () => {
 
                 $('#profile-display').html("<div class=\"profile-subheader\">Post History <i class=\"bi bi-pen header-symbol\"></i></div>");
 
-                $('#profile-display').append("<div class=\"grid-display-bar-userposts\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userposts\" id=\"max_userposts\" onchange=\"onKeyUp_userposts()\"></select></div>");
+                $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-posts\"></div>")
+                $('#profile-posts').append("<div class=\"grid-display-bar-userposts\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_userposts\" id=\"max_userposts\" onchange=\"onKeyUp_userposts()\"></select></div>");
                 $('#max_userposts').append("<option value=\"10\">10</option>" +
                     "<option value=\"20\" selected>20</option>" +
                     "<option value=\"50\">50</option>" +
                     "<option value=\"100\">100</option>");
 
-                $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-posts\"></div>")
-                $('#profile-display').append("<div class=\"display-page-num\" id=\"display-page-num-posts\"></div>");
+                $('#profile-posts').append('<div class=\"grid-display-userposts\" id=\"display-userposts\"></div>');
+                $('#profile-posts').append("<div class=\"display-page-num\" id=\"display-page-num-posts\"></div>");
 
                 curr_userpost_page_set = 1;
                 curr_userpost_page_num = 1;
@@ -730,17 +717,17 @@ function get_userposts() {
 
     $.get('/user-posts', {"limit_size": $('#max_userposts').val(), "offset_page": curr_userpost_page_num - 1}, (posts) => {
 
-        $('#profile-posts').html('');
+        $('#display-userposts').html('');
 
         if (posts[0].length == 0) {
 
-            $('#profile-posts').append("<div class=\"error-page\">No posts yet.</div>");
+            $('#pdisplay-userposts').append("<div class=\"error-page\">No posts yet.</div>");
         }
         else {
 
             for (const post of posts[0]) {
 
-                $('#profile-posts').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-post-${post["post_id"]}\"></div>`);
+                $('#display-userposts').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-post-${post["post_id"]}\"></div>`);
                 $(`#profile-post-${post["post_id"]}`).append(get_userpost_html(post));
             }
 

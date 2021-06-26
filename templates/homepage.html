@@ -5,25 +5,25 @@
     <div class="banner" id="banner">
         Website Name
     </div>
-
-    <div class="grid-homepage-menu" id="homepage-menu">
-        {% if(session.get('user', 0)) %}
-            <div class="homepage-menu-item" id="my-profile"><i class="bi bi-person-circle menu-symbol"></i> My Profile</div>
-            <div class="homepage-menu-item" id="log-out">Log Out</div>
-        {% else %}
-            <div class="homepage-menu-item" id="create-account"><i class="bi bi-person-plus menu-symbol"></i> Create Account</div>
-            <div class="homepage-menu-item" id="log-in">Log In</div>
-        {% endif %}
-        <div class="homepage-menu-item" id="create-schedule"><i class="bi bi-calendar2-plus menu-symbol"></i> Create Schedule</div>
-        <div class="homepage-menu-item" id="all-schedules"><i class="bi bi-calendar3 menu-symbol"></i> All Schedules</div>
-        <div class="homepage-menu-item" id="all-games"><i class="bi bi-controller menu-symbol"></i> All Games</div>
-        <form action="/search-game">
-            <Label for="search-game">Search</Label>
-            <input type="text" name="search-game" id="search-game" placeholder="GiantBomb database" 
-                    onkeyup = "onKeyUp_searchGames()" onkeydown="return (event.keyCode!=13);"></input>
-        </form>
+    <div class="navbar">
+        <div class="grid-homepage-menu" id="homepage-menu">
+            {% if(session.get('user', 0)) %}
+                <div class="homepage-menu-item" id="my-profile"><i class="bi bi-person-circle menu-symbol"></i> My Profile</div>
+                <div class="homepage-menu-item" id="log-out">Log Out</div>
+            {% else %}
+                <div class="homepage-menu-item" id="create-account"><i class="bi bi-person-plus menu-symbol"></i> Create Account</div>
+                <div class="homepage-menu-item" id="log-in">Log In</div>
+            {% endif %}
+            <div class="homepage-menu-item" id="create-schedule"><i class="bi bi-calendar2-plus menu-symbol"></i> Create Schedule</div>
+            <div class="homepage-menu-item" id="all-schedules"><i class="bi bi-calendar3 menu-symbol"></i> All Schedules</div>
+            <div class="homepage-menu-item" id="all-games"><i class="bi bi-controller menu-symbol"></i> All Games</div>
+            <form action="/search-game">
+                <Label for="search-game">Search</Label>
+                <input type="text" name="search-game" id="search-game" placeholder="GiantBomb database" 
+                        onkeyup = "onKeyUp_searchGames()" onkeydown="return (event.keyCode!=13);"></input>
+            </form>
+        </div>
     </div>
-
     <div class="homepage-display" id="homepage-display"></div>
     <div class="homepage-display-bottom" id="homepage-display-bottom">
         <center>
@@ -33,7 +33,7 @@
     </div>
     <div id="snackbar"></div>
 
-    <div class="navbar">
+    <div class="navbar2">
         <div class="adminbutton" id="users">Users</div>
         <div class="adminbutton" id="games">Games</div>
         <div class="adminbutton" id="schedules">Schedules</div>
