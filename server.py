@@ -519,7 +519,14 @@ def get_schedules_active():
         status = 'none'
 
         if session.get('user', 0):
-            if session['user'] == host.user_id:
+            requests = crud.get_requests_by_schedule_id(schedule.schedule_id)
+
+            if requests:
+                for request_ in requests:
+                    if request_.user_id == session['user']:
+                        status = 'requested'
+
+            elif session['user'] == host.user_id:
                 status = 'host'
         
             else:

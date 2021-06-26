@@ -375,6 +375,12 @@ function get_schedules() {
                     $(`#schedule-status-box-${schedule.schedule_id}`).css("color", "gold");
                     $(`#schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Host</div>');
                 }
+                else if (schedule.status === "requested") {
+
+                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-envelope-fill button-symbol\"></i></div>`);
+                    $(`#schedule-status-box-${schedule.schedule_id}`).css("color", "black");
+                    $(`#schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Request Sent</div>');
+                }
             }
 
             $('.view-schedule-button').on('click', (evt) => {
