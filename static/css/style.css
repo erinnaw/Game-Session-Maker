@@ -655,7 +655,7 @@ a {
     height: 300px;
     width: 400px;
     top: -33px;
-    left: -33px;
+    left: 0px;
 }
 
 .sent-item-background {
@@ -1338,7 +1338,7 @@ label {
     height: 283px;
     width: 460px;
     margin: auto;
-    opacity: 0.5;    
+    opacity: 0.3;    
 }
 
 .schedule-item-leftrows {
@@ -1374,7 +1374,7 @@ label {
     height: 600px;
     width: 960px;
     margin: auto;
-    opacity: 0.5;
+    opacity: 0.3;
 }
 
 .schedule-status-box {
