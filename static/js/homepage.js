@@ -350,34 +350,40 @@ function get_schedules() {
             for (const schedule of schedules[0]) {
 
                 $('#display-schedules-results').append(`<div class=\"grid-display-schedule-item\" id=\"schedule-item-${schedule.schedule_id}\"></div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Host:</div><div class=\"profile-schedules-item-text\">${schedule.username}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule ID:</div><div class=\"profile-schedules-item-text\">${schedule.schedule_id}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Game ID:</div><div class=\"profile-schedules-item-text\">${schedule.game_id}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Game Name:</div><div class=\"profile-schedules-item-text\">${schedule.game_name}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule ID:</div><div class=\"profile-schedules-item-text\">${schedule.schedule_id}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule Date/Time::</div><div class=\"profile-schedules-item-text\">${schedule.datetime}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule Timezone:</div><div class=\"profile-schedules-item-text\">${schedule.timezone}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Platform:</div><div class=\"profile-schedules-item-text\">${schedule.platform}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max User:</div><div class=\"profile-schedules-item-text\">${schedule.max_user}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max Team:</div><div class=\"profile-schedules-item-text\">${schedule.max_team}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Description:</div><div class=\"profile-schedules-item-text\">${schedule.description}</div>`);
-                $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"view-schedule-button\" id=\"schedule-${schedule.schedule_id}\"><i class=\"bi bi-box-arrow-in-right button-symbol\" id=\"schedule-${schedule.schedule_id}\"></i></div>`);
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"schedule-item-leftrows\" id=\"schedule-item-leftrows-${schedule.schedule_id}\"></div>`);
+                $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"schedule-item-rightrows\" id=\"schedule-item-rightrows-${schedule.schedule_id}\"></div>`);
+
+                $(`#schedule-item-leftrows-${schedule.schedule_id}`).append(`<img src=\"${schedule.image_path}\" class=\"all-schedules-item-background-image\"/>`);
+                $(`#schedule-item-leftrows-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Schedule ID:</div><div class=\"profile-schedules-item-text\">${schedule.schedule_id}</div>`);
+                $(`#schedule-item-leftrows-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Host:</div><div class=\"profile-schedules-item-text\">${schedule.username}</div>`);
+                $(`#schedule-item-leftrows-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Game:</div><div class=\"profile-schedules-item-text\">${schedule.game_name}</div>`);
+                $(`#schedule-item-leftrows-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Date/Time::</div><div class=\"profile-schedules-item-text\">${schedule.datetime}</div>`);
+                $(`#schedule-item-leftrows-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Timezone:</div><div class=\"profile-schedules-item-text\">${schedule.timezone}</div>`);
+                $(`#schedule-item-leftrows-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Platform:</div><div class=\"profile-schedules-item-text\">${schedule.platform}</div>`);
+                $(`#schedule-item-leftrows-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max User:</div><div class=\"profile-schedules-item-text\">${schedule.max_user}</div>`);
+                $(`#schedule-item-leftrows-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Max Team:</div><div class=\"profile-schedules-item-text\">${schedule.max_team}</div>`);
+                $(`#schedule-item-rightrows-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Description:</div><div class=\"profile-schedules-item-textarea">${schedule.description}</div>`);
+                $(`#schedule-item-rightrows-${schedule.schedule_id}`).append(`<div class=\"view-schedule-button\" id=\"schedule-${schedule.schedule_id}\"><i class=\"bi bi-box-arrow-in-right button-symbol realign-icon\" id=\"schedule-${schedule.schedule_id}\"></i></div>`);
             
+                console.log(schedule.schedule_id);
+                console.log(schedule.status);
+                console.log("--------------------------------");
+
                 if (schedule.status === "user") {
 
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-check2-square button-symbol\"></i></div>`);
+                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-check2-square button-symbol realign-icon shift-icon\"></i></div>`);
                     $(`#schedule-status-box-${schedule.schedule_id}`).css("color", "yellowgreen");
                     $(`#schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Approved</div>');
                 }
                 else if (schedule.status === "host") {
 
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-star button-symbol\"></i></div>`);
+                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-star button-symbol realign-icon shift-icon\"></i></div>`);
                     $(`#schedule-status-box-${schedule.schedule_id}`).css("color", "gold");
                     $(`#schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Host</div>');
                 }
                 else if (schedule.status === "requested") {
 
-                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div></div><div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-envelope-fill button-symbol\"></i></div>`);
+                    $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-envelope-fill button-symbol realign-icon shift-icon\"></i></div>`);
                     $(`#schedule-status-box-${schedule.schedule_id}`).css("color", "black");
                     $(`#schedule-status-box-${schedule.schedule_id}`).append('<div class=\"tooltiptext\">Requested</div>');
                 }
@@ -1024,13 +1030,10 @@ function get_userrequest_html(request) {
 
     $(`#profile-schedule-item-rightrows-${request["request_id"]}`).append(`<div class=\"profile-schedules-item-text\">Message:</div>`);
     $(`#profile-schedule-item-rightrows-${request["request_id"]}`).append(`<div class=\"profile-schedules-item-textarea\">${request['content']}</div>`);
-    $(`#profile-schedule-item-rightrows-${request["request_id"]}`).append(`<div class=\"profile-schedules-item-text\">${request['time_stamp']}</div>`);
+    $(`#profile-schedule-item-rightrows-${request["request_id"]}`).append(`<div class=\"profile-schedules-item-text\"> ${request['time_stamp']}</div>`);
 }
 
 function get_userpost_html(post) {
-
-    // profile-userposts-leftrows
-    //profile-userposts-rightrows
 
     $(`#profile-userposts-leftrows-${post["post_id"]}`).append(`<div></div>`);
     $(`#profile-userposts-leftrows-${post["post_id"]}`).append(`<div class=\"profile-schedules-item-text\">Schedule ID: ${post['schedule_id']}</div>`);
@@ -1038,16 +1041,6 @@ function get_userpost_html(post) {
 
     $(`#profile-userposts-rightrows-${post["post_id"]}`).append(`<div class=\"profile-schedules-item-text\">Post Content:</div>`);
     $(`#profile-userposts-rightrows-${post["post_id"]}`).append(`<div class=\"profile-post-item-textarea\">${post['content']}</div>`);
-
-    /*
-    return (
-        `<div class=\"profile-schedules-item-text\">Schedule ID:</div>` +
-        `<div class=\"profile-schedules-item-text\">${post['schedule_id']}</div>` +
-        `<div class=\"profile-schedules-item-text\">Time Stamp:</div>` +
-        `<div class=\"profile-schedules-item-text\">${post['time_stamp']}</div>` +
-        `<div class=\"profile-schedules-item-text\">Post Content:</div>` +
-        `<div class=\"profile-schedules-item-text\">${post['content']}</div>`)
-        */
 }
 
 function createSchedule_by_game_id(game_id = 1) {
