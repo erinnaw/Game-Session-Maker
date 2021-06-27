@@ -365,10 +365,6 @@ function get_schedules() {
                 $(`#schedule-item-rightrows-${schedule.schedule_id}`).append(`<div class=\"profile-schedules-item-text\">Description:</div><div class=\"profile-schedules-item-textarea">${schedule.description}</div>`);
                 $(`#schedule-item-rightrows-${schedule.schedule_id}`).append(`<div class=\"view-schedule-button\" id=\"schedule-${schedule.schedule_id}\"><i class=\"bi bi-box-arrow-in-right button-symbol realign-icon\" id=\"schedule-${schedule.schedule_id}\"></i></div>`);
             
-                console.log(schedule.schedule_id);
-                console.log(schedule.status);
-                console.log("--------------------------------");
-
                 if (schedule.status === "user") {
 
                     $(`#schedule-item-${schedule.schedule_id}`).append(`<div class=\"schedule-status-box\" id=\"schedule-status-box-${schedule.schedule_id}\"><i class=\"bi bi-check2-square button-symbol realign-icon shift-icon\"></i></div>`);
