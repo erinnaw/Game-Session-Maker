@@ -759,7 +759,7 @@ def get_user_sent_requests():
             host = crud.get_user_by_id(schedule.user_id)
 
             data = {"type": "sent",
-                    "host_username": host.username,
+                    "username": host.username,
                     "request_id": request.request_id,
                     "game_id": schedule.game_id,
                     "game_name": game.name,

@@ -232,7 +232,7 @@ $('#my-profile').on('click', () => {
 
                             $('#sent').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-request-sent-${request["request_id"]}\"></div>`);
                             $(`#profile-request-sent-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows\" id=\"profile-schedule-item-leftrows-${request["request_id"]}\"></div>`);
-                            $(`#profile-request-sent-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows\" id=\"profile-schedule-item-rightrows-${request["request_id"]}\"></div>`);
+                            $(`#profile-request-sent-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-rightrows\" id=\"profile-schedule-item-rightrows-${request["request_id"]}\"></div>`);
 
                             get_userrequest_html(request);
 
@@ -276,7 +276,7 @@ $('#my-profile').on('click', () => {
 
                             $('#received').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-request-received-${request["request_id"]}\"></div>`);
                             $(`#profile-request-received-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows\" id=\"profile-schedule-item-leftrows-${request["request_id"]}\"></div>`);
-                            $(`#profile-request-received-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows\" id=\"profile-schedule-item-rightrows-${request["request_id"]}\"></div>`);
+                            $(`#profile-request-received-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-rightrows\" id=\"profile-schedule-item-rightrows-${request["request_id"]}\"></div>`);
 
                             get_userrequest_html(request);
 
@@ -754,7 +754,6 @@ function get_userposts() {
 
                 $('#display-userposts').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-post-${post["post_id"]}\"></div>`);
                 $(`#profile-post-${post["post_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows\" id=\"profile-userposts-leftrows-${post["post_id"]}\"></div>`);
-                $(`#profile-post-${post["post_id"]}`).append(`<div class=\"grid-profile-schedule-item-rightrows\" id=\"profile-userposts-rightrows-${post["post_id"]}\"></div>`);
 
                 get_userpost_html(post);
             }

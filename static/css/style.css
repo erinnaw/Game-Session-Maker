@@ -629,7 +629,7 @@ a {
 }
 
 .profile-schedules-item-textarea {
-    height: 150px;
+    height: 100%;
     width: 90%;
     border: 1px solid rgb(0, 0, 0);  
     border-radius: 10px;
@@ -640,7 +640,7 @@ a {
 }
 
 .profile-post-item-textarea {
-    height: 100px;
+    height: 70px;
     width: 400px;
     border: 1px solid rgb(0, 0, 0);  
     border-radius: 10px;
@@ -664,20 +664,21 @@ a {
     opacity: 0.3;
     height: 280px;
     width: 300px;
-    top: -33px;
+    top: -60px;
     left: 516px;
 }
 
 .grid-profile-schedule-item-leftrows {
     position: relative;
     display: grid;
-    grid-template-columns: auto;
+    grid-template-columns: 30% 70%;
 }
 
 .grid-profile-schedule-item-rightrows {
     position: relative;
     display: grid;
     grid-template-columns: auto;
+    grid-template-rows: 15% 70% 15%;
 }
 
 .profile-schedules-item-text {
@@ -1308,6 +1309,9 @@ label {
     border-top: 1px solid rgb(0, 0, 0);
     border-right: 1px solid rgb(0, 0, 0);
     border-left: 1px solid rgb(0, 0, 0);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
 }
 
 .grid-display-schedules-results {
@@ -1359,13 +1363,25 @@ label {
 .grid-display-schedule-item-expanded {
     position: relative;
     display: grid;
-    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-columns: 40% 60%;
     height: 300px;
     width: 100%;
     border-bottom: 1px solid rgb(0, 0, 0);
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 10px 10px 10px;
     overflow:hidden;
+}
+
+.grid-schedule-item-leftrows {
+    position: relative;
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+
+.grid-schedule-item-rightrows {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 10% 70% 20%;
 }
 
 .schedule-background-img {
@@ -1375,6 +1391,8 @@ label {
     width: 960px;
     margin: auto;
     opacity: 0.3;
+    top: -115px;
+    left: -11px;
 }
 
 .schedule-status-box {
@@ -1573,7 +1591,7 @@ label {
 
 .postmsgbox {
     border: 1px solid rgb(0, 0, 0);
-    padding: 10px 10px 10px 10px;  
+    padding: 10px 10px 10px 10px;
 }
 
 .grid-display-bar {
@@ -1588,6 +1606,7 @@ label {
     padding-top: 5px;
     padding-bottom: 5px;
     line-height: 20px;
+    border: 1px solid rgb(0, 0, 0);  
 }
 
 .grid-display-bar-userposts {
