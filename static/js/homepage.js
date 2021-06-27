@@ -105,7 +105,7 @@ $('#create-account').on('click', () => {
         "<Label for= \"password\">Password*</Label>" +
         "<input type=\"password\" name=\"password\" id=\"password\">" +
         "<div></div><div><input type=\"checkbox\" onclick=\"showPassword()\"></input>Show Password</div>" +
-        "<div></div><input type=\"submit\" value=\"Submit\">" +
+        "<div></div><input type=\"submit\" value=\"Submit\" class=\"submit\">" +
         "<div></div>* required fields" +
         "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
 
@@ -200,12 +200,12 @@ $('#log-in').on('click', () => {
     $('#login-form').append("<div class=\"grid-login\" id=\"login\"></div>");
     $('#login').append(
         "<Label for=\"email\">Email</Label>" +
-        "<input type =\"email\" name=\"email\" id=\"email\">" +
-        "<Label for= \"password\">Password</Label>" +
-        "<input type=\"password\" name=\"password\" id=\"password\">" +
-        "<div></div><div><input type=\"checkbox\" onclick=\"showPassword()\"></input>Show Password</div>" +
-        "<div></div><input type=\"submit\" value=\"Submit\">" +
-        "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
+        "<input type =\"email\" name=\"email\" id=\"email\" class=\"login_input\">" +
+        "<Label for= \"password\" class=\"password_label\">Password</Label>" +
+        "<input type=\"password\" name=\"password\" id=\"password\" class=\"login_input\">" +
+        "<div></div><div><input type=\"checkbox\" onclick=\"showPassword()\"></input> Show Password</div>" +
+        "<input type=\"submit\" value=\"Submit\" class=\"submit submit-login\">" +
+        "<div class=\"flash-msg login-flash\" id=\"flash-msg\"></div>");
 
     $('#login-form').on('submit', (evt) => {
         
@@ -1067,7 +1067,7 @@ function createSchedule_by_game_id(game_id = 1) {
 
             $('#homepage-display').append("<form class=\"schedule-form\" id=\"schedule-form\" action=\"/create-schedule\" method=\"POST\"></form>");
             $('#schedule-form').append("<div class=\"grid-create-schedule-form\" id=\"create-schedule-form\"></div>");
-            $('#create-schedule-form').append(`<Label for=\"game\">Game*</Label><select name=\"game\" id=\"gameselect\"></select>`);
+            $('#create-schedule-form').append(`<Label for=\"game\" id=\"game\">Game*</Label><select name=\"game\" id=\"gameselect\"></select>`);
             
             $.get('/get-all-games', (games) => {
                 for (const game of games) {
@@ -1081,7 +1081,7 @@ function createSchedule_by_game_id(game_id = 1) {
 
             $('#create-schedule-form').append("<Label for=\"date\">Date*</Label>" +
                 "<input type=\"date\" name=\"date\" id=\"date\">" +
-                "<Label for=\"time\">Time*</Label>" +
+                "<Label for=\"time\" id=\"time\">Time*</Label>" +
                 "<input type=\"time\" name=\"time\" id=\"time\">" +
                 "<Label for=\"timezone\">Timezone*</Label>" +
                 "<div class=\"tz\" id=\"tz\"></div>");
@@ -1090,7 +1090,7 @@ function createSchedule_by_game_id(game_id = 1) {
                 $('#tz').append(str);
             });
 
-            $('#create-schedule-form').append("<Label for=\"platform\">Platform</Label>" +
+            $('#create-schedule-form').append("<Label for=\"platform\" id=\"platform_label\">Platform</Label>" +
                 "<select name=\"platform\" id=\"platform\"></select>");
 
             $.get(`/get-game/${game_id}`, (game) => {
@@ -1115,7 +1115,7 @@ function createSchedule_by_game_id(game_id = 1) {
 
             $('#create-schedule-form').append("<Label for=\"max_user\">Max Users*</Label>" +
                 "<input type=\"number\" min=\"1\" step=\"1\" name=\"max_user\" id=\"max_user\">" +
-                "<Label for=\"max_team\">Max Teams</Label>" +
+                "<Label for=\"max_team\" id=\"max_team\">Max Teams</Label>" +
                 "<input type=\"number\" min=\"1\" step=\"1\" name=\"max_team\" id=\"max_team\" placeholder=\"1\">" +
                 "<Label for=\"description\">Description*</Label>" +
                 "<textarea name=\"description\" id=\"description\" rows=\"10\" cols=\"50\">Write requirements for users and description of your objective(s).</textarea> " +
@@ -1123,6 +1123,11 @@ function createSchedule_by_game_id(game_id = 1) {
                 "<input type=\"submit\" value=\"Submit\">" +
                 "<div></div>" +
                 "*required fields");
+
+            $('#game').css("background-color", "rgb(180, 180, 203)");
+            $('#time').css("background-color", "rgb(180, 180, 203)");
+            $('#platform_label').css("background-color", "rgb(180, 180, 203)");
+            $('#max_team').css("background-color", "rgb(180, 180, 203)");
 
             $('#homepage-display').append("<div class=\"flash-msg\" id=\"flash-msg\"></div");
 

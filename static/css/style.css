@@ -472,18 +472,61 @@ a {
 
 /*----------------------------Registration----------------------------*/
 
+.registration-form {
+    height: 630px;
+    width: 600px;
+    background-color: rgb(187, 196, 216);
+    margin:auto;
+    border: 3px solid rgb(0, 0, 0);
+    border-radius: 20px;
+    padding-top: 20px;
+}
+
 .grid-registration {
     display: grid;
     grid-template-columns: 40% 60%;
     width: 400px;
     margin: auto;
+    margin-top: 100px;
 }
 
 .grid-login {
     display: grid;
-    grid-template-columns: 40% 60%;
-    width: 400px;
+    grid-template-columns: auto;
+    width: 380px;
+    height: 300px;
+    border: 3px solid rgb(0, 0, 0);
+    border-radius: 20px;
+    background-color: rgb(187, 196, 216);
     margin: auto;
+    padding: 10px 10px 10px 10px;
+}
+
+.login_input {
+    width: 350px;
+}
+
+.submit-login {
+    margin: auto;
+}
+
+.login-flash {
+    width: 350px;
+}
+
+.password_label {
+    margin-top: 5px;
+}
+
+.submit {
+    border-radius: 5px;
+    width: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#password, #username, #email {
+    border-radius: 5px;
 }
 
 .registration-form-spacing {
@@ -1003,11 +1046,19 @@ body, html {
 .grid-create-schedule-form {
     position: relative;
     display: grid;
+    background-color: rgb(210, 210, 224);
+    padding: 10px 10px 10px 0px;
+    border-radius: 10px;
+    border: 3px solid rgb(0, 0, 0);
     grid-template-columns: 25% 75%;
     width: 50%;
     margin: auto;
     margin-top: 30px;
     text-align: left;    
+}
+
+label {
+    padding-left: 10px;
 }
 
 #timezone {
@@ -1828,7 +1879,7 @@ body, html {
 }
 
 .avator-upload-form.has-advanced-upload {
-  border: 2px dashed #ccc;
+  border: 2px dashed rgb(85, 85, 85);
   border-radius: 20px;
   height: 175px;
   width: 175px;
