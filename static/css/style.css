@@ -1,6 +1,5 @@
 .banner {
     font-size: 36px;
-    font-family:'Courier New', Courier, monospace;
     height: 100px;
     width: 100%;
     line-height: 100px;
@@ -272,7 +271,6 @@ textarea {
     padding-right: 15px;
     text-align: center;
     font-size: 16px;
-    font-family:'Courier New', Courier, monospace;   
     color: whitesmoke;
 }
 
@@ -282,7 +280,6 @@ textarea {
     height: auto;
     width: 1200px;
     margin: auto;
-    font-family:'Courier New', Courier, monospace;
     overflow: auto;  
 }
 
@@ -541,17 +538,20 @@ a {
     height: 245px;
     width: 500px;
     margin: auto;
-    border: 1px solid rgb(0, 0, 0);
+    border: 3px solid rgb(0, 0, 0);
     border-radius: 30px;
     padding-top: 10px;
     padding-bottom: 10px;
+    background-color: rgb(235, 244, 255);
+    overflow: hidden;
 }
 
 .profile-user-item {
-    height: 30px;
-    line-height: 30px;
+    height: 37px;
+    line-height: 37px;
     text-align: left;
     padding-left: 20px;
+
 }
 
 .profile-subheader {
@@ -574,23 +574,76 @@ a {
 .grid-profile-schedule-item {
     position: relative;
     display: grid;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 50% 50%;
     width: 100%;
     margin: auto;
     border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: white;
-    overflow: auto;
+    background-color: floralwhite;
+    overflow: hidden;
+}
+
+.profile-schedules-item-textarea {
+    height: 150px;
+    width: 350px;
+    border: 1px solid rgb(0, 0, 0);  
+    border-radius: 10px;
+    padding: 10px 10px 10px 10px;
+    overflow-y: auto;
+}
+
+.profile-post-item-textarea {
+    height: 100px;
+    width: 400px;
+    border: 1px solid rgb(0, 0, 0);  
+    border-radius: 10px;
+    padding: 10px 10px 10px 10px;
+    overflow-y: auto;
+}
+
+.schedule-item-background {
+    position: absolute;
+    z-index: 1;
+    opacity: 0.3;
+    height: 300px;
+    width: 400px;
+    top: -33px;
+    left: -33px;
+}
+
+.sent-item-background {
+    position: absolute;
+    z-index: 1;
+    opacity: 0.3;
+    height: 280px;
+    width: 300px;
+    top: -33px;
+    left: 516px;
+}
+
+.grid-profile-schedule-item-leftrows {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto;
+}
+
+.grid-profile-schedule-item-rightrows {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto;
 }
 
 .profile-schedules-item-text {
-    padding-right: 20px;
-    text-align: right;
+    padding-right: 10px;
+    padding-left: 10px;
+    z-index: 1;
 }
 
 .grid-user-schedule-hover {
     position: absolute;
+    z-index: 3;
     transition: opacity 0.25s;
     height: 100%; 
     top: 0px;
@@ -910,7 +963,6 @@ a {
 body, html {
   height: 100%;
   margin: 0;
-  font-family:'Courier New', Courier, monospace;
 }
 
 /* Style tab links */
@@ -940,11 +992,11 @@ body, html {
     border: 1px solid rgb(0, 0, 0);
 }
 
-#created {background-color: gold;}
-#joined {background-color: yellowgreen;}
-#archived {background-color: lightcoral;}
-#sent {background-color: lightgrey;}
-#received {background-color: lightgrey;}
+#created {background-color: rgb(204, 235, 255);}
+#joined {background-color: rgb(230, 255, 243);}
+#archived {background-color: lemonchiffon;}
+#sent {background-color: aliceblue;}
+#received {background-color: honeydew;}
 
 /*------------------------Create Schedule---------------------------*/
 
@@ -1457,6 +1509,7 @@ body, html {
     position: relative;
     display: inline-grid;
     grid-template-columns: 10% 10% ;
+    background-color: rgb(196, 210, 228);
     height: 33px;
     width: 100%;
     left: 50%;
@@ -1464,7 +1517,9 @@ body, html {
     padding-top: 5px;
     padding-bottom: 5px;
     line-height: 20px;
-    border: 1px solid rgb(0, 0, 0);  
+    border: 1px solid rgb(0, 0, 0);
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
 }
 
 /*------------------------Display Avator Box---------------------------*/
@@ -1680,7 +1735,6 @@ body, html {
 
 /* The snackbar - position it at the bottom and in the middle of the screen */
 #snackbar {
-    font-family: 'Courier New', Courier, monospace;
     visibility: hidden; /* Hidden by default. Visible on click */
     min-width: 250px; /* Set a default minimum width */
     margin-left: -125px; /* Divide value of min-width by 2 */
@@ -1739,7 +1793,6 @@ body, html {
   text-align: left;
   outline: none;
   font-size: 15px;
-  font-family: 'Courier New', Courier, monospace;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
@@ -1754,7 +1807,6 @@ body, html {
   display: none;
   overflow: hidden;
   background-color: #f1f1f1;
-  font-family: 'Courier New', Courier, monospace;
 }
 
 .collapsible:after {

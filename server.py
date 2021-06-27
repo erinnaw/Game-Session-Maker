@@ -279,17 +279,18 @@ def log_in():
     """Find user and log in user to session."""
 
     email = request.form.get("email")
-    password_hashed = request.form.get("password")
+    user_password = request.form.get("password")
     user = crud.get_user_by_email(email)
     user_email = ""
 
-    if email == "" or password_hashed == "":
+    if email == "" or user_password == "":
         flash = "All field input is required."
         status = "0"
+
     elif user:
-        password = hashlib.md5(user.password.encode('utf-8'))
+        password = user.password
         
-        if password.hexdigest() == password_hashed:
+        if password == user_password:
             session["user"] = user.user_id
             flash = f"Logged in as {user.username}"
             user_email = user.email
@@ -445,6 +446,7 @@ def get_user_schedules_created():
                     "platform": platform.name,
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
+                    "image_path": game.image_path,
                     "description": schedule.description}
             data_list.append(data)
 
@@ -549,6 +551,7 @@ def get_schedules_active():
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
                     "isArchived": schedule.isArchived,
+                    "image_path": game.image_path,
                     "status": status})
 
     return jsonify([data, {"query_count": query_count}])
@@ -584,6 +587,7 @@ def get_user_schedules_joined():
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
                     "description": schedule.description,
+                    "image_path": game.image_path,
                     "isArchived": schedule.isArchived}
             data_list.append(data)            
 
@@ -620,6 +624,7 @@ def get_user_schedules_archived():
                     "max_user": schedule.max_user,
                     "max_team": schedule.max_team,
                     "description": schedule.description,
+                    "image_path": game.image_path,
                     "isArchived": schedule.isArchived}
             data_list.append(data)
 
@@ -720,11 +725,11 @@ def get_user_requests():
             for request in schedule.requests:
                 game = crud.get_game_by_id(schedule.game_id)
                 schedule = crud.get_schedule_by_id(request.schedule_id)
-                user = crud.get_user_by_id(request.user_id)
+                host = crud.get_user_by_id(request.user_id)
 
 
                 data = {"type": "received",
-                        "username": user.username,
+                        "host_username": host.username,
                         "request_id": request.request_id,
                         "game_id": schedule.game_id,
                         "game_name": game.name,
@@ -751,10 +756,10 @@ def get_user_sent_requests():
         for request in requests:
             game = crud.get_game_by_id(request.game_id)
             schedule = crud.get_schedule_by_id(request.schedule_id)
-            user = crud.get_user_by_id(request.user_id)
+            host = crud.get_user_by_id(schedule.user_id)
 
             data = {"type": "sent",
-                    "username": user.username,
+                    "host_username": host.username,
                     "request_id": request.request_id,
                     "game_id": schedule.game_id,
                     "game_name": game.name,
@@ -762,7 +767,8 @@ def get_user_sent_requests():
                     "schedule_datetime": schedule.datetime,
                     "schedule_timezone": schedule.timezone,
                     "time_stamp": request.time_stamp,
-                    "content": request.content}
+                    "content": request.content,
+                    "postmark_image": '/static/img/sent.png'}
 
             data_list.append(data)
 
@@ -793,7 +799,8 @@ def get_user_received_requests():
                         "schedule_datetime": schedule.datetime,
                         "schedule_timezone": schedule.timezone,
                         "time_stamp": request.time_stamp,                    
-                        "content": request.content}
+                        "content": request.content,
+                        "postmark_image": '/static/img/received.png'}
 
                 data_list.append(data)
 
