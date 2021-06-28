@@ -1148,7 +1148,7 @@ label {
     cursor: pointer;
     overflow: hidden;
     border-radius: 10px;
-    background-color: rgb(247, 245, 255);
+    background-color: rgb(226 226 226);
 }
 
 .grid-display-game-item-hover:hover .create-schedule-hover {
