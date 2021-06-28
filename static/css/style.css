@@ -1521,10 +1521,13 @@ label {
     bottom: 10px;
     text-align: center;
     width: 100px;
-    height: 20px;
+    height: 30px;
+    line-height: 30px;
     border: 1px solid rgb(0, 0, 0);  
+    border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
+    padding-bottom: 5px;
 }
 
 .requested-button {
@@ -1555,7 +1558,8 @@ label {
     grid-template-columns: 20% 80%;
     width: 80%;
     margin: auto;
-    border: 1px solid rgb(0, 0, 0);  
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(255, 244, 225);
 }
 
 /*------------------------Posts---------------------------*/
@@ -1568,9 +1572,24 @@ label {
     margin: 10px 10px;  
 }
 
+.triangle {
+    width: 0;
+    height: 0;
+    border-top: 22px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right: 50px solid #333;
+    position: absolute;
+    top: 25px;
+    left: -18px;
+}
+
 .grid-post-msg {
     display: grid;
     grid-template-columns: 85% 15%;
+}
+
+.timestamp-post {
+    margin-left: 30px;
 }
 
 .schedule-post-item {
@@ -1578,10 +1597,12 @@ label {
     grid-template-columns: 20% 80%;
     width: 80%;
     margin: auto;
-    border: 1px solid rgb(0, 0, 0);  
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .grid-post-content {
+    position: relative;
     display: grid;
     grid-template-columns: auto;
     width: 90%;
@@ -1591,7 +1612,14 @@ label {
 
 .postmsgbox {
     border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
     padding: 10px 10px 10px 10px;
+    margin-top: 10px;
+    margin-left: 30px;
+    height: 100px;
+    background-color: #333;
+    color: white;
+    overflow: auto;
 }
 
 .grid-display-bar {
@@ -1606,7 +1634,11 @@ label {
     padding-top: 5px;
     padding-bottom: 5px;
     line-height: 20px;
-    border: 1px solid rgb(0, 0, 0);  
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(255, 244, 225);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    overflow: hidden;  
 }
 
 .grid-display-bar-userposts {
@@ -1633,9 +1665,11 @@ label {
     display: grid;
     grid-template-columns: auto;
     width: 150px;
-    border: 1px solid rgb(0, 0, 0);  
+    border: 1px solid white;
+    border-radius: 10px;
     padding-top: 10px;
-    padding-bottom: 10px;  
+    padding-bottom: 10px;
+    background-color: #333;  
 }
 
 .post-avator-hover {
@@ -1643,9 +1677,12 @@ label {
     display: grid;
     grid-template-columns: auto;
     width: 150px;
-    border: 1px solid rgb(0, 0, 0);  
+    border: 1px solid #f1f1f1;  
+    border-radius: 10px;
     padding-top: 10px;
-    padding-bottom: 10px;  
+    padding-bottom: 10px;
+    overflow: hidden;  
+    background-color: #333;
 }
 
 .post-avator-hover:hover .kick-user {
@@ -1694,6 +1731,7 @@ label {
 
 .avator-name {
     text-align: center;
+    color: whitesmoke;
 }
 
 .kicked-user {
@@ -1714,18 +1752,29 @@ label {
     position: relative;
     display: grid;
     grid-template-columns: 20% 80%;
+    padding-bottom: 10px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.close {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding-left: 20px;
 }
 
 .grid-request-inner {
     position: relative;
     display: grid;
     grid-template-columns: auto;
+    grid-template-rows: 20%;
     padding-left: 10px;
     padding-right: 10px;
 }
 
 .grid-request-header {
     text-align: left;
+    padding-left: 20px;
 }
 
 .grid-requestform {
@@ -1744,19 +1793,19 @@ label {
     grid-template-columns: 20% 65% 15%;
     width: 100%;
     margin: auto;
-    border: 1px solid rgb(0, 0, 0); 
 }
 
 .grid-request-content {
     display: grid;
     grid-template-columns: auto;
     padding-top: 5px;
+    overflow-y: auto; 
 }
 
 .grid-approval {
     display: grid;
     grid-template-columns: auto;
-    padding: 10px 20px 10px;
+    padding: 25px 20px 10px;
 }
 
 .decline, .approve {

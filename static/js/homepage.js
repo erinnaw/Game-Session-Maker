@@ -557,11 +557,17 @@ function view_schedule(schedule_id) {
                         $(`#avatorboxreq-${user.user_id}`).append(`<div class=\"avator-name\" id=\"avatornamereq-${user.user_id}\">${user.username}</div>`);
 
                         $('#request-form').append("<div class=\"grid-request-inner\" id=\"request-inner\"></div>");
-                        $('#request-inner').append("<div class=\"grid-request-header\" id=\"request-header\">Request</div>");
+                        $('#request-inner').append("<div class=\"grid-request-header\" id=\"request-header\">Request Message</div>");
                         $('#request-inner').append(`<form class=\"grid-requestform\" method=\"POST\" id=\"requestform\"></form>`);
                         $('#requestform').append("<textarea name=\"description\" id=\"request-content\" rows=\"8\" cols=\"50\"></textarea>" +
-                            "<button type=\"submit\" class=\"button\"><i class=\"bi bi-envelope-open button-symbol\"></i></button>");
+                            "<button type=\"submit\" class=\"button\"><i class=\"bi bi-envelope-open button-symbol realign-icon\"></i></button>");
                         $('#request-inner').append("<div class=\"flash-msg\" id=\"flash-msg-request\"></div>");
+                        
+                        $(`#request-content`).css("height", "100px");
+                        $(`#request-content`).css("width", "420px");
+                        $(`#request-content`).css("margin-left", "20px");
+                        $(`#request-form`).css("padding-left", "20px");
+                        $(`#request-form`).css("padding-right", "20px");
 
                         $('#requestform').on('submit', (evt) => {
 
@@ -645,6 +651,7 @@ function view_schedule(schedule_id) {
 
                             $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"requests-button\">See all requests</button>" +
                                 "<div class=\"content-approved-users\" id=\"content-requests\"></div>");
+                            $('#requests-button').css("background-color", "lightsteelblue");
 
                             $('#requests-button').on('click', () => {
 
@@ -707,6 +714,7 @@ function view_schedule(schedule_id) {
 
                         $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"approval-button\">See all approved users</button>" +
                             "<div class=\"content-approved-users\" id=\"content-approved\"></div>");
+                        $('#approval-button').css("background-color", "rgb(204, 255, 204)");
 
                         $('#approval-button').on('click', () => {
 
@@ -763,12 +771,13 @@ function view_schedule(schedule_id) {
 
                         $('#schedule-post-box').append("<div class=\"grid-post-box\" id=\"post-box\"></div>");
                         $('#post-box').append(`<form action=\"/post/${schedule.schedule_id}\" method=\"POST\" id=\"post-form\">` +
-                            "<Label for=\"message\">Post Message:</Label>" +
                             "<div class=\"grid-post-msg\">" +
                             "<textarea name=\"message\" id=\"message\" rows=\"6\" cols=\"60\"></textarea>" +
                             "<button type=\"submit\" class=\"button\"><i class=\"bi bi-pen button-symbol button-symbol realign-icon\"></i></button>" +
                             "</form></div>" +
                             "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
+                        $('#message').css("height","100")
+                        $('#message').css("margin-top", "10px")
                         $('#homepage-display').append("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_posts\" id=\"max_posts\"></select></div>");
                         $('#max_posts').append("<option value=\"10\">10</option>" +
                             "<option value=\"20\" selected>20</option>" +
@@ -842,9 +851,9 @@ function get_scheduleposts(schedule_id, host_id) {
                 $(`#post-avatorbox-${post.post_id}`).append(`<div class=\"avator-name\" id=\"avatorname-${post.post_id}\">${post.username}</div>`);
 
                 $(`#scheduleposts-${post.post_id}`).append(`<div class=\"grid-post-content\" id=\"postcontent-${post.post_id}\"></div>`);
-                $(`#postcontent-${post.post_id}`).append(`<div>${post.username} says:</div>`);
                 $(`#postcontent-${post.post_id}`).append(`<div class=\"postmsgbox\"><p>${post.content}</p></div>`);
-                $(`#postcontent-${post.post_id}`).append(`<div class=\"timestamp\">${post.time_stamp}</div>`);
+                $(`#postcontent-${post.post_id}`).append('<div class=\"triangle\"></div>');
+                $(`#postcontent-${post.post_id}`).append(`<div class=\"timestamp timestamp-post\">${post.time_stamp}</div>`);
 
                 if (post.user_id == host_id) {
 
