@@ -18,13 +18,12 @@ $('#all-games').on('click', () => {
                                 "<option value=\"alphabetical\">Alphabetical</option>" +
                                 "<option value=\"most-active\">Most Popular</option></select>");
 
-    //$('#homepage-display').append("<div class=\"arrow-left\" id=\"arrow-left\"></div>");
+    $('#homepage-display').append(`<div class=\"game-label-hover\" id=\"game-label-hover\"></div>`);
     $('#homepage-display').append("<i class=\"bi bi-chevron-left arrow-left\" id=\"arrow-left\"></i>");
     $('#homepage-display').append("<div class=\"display-games\"></div>");
     $('.display-games').append("<div class=\"grid-display-games\" id=\"display-games\"></div>");
     $('#homepage-display').append(`<div class=\"page-indicator-bar\" id=\"page-indicator\"></div>`);
     $('#homepage-display').append("<i class=\"bi bi-chevron-right arrow-right\" id=\"arrow-right\"></i>");
-    //$('#homepage-display').append("<div class=\"arrow-right\" id=\"arrow-right\"></div>");
 
     $('#arrow-left').on('click', () => {
 
@@ -87,6 +86,16 @@ function get_games() {
             $(`#display-game-item-name-${game.game_id}`).append(`${game.name}`);
             $(`#display-game-item-${game.game_id}`).append(`<div class=\"create-schedule-hover\" id=\"create-schedule-${game.game_id}\">Create Schedule</div>`);
             $(`#display-game-item-${game.game_id}`).append(`<div class=\"find-schedule-hover\" id=\"find-schedule-${game.game_id}\">Find Schedule</div>`);
+
+            $(`#display-game-item-${game.game_id}`).hover(
+                function() {
+
+                    $('#game-label-hover').html(`${game.name}`);
+                },
+                function() {
+                    $('#game-label-hover').html('');
+                }
+            );
         }
 
         $('.create-schedule-hover').on('click', (evt) => {

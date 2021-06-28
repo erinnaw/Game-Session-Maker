@@ -1113,9 +1113,10 @@ label {
 /*------------------------Display Games---------------------------*/
 
 .display-games {
-    height: 850px;
+    height: 750px;
     width: 900px;
     margin: auto;
+    margin-bottom: 30px;
 }
 
 .grid-display-games {
@@ -1135,11 +1136,11 @@ label {
     width: 175px;
     padding-top: 10px;
     padding-bottom: 10px;
-    border: 1px solid rgb(0, 0, 0);
+    border: 2px solid rgb(31, 10, 122);
     cursor: pointer;
     overflow: hidden;
     border-radius: 10px;
-    background-color: transparent;
+    background-color: rgb(247, 245, 255);
 }
 
 .grid-display-game-item-hover:hover .create-schedule-hover {
@@ -1149,41 +1150,55 @@ label {
 }
 
 .grid-display-game-item-hover:hover .find-schedule-hover {
-    top: 95px;
+    top: 83px;
     width: 100%;
     transition: top 0.2s ease-in-out;
 }
 
 .create-schedule-hover:hover {
-    background-color: rgba(51, 51, 51, 0.8);
+    background-color: black;
 }
 
 .find-schedule-hover:hover {
-    background-color: rgba(51, 51, 51, 0.8);
+    background-color: black;
 }
 
 .create-schedule-hover {
     position: absolute;
     height: 50%; 
-    line-height: 100px;
-    top: -95px;
+    line-height: 83px;
+    top: -84px;
     width: 100%;
     text-align: center;
-    background-color: rgba(119, 119, 119, 0.8);
-    color:white;
+    background-color: rgba(54, 54, 54, 0.8);
     cursor: pointer;
+    color: rgb(236, 236, 236);
 }
 
 .find-schedule-hover {
     position: absolute;
     height: 50%; 
-    line-height: 100px;
-    top: 190px;
+    line-height: 83px;
+    top: 167px;
     width: 100%;
     text-align: center;
-    background-color: rgba(119, 119, 119, 0.8);
-    color:white;
+    background-color: rgba(54, 54, 54, 0.8);
     cursor: pointer;
+    color: rgb(236, 236, 236);
+}
+
+.game-label-hover {
+    margin: auto;
+    height: 30px;
+    width: 400px;
+    border: 1px solid rgb(31, 10, 122);   
+    border-radius: 30px;
+    line-height: 30px;
+    margin-top: 30px;
+    margin-bottom: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
 }
 
 .display-game-item-img {
@@ -1199,6 +1214,9 @@ label {
     height: 20px;
     text-align: center;
     line-height: 20px;
+    overflow: hidden;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 @-webkit-keyframes bounceright {
@@ -1234,8 +1252,8 @@ label {
 .arrow-right {
     position: absolute;
     font-size: 60px;
-    top: 52%;
-    left: 91%;
+    top: 48%;
+    left: 90%;
     cursor: pointer;
 }
 
@@ -1249,8 +1267,8 @@ label {
 .arrow-left {
     position: absolute;
     font-size: 60px;
-    top: 52%;
-    right: 91%;
+    top: 48%;
+    right: 90%;
     cursor: pointer;
 }
 
