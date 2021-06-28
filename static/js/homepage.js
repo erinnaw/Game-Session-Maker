@@ -779,6 +779,7 @@ function view_schedule(schedule_id) {
                         $('#message').css("height","100")
                         $('#message').css("margin-top", "10px")
                         $('#homepage-display').append("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_posts\" id=\"max_posts\"></select></div>");
+                        $('#display-bar').css("background-color", "rgb(255, 244, 225)");
                         $('#max_posts').append("<option value=\"10\">10</option>" +
                             "<option value=\"20\" selected>20</option>" +
                             "<option value=\"50\">50</option>" +

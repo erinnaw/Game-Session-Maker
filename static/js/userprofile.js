@@ -347,10 +347,9 @@ $('#my-profile').on('click', () => {
                     "<option value=\"20\" selected>20</option>" +
                     "<option value=\"50\">50</option>" +
                     "<option value=\"100\">100</option>");
-
                 $('#profile-posts').append('<div class=\"grid-display-userposts\" id=\"display-userposts\"></div>');
                 $('#profile-posts').append("<div class=\"display-page-num\" id=\"display-page-num-posts\"></div>");
-
+                
                 curr_userpost_page_set = 1;
                 curr_userpost_page_num = 1;
                 get_userposts();
