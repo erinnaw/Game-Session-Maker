@@ -477,7 +477,7 @@ a {
 .registration-form {
     height: 630px;
     width: 600px;
-    background-color: rgb(187, 196, 216);
+    background-color: #B7C0EE;
     margin:auto;
     border: 3px solid rgb(0, 0, 0);
     border-radius: 20px;
@@ -499,7 +499,7 @@ a {
     height: 300px;
     border: 3px solid rgb(0, 0, 0);
     border-radius: 20px;
-    background-color: rgb(187, 196, 216);
+    background-color: #B7C0EE;
     margin: auto;
     padding: 10px 10px 10px 10px;
 }
@@ -587,7 +587,7 @@ a {
     border-radius: 30px;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: rgb(235, 244, 255);
+    background-color: #D4E1FF;
     overflow: hidden;
 }
 
@@ -626,7 +626,7 @@ a {
     border-radius: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: mintcream;
+    background-color: #f1f3f7;
     overflow: hidden;
 }
 
@@ -674,6 +674,11 @@ a {
     position: relative;
     display: grid;
     grid-template-columns: 30% 70%;
+    font-weight: 500;
+}
+
+.post-item {
+    font-weight: 400;    
 }
 
 .grid-profile-schedule-item-rightrows {
@@ -1040,18 +1045,18 @@ body, html {
     border: 1px solid rgb(0, 0, 0);
 }
 
-#created {background-color: rgb(204, 235, 255);}
-#joined {background-color: rgb(230, 255, 243);}
-#archived {background-color: lemonchiffon;}
-#sent {background-color: aliceblue;}
-#received {background-color: honeydew;}
+#created {background-color: #B7C0EE;}
+#joined {background-color: #DBF4A7;}
+#archived {background-color: #CBF3D2;}
+#sent {background-color: #DBF4A7;}
+#received {background-color: #CBF3D2;}
 
 /*------------------------Create Schedule---------------------------*/
 
 .grid-create-schedule-form {
     position: relative;
     display: grid;
-    background-color: rgb(210, 210, 224);
+    background-color: #B7C0EE;
     padding: 10px 10px 10px 0px;
     border-radius: 10px;
     border: 3px solid rgb(0, 0, 0);
@@ -1360,7 +1365,7 @@ label {
     padding: 10px 10px 10px 10px;
     width: 100%;
     border: 1px solid rgb(0, 0, 0);
-    background-color: mintcream;
+    background-color: #f1f3f7;
     border-radius: 10px;
     overflow:hidden;
 }
@@ -1382,6 +1387,7 @@ label {
     grid-template-columns: 25% 75%;
     padding-top: 10px;
     padding-bottom: 10px;
+    font-weight: 500;
 }
 
 .schedule-item-rightrows {
@@ -1406,6 +1412,7 @@ label {
     position: relative;
     display: grid;
     grid-template-columns: 30% 70%;
+    font-weight: 500;
 }
 
 .grid-schedule-item-rightrows {
@@ -1590,7 +1597,7 @@ label {
     width: 80%;
     margin: auto;
     border: 1px solid rgb(0, 0, 0);
-    background-color: rgb(255, 244, 225);
+    background-color: #B7C0EE;  
 }
 
 /*------------------------Posts---------------------------*/
@@ -1600,7 +1607,7 @@ label {
     display: grid;
     width: 757px;
     grid-template-columns: auto;
-    margin: 10px 10px;  
+    margin: 10px 10px;
 }
 
 .triangle {
@@ -1675,7 +1682,7 @@ label {
     position: relative;
     display: inline-grid;
     grid-template-columns: 10% 10% ;
-    background-color: rgb(196, 210, 228);
+    background-color: #B7C0EE;
     height: 33px;
     width: 100%;
     left: 50%;
@@ -1966,6 +1973,7 @@ label {
 
 /* Style the button that is used to open and close the collapsible content */
 .collapsible {
+  z-index: 1;
   position: relative;
   background-color: #eee;
   cursor: pointer;
@@ -1976,6 +1984,7 @@ label {
   text-align: left;
   outline: none;
   font-size: 15px;
+  box-shadow: 1px 5px 10px 0px grey;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */

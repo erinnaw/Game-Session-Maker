@@ -23,12 +23,12 @@ $('#my-profile').on('click', () => {
             $('#profile-display').append(`<img class=\"avator-img-profile\" id=\"avator-img-edit\" src=\"${res.image_path}\"></img>`);
             $('#profile-display').append("<div class=\"grid-profile-user\" id=\"profile-user\"></div>");
             $('#profile-user').html(get_userdetails_html(res));
-            $('#row-2').css("background-color", "lightsteelblue");
-            $('#row-4').css("background-color", "lightsteelblue");
-            $('#row-6').css("background-color", "lightsteelblue");
-            $('#edit-lastname').css("background-color", "lightsteelblue");
-            $('#edit-password').css("background-color", "lightsteelblue");
-            $('#edit-username').css("background-color", "lightsteelblue");
+            $('#row-2').css("background-color", "#ADC6FA");
+            $('#row-4').css("background-color", "#ADC6FA");
+            $('#row-6').css("background-color", "#ADC6FA");
+            $('#edit-lastname').css("background-color", "#ADC6FA");
+            $('#edit-password').css("background-color", "#ADC6FA");
+            $('#edit-username').css("background-color", "#ADC6FA");
 
             $('#profile-display').append("<span class=\"edit-profile-button\" id=\"edit-profile\"><i class=\"bi bi-pencil-square button-symbol\"></i></span>");
             $('#profile-display').append("<div class=\"flash-msg\" id=\"flash-msg\"></div");
@@ -138,9 +138,9 @@ $('#my-profile').on('click', () => {
                 $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-schedules\"></div>");
 
                 $('#profile-schedules').append('<div class=\"grid-schedules-tabs\" id=\"schedules-tabs\"></div>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'created\', this, \'rgb(204, 235, 255)\')\" id=\"created-tab\">Created <i class="bi bi-star menu-symbol"></i></button>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'joined\', this, \'rgb(230, 255, 243)\')\" id=\"joined-tab\">Joined <i class=\"bi bi-check2-square menu-symbol\"></i></button>');
-                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'archived\', this, \'lemonchiffon\')\" id=\"archived-tab\">Archived <i class=\"bi bi-archive menu-symbol\"></i></button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'created\', this, \'#B7C0EE\')\" id=\"created-tab\">Created <i class="bi bi-star menu-symbol"></i></button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'joined\', this, \'#DBF4A7\')\" id=\"joined-tab\">Joined <i class=\"bi bi-check2-square menu-symbol\"></i></button>');
+                $('#schedules-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'archived\', this, \'#CBF3D2\')\" id=\"archived-tab\">Archived <i class=\"bi bi-archive menu-symbol\"></i></button>');
                 $('#profile-schedules').append('<div id=\"created\" class=\"tabcontent\"></div>');
                 $('#profile-schedules').append('<div id=\"joined\" class=\"tabcontent\"></div>');
                 $('#profile-schedules').append('<div id=\"archived\" class=\"tabcontent\"></div>');
@@ -212,8 +212,8 @@ $('#my-profile').on('click', () => {
                 $('#profile-display').append("<div class=\"grid-profile-schedules\" id=\"profile-requests\"></div>");
 
                 $('#profile-requests').append('<div class=\"grid-schedules-tabs\" id=\"requests-tabs\"></div>');
-                $('#requests-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'sent\', this, \'aliceblue\')\" id=\"sent-tab\">Sent <i class=\"bi bi-envelope menu-symbol\"></i></button>');
-                $('#requests-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'received\', this, \'honeydew\')\" id=\"received-tab\">Received <i class=\"bi bi-mailbox menu-symbol\"></i></button>');
+                $('#requests-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'sent\', this, \'#DBF4A7\')\" id=\"sent-tab\">Sent <i class=\"bi bi-envelope menu-symbol\"></i></button>');
+                $('#requests-tabs').append('<button class=\"tablink\" onclick=\"openPage(\'received\', this, \'#CBF3D2\')\" id=\"received-tab\">Received <i class=\"bi bi-mailbox menu-symbol\"></i></button>');
                 $('#profile-requests').append('<div id=\"sent\" class=\"tabcontent\"></div>');
                 $('#profile-requests').append('<div id=\"received\" class=\"tabcontent\"></div>');
 
@@ -231,7 +231,7 @@ $('#my-profile').on('click', () => {
                         for (const request of requests) {
 
                             $('#sent').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-request-sent-${request["request_id"]}\"></div>`);
-                            $(`#profile-request-sent-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows\" id=\"profile-schedule-item-leftrows-${request["request_id"]}\"></div>`);
+                            $(`#profile-request-sent-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows post-item\" id=\"profile-schedule-item-leftrows-${request["request_id"]}\"></div>`);
                             $(`#profile-request-sent-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-rightrows\" id=\"profile-schedule-item-rightrows-${request["request_id"]}\"></div>`);
 
                             get_userrequest_html(request);
@@ -253,7 +253,6 @@ $('#my-profile').on('click', () => {
                                     $(`#delete-request-user-${request["schedule_id"]}`).remove();
                                     $(`#view-schedule-user-${request["schedule_id"]}`).remove();
                                     $(`#user-request-sent-hover-${request["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${request["schedule_id"]}\">Request Deleted</div>`);
-                                    $(`#user-request-sent-hover-${request["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
                                     $(`#user-request-sent-hover-${request["schedule_id"]}`).css('opacity', '1');
                                 });
                             });
@@ -275,7 +274,7 @@ $('#my-profile').on('click', () => {
                         for (const request of requests) {
 
                             $('#received').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-request-received-${request["request_id"]}\"></div>`);
-                            $(`#profile-request-received-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows\" id=\"profile-schedule-item-leftrows-${request["request_id"]}\"></div>`);
+                            $(`#profile-request-received-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows post-item\" id=\"profile-schedule-item-leftrows-${request["request_id"]}\"></div>`);
                             $(`#profile-request-received-${request["request_id"]}`).append(`<div class=\"grid-profile-schedule-item-rightrows\" id=\"profile-schedule-item-rightrows-${request["request_id"]}\"></div>`);
 
                             get_userrequest_html(request);
@@ -447,7 +446,6 @@ function get_userschedules_created() {
                         $(`#archive-schedule-user-${schedule["schedule_id"]}`).remove();
                         $(`#delete-schedule-user-${schedule["schedule_id"]}`).remove();
                         $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${schedule["schedule_id"]}\">Sent to Archived</div>`);
-                        $(`#user-schedule-hover-${schedule["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
                         $(`#user-schedule-hover-${schedule["schedule_id"]}`).css('opacity', '1');
                     });
                 });
@@ -460,7 +458,6 @@ function get_userschedules_created() {
                         $(`#archive-schedule-user-${schedule["schedule_id"]}`).remove();
                         $(`#delete-schedule-user-${schedule["schedule_id"]}`).remove();
                         $(`#user-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${schedule["schedule_id"]}\">${msg}</div>`);
-                        $(`#user-schedule-hover-${schedule["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
                         $(`#user-schedule-hover-${schedule["schedule_id"]}`).css('opacity', '1');
                     })
                 });
@@ -569,7 +566,6 @@ function get_userschedules_joined() {
                         $(`#view-schedule-user-${schedule["schedule_id"]}`).remove();
                         $(`#leave-button-${schedule["schedule_id"]}`).remove();
                         $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).append(`<div class=\"subheader-2\" id=\"subheader-${schedule["schedule_id"]}\">${msg}</div>`);
-                        $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).css('background-color', 'rgba(255, 255, 255, 0.8)');
                         $(`#user-joined-schedule-hover-${schedule["schedule_id"]}`).css('opacity', '1');
                     });
                 });
@@ -752,7 +748,7 @@ function get_userposts() {
             for (const post of posts[0]) {
 
                 $('#display-userposts').append(`<div class=\"grid-profile-schedule-item\" id=\"profile-post-${post["post_id"]}\"></div>`);
-                $(`#profile-post-${post["post_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows\" id=\"profile-userposts-leftrows-${post["post_id"]}\"></div>`);
+                $(`#profile-post-${post["post_id"]}`).append(`<div class=\"grid-profile-schedule-item-leftrows post-item\" id=\"profile-userposts-leftrows-${post["post_id"]}\"></div>`);
 
                 get_userpost_html(post);
             }

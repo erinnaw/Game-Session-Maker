@@ -651,8 +651,8 @@ function view_schedule(schedule_id) {
 
                             $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"requests-button\">See all requests</button>" +
                                 "<div class=\"content-approved-users\" id=\"content-requests\"></div>");
-                            $('#requests-button').css("background-color", "lightsteelblue");
-                            $('#content-requests').css("background-color", "cornflowerblue");
+                            $('#requests-button').css("background-color", "#55B565");
+                            $('#content-requests').css("background-color", "#CBF3D2");
 
                             $('#requests-button').on('click', () => {
 
@@ -715,8 +715,8 @@ function view_schedule(schedule_id) {
 
                         $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"approval-button\">See all approved users</button>" +
                             "<div class=\"content-approved-users\" id=\"content-approved\"></div>");
-                        $('#approval-button').css("background-color", "rgb(204, 255, 204)");
-                        $('#content-approved').css("background-color", "lightgreen");
+                        $('#approval-button').css("background-color", "#97B555");
+                        $('#content-approved').css("background-color", "#DBF4A7");
 
                         $('#approval-button').on('click', () => {
 
@@ -781,7 +781,7 @@ function view_schedule(schedule_id) {
                         $('#message').css("height","100")
                         $('#message').css("margin-top", "10px")
                         $('#homepage-display').append("<div class=\"grid-display-bar\" id=\"display-bar\"><div class=\"search-schedule-item\">Show</div><select name=\"max_posts\" id=\"max_posts\"></select></div>");
-                        $('#display-bar').css("background-color", "rgb(255, 244, 225)");
+                        $('#display-bar').css("background-color", "#7067CF");
                         $('#max_posts').append("<option value=\"10\">10</option>" +
                             "<option value=\"20\" selected>20</option>" +
                             "<option value=\"50\">50</option>" +
@@ -860,7 +860,7 @@ function get_scheduleposts(schedule_id, host_id) {
 
                 if (post.user_id == host_id) {
 
-                    $(`#scheduleposts-${post.post_id}`).css("background-color", "rgb(240, 223, 177)");
+                    $(`#scheduleposts-${post.post_id}`).css("background-color", "#FAFAD2 ");
                 }
             }
         }
