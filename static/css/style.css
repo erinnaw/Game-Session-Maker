@@ -1159,13 +1159,11 @@ label {
 .grid-display-game-item-hover:hover .create-schedule-hover {
     top: 0px;
     width: 100%;
-    transition: top 0.2s ease-in-out;
 }
 
 .grid-display-game-item-hover:hover .find-schedule-hover {
     top: 83px;
     width: 100%;
-    transition: top 0.2s ease-in-out;
 }
 
 .create-schedule-hover:hover {
@@ -1186,6 +1184,7 @@ label {
     background-color: rgba(54, 54, 54, 0.8);
     cursor: pointer;
     color: rgb(236, 236, 236);
+    transition: top 0.2s ease-in-out;
 }
 
 .find-schedule-hover {
@@ -1198,6 +1197,7 @@ label {
     background-color: rgba(54, 54, 54, 0.8);
     cursor: pointer;
     color: rgb(236, 236, 236);
+    transition: top 0.2s ease-in-out;
 }
 
 .game-label-hover {
