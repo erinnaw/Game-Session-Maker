@@ -1141,7 +1141,7 @@ label {
     position: relative;
     display: inline-grid;
     grid-template-columns: auto auto auto auto auto;
-    width: 900px;
+    width: auto;
     margin: auto;
     margin-top: 40px;
     left: 50%;
@@ -1154,11 +1154,10 @@ label {
     width: 175px;
     padding-top: 10px;
     padding-bottom: 10px;
-    border: 2px solid rgb(31, 10, 122);
+    border: 2px solid #333;
     cursor: pointer;
     overflow: hidden;
-    border-radius: 10px;
-    background-color: rgb(226 226 226);
+    background-color: #dcdff0;
 }
 
 .grid-display-game-item-hover:hover .create-schedule-hover {
@@ -1315,7 +1314,7 @@ label {
     font-size: 18px;
     width: 0;
     height: 30px;
-    background-color: rgb(143, 190, 122);
+    background-color: #8AA399;
     border-radius: 12px 0px 0px 12px;
     margin-left: 0px;
     line-height: 30px;
