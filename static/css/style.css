@@ -1365,7 +1365,7 @@ label {
     position: absolute;
     top: -22px;
     left: -14px;
-    height: 283px;
+    height: 300px;
     width: 460px;
     margin: auto;
     opacity: 0.3;    
@@ -1981,10 +1981,9 @@ label {
 /* Style the collapsible content. Note: hidden by default */
 .content-approved-users {
   position: relative;
-  padding: 0 18px;
   display: none;
   overflow: hidden;
-  background-color: #f1f1f1;
+  padding: 10px 10px 10px 10px;
 }
 
 .collapsible:after {

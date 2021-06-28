@@ -652,6 +652,7 @@ function view_schedule(schedule_id) {
                             $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"requests-button\">See all requests</button>" +
                                 "<div class=\"content-approved-users\" id=\"content-requests\"></div>");
                             $('#requests-button').css("background-color", "lightsteelblue");
+                            $('#content-requests').css("background-color", "cornflowerblue");
 
                             $('#requests-button').on('click', () => {
 
@@ -715,6 +716,7 @@ function view_schedule(schedule_id) {
                         $('#display-schedules').append("<button type=\"button\" class=\"collapsible\" id=\"approval-button\">See all approved users</button>" +
                             "<div class=\"content-approved-users\" id=\"content-approved\"></div>");
                         $('#approval-button').css("background-color", "rgb(204, 255, 204)");
+                        $('#content-approved').css("background-color", "lightgreen");
 
                         $('#approval-button').on('click', () => {
 
