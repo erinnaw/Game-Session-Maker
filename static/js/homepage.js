@@ -1137,11 +1137,6 @@ function createSchedule_by_game_id(game_id = 1) {
                 "<div></div>" +
                 "<center>*required fields</center>");
 
-            $('#game').css("background-color", "rgb(180, 180, 203)");
-            $('#time').css("background-color", "rgb(180, 180, 203)");
-            $('#platform_label').css("background-color", "rgb(180, 180, 203)");
-            $('#max_team').css("background-color", "rgb(180, 180, 203)");
-
             $('#homepage-display').append("<div class=\"flash-msg\" id=\"flash-msg\"></div");
 
             $('#schedule-form').on('submit', (evt) => {
@@ -1227,9 +1222,9 @@ function createSchedule_by_game_name(game_name, image_path, icon_path, descripti
                 "<Label for=\"description\">Description*</Label>" +
                 "<textarea name=\"description\" id=\"description\" rows=\"10\" cols=\"50\">Write requirements for users and description of your objective(s).</textarea> " +
                 "<div></div>" +
-                "<input type=\"submit\" value=\"Submit\">" +
+                "<input type=\"submit\" value=\"Submit\" class=\"submit submit-login\">" +
                 "<div></div>" +
-                "*required fields");
+                "<center>*required fields</center>");
 
             $('#homepage-display').append("<div class=\"flash-msg\" id=\"flash-msg\"></div");
 
