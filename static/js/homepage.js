@@ -1333,9 +1333,6 @@ function search_games() {
                             <div>Release Date: ${release_date.getMonth()}/${release_date.getDate()}/${release_date.getFullYear()}</div>
                             <div class=\"platforms\" id=\"platforms-${results[i].id}\">Plaform(s): </div>
                         </div>
-                        <div>
-                            <div class=\"select-game\" id=\"select-game\"></div>
-                        </div>
                     </div>`
                 );
 

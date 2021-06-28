@@ -205,8 +205,9 @@ textarea {
     position: relative;
     display: grid;
     grid-template-columns: auto auto;
-    width: 400px;
+    width: 100%;
     height: 50px;
+    line-height: 50px;
 }
 
 textarea {
@@ -358,13 +359,14 @@ a {
 .search-result-item {
     position: relative;
     display: grid;
-    grid-template-columns: 100px 540px 160px;
+    grid-template-columns: 100px 700px;
     height: 100px;
     width: 800px;
     margin: auto;
     border: 1px solid rgb(0, 0, 0);
     text-align: center;
     cursor: pointer;
+    background-color: rgb(241, 241, 241);
 }
 
 .search-result-item:hover .search-result-item-hover {
@@ -378,11 +380,11 @@ a {
 
 .search-result-item-content {
     height: 100px;
-    width: 500px;
+    width: 600px;
     margin: auto;
-    padding-top: 20px;
-    padding-left: 20px;
+    padding-top: 10px;
     text-align: left;
+    overflow: hidden;
 }
 
 .select-game {
@@ -1071,10 +1073,14 @@ label {
 .grid-display-game {
     position: relative;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 40% 60%;
     width: 1000px;
     margin: auto;
-    text-align: left;   
+    text-align: left;
+    border: 3px solid rgb(0, 0, 0);
+    background-color: rgb(222 222 222 / 80%);
+    border-radius: 20px;
+    overflow: hidden;
 }
 
 .display-game-icon {
@@ -1085,9 +1091,10 @@ label {
 
 .game-description {
     height: 300px;
-    width: 400px;
+    width: 545px;
     margin: auto;
     margin-left: 30px;
+    padding: 10px 10px 10px 10px;
 }
 
 .back-to-search-bar {
@@ -1105,6 +1112,7 @@ label {
     width: 250px;
     height: 30px;
     border: 1px solid rgb(0, 0, 0);
+    border-radius: 7px;
     cursor: pointer;
     line-height: 30px;
     transition: 0.3s;
