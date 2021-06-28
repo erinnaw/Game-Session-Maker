@@ -1260,7 +1260,7 @@ label {
 .arrow-right {
     position: absolute;
     font-size: 60px;
-    top: 48%;
+    top: 52%;
     left: 90%;
     cursor: pointer;
 }
@@ -1275,7 +1275,7 @@ label {
 .arrow-left {
     position: absolute;
     font-size: 60px;
-    top: 48%;
+    top: 52%;
     right: 90%;
     cursor: pointer;
 }
