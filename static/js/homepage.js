@@ -675,7 +675,7 @@ function view_schedule(schedule_id) {
                                             $(`#request-item-${request.request_id}`).append(`<div class=\"grid-request-content\" id=\"request-content-${request.request_id}\"></div>`);
                                             $(`#request-content-${request.request_id}`).append(`<div class=\"grid-request-header\" id=\"request-header-${request.request_id}\">Request Message</div>`);
                                             $(`#request-content-${request.request_id}`).append(`<div class=\"postmsgbox\">${request.content}</div>`);
-                                            $(`#request-content-${request.request_id}`).append(`<div class=\"timestamp\" id=\"timestamp-request-${request.request_id}\">${request.time_stamp}</div>`);
+                                            $(`#request-content-${request.request_id}`).append(`<div class=\"timestamp timestamp-post\" id=\"timestamp-request-${request.request_id}\">${request.time_stamp}</div>`);
 
                                             $(`#request-item-${request.request_id}`).append(`<div class=\"grid-approval\" id=\"approval-${request.request_id}\"></div>`);
                                             $(`#approval-${request.request_id}`).append(`<div class=\"approve-button\" id=\"approve-button-${request.request_id}\"><i class=\"bi bi-check-square button-symbol\"></i></div>`);
