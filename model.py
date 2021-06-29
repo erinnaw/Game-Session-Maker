@@ -75,6 +75,7 @@ class Platform(db.Model):
     game_id = db.Column(db.Integer,
                         db.ForeignKey('games.game_id'))
     name = db.Column(db.String)
+    
     games = db.relationship('Game', viewonly=True)
     schedules = db.relationship('Schedule')
 
