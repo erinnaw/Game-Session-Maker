@@ -92,10 +92,14 @@ textarea {
 }
 
 .homepage-display-bottom {
-    padding-top: 30px;
+    padding-top: 10px;
+    padding-bottom: 30px;
     text-align: center;
-    height: 100px;
+    height: 50px;
+    width: 100%;
+    text-align: center;
     margin: auto;
+    margin-top: 10px;
 }
 
 .status-archived { 
@@ -330,7 +334,7 @@ a {
 .grid-display-search-results {
     display: inline-grid;
     grid-template-columns: auto;
-    height: auto;
+    height: 1000px;
     width: 1200px;
     margin: auto;
     overflow: auto;
