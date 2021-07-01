@@ -15,7 +15,7 @@
 
 ![alt Manage your schedules](/README_images/4.JPG)
 
-- **Edit your Profile**: Change your avator image, first name, last name, email and password. User ID and Username cannot be changed.
+- **Edit your Profile**: Change your avator image, first name, last name and password. User ID, Email and Username cannot be changed.
 - **Drag and Drop Images**: Drag and drop your avator image onto the outlined box.
 
 ![alt Manage your schedules](/README_images/2.JPG)

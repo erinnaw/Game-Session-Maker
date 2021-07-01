@@ -36,6 +36,12 @@ let back_state;
 let fromSearch = new Boolean(false);
 let saved_search = '';
 
+const sanitizeHTML = function (str) {
+    return str.replace(/[^\w. ]/gi, function (c) {
+        return '&#' + c.charCodeAt(0) + ';';
+    });
+};
+
 $(document).ready(function () {
 
     let key = new String();
@@ -97,9 +103,9 @@ $('#create-account').on('click', () => {
         "<Label for=\"username\">Username*</Label>"+
         "<input type =\"text\" name=\"username\" id=\"username\">"+
         "<Label for=\"fname\">First Name</Label>"+
-        "<input type =\"text\" name=\"fname\" id=\"fname\">"+
+        "<input type =\"text\" name=\"fname\" id=\"fname\" onkeydown=\"return alphaOnly(event);\">"+
         "<Label for=\"lname\">Last Name</Label>"+
-        "<input type =\"text\" name=\"lname\" id=\"lname\">"+
+        "<input type =\"text\" name=\"lname\" id=\"lname\" onkeydown=\"return alphaOnly(event);\">"+
         "<Label for=\"email\">Email*</Label>" +
         "<input type =\"email\" name=\"email\" id=\"email\">" +
         "<Label for= \"password\">Password*</Label>" +
@@ -156,12 +162,12 @@ $('#create-account').on('click', () => {
         
         evt.preventDefault();
         const formData = {
-            "username": $('#username').val(),
-            "fname": $('#fname').val(),
-            "lname": $('#lname').val(),
-            "email": $('#email').val(),
-            "password": $('#password').val(),
-            "image_path": $('#avator-img').attr('src')
+            "username": sanitizeHTML($('#username').val()),
+            "fname": sanitizeHTML($('#fname').val()),
+            "lname": sanitizeHTML($('#lname').val()),
+            "email": sanitizeHTML($('#email').val()),
+            "password": sanitizeHTML($('#password').val()),
+            "image_path": sanitizeHTML($('#avator-img').attr('src'))
         };
 
         $.post('/add-user', formData, (res) => {
@@ -212,12 +218,10 @@ $('#log-in').on('click', () => {
         evt.preventDefault();
 
         let formData = {
-            "email": $('#email').val(),
-            "password": $('#password').val()
+            "email": sanitizeHTML($('#email').val()),
+            "password": sanitizeHTML($('#password').val())
         };
 
-        formData.password = $('#password').val();
-        
         $.post('/login', formData, (res) => {
 
             $('#flash-msg').html(res["flash"]);
@@ -335,7 +339,12 @@ function onKeyUp_searchSchedules() {
 
 function get_schedules() {
 
-    const formData = $('#search-schedule-bar').serialize() + "&offset_page=" + (curr_schedule_search_page_num - 1);
+    const formData = {"limit_size": $('#limit_size').val(),
+                        "username": sanitizeHTML($('#username').val()),
+                        "game_name": sanitizeHTML($('#game_name').val()),
+                        "date": $('#date').val(),
+                        "time": $('#time').val(),
+                        "offset_page": curr_schedule_search_page_num - 1};
     prev_formData = formData;
 
     $('#display-schedules-results').html('');
@@ -581,7 +590,7 @@ function view_schedule(schedule_id) {
                                 const formData = {
                                     "user_id": user.user_id,
                                     "schedule_id": schedule.schedule_id,
-                                    "content": $('#request-content').val()
+                                    "content": sanitizeHTML($('#request-content').val())
                                 }
 
                                 $.post(`/request/${schedule.schedule_id}`, formData, (msg) => {
@@ -808,7 +817,7 @@ function view_schedule(schedule_id) {
                                 const formData = {
                                     "user_id": user.user_id,
                                     "schedule_id": schedule.schedule_id,
-                                    "content": $('#message').val(),
+                                    "content": sanitizeHTML($('#message').val())
                                 };
 
                                 $.post('/add-post', formData, (res) => {
@@ -1094,7 +1103,7 @@ function createSchedule_by_game_id(game_id = 1) {
 
             $('#create-schedule-form').append("<Label for=\"date\">Date*</Label>" +
                 "<input type=\"date\" name=\"date\" id=\"date\">" +
-                "<Label for=\"time\" id=\"time\">Time*</Label>" +
+                "<Label for=\"time\">Time*</Label>" +
                 "<input type=\"time\" name=\"time\" id=\"time\">" +
                 "<Label for=\"timezone\">Timezone*</Label>" +
                 "<div class=\"tz\" id=\"tz\"></div>");
@@ -1128,7 +1137,7 @@ function createSchedule_by_game_id(game_id = 1) {
 
             $('#create-schedule-form').append("<Label for=\"max_user\">Max Users*</Label>" +
                 "<input type=\"number\" min=\"1\" step=\"1\" name=\"max_user\" id=\"max_user\">" +
-                "<Label for=\"max_team\" id=\"max_team\">Max Teams</Label>" +
+                "<Label for=\"max_team\">Max Teams</Label>" +
                 "<input type=\"number\" min=\"1\" step=\"1\" name=\"max_team\" id=\"max_team\" placeholder=\"1\">" +
                 "<Label for=\"description\">Description*</Label>" +
                 "<textarea name=\"description\" id=\"description\" rows=\"10\" cols=\"50\">Write requirements for users and description of your objective(s).</textarea> " +
@@ -1141,8 +1150,18 @@ function createSchedule_by_game_id(game_id = 1) {
 
             $('#schedule-form').on('submit', (evt) => {
 
-                const formData = $('#schedule-form').serialize();
                 evt.preventDefault();
+
+                const formData = {
+                    "game": $('#gameselect').val(),
+                    "date": $('#date').val(),
+                    "time": $('#time').val(),
+                    "timezone": $('#timezone option:selected').text(),
+                    "platform": $('#platform').val(),
+                    "description": sanitizeHTML($('#description').val()),
+                    "max_user": $('#max_user').val(),
+                    "max_team": $('#max_team').val()
+                };
 
                 $.post('/create-schedule', formData, (data) => {
 
@@ -1231,8 +1250,23 @@ function createSchedule_by_game_name(game_name, image_path, icon_path, descripti
             $('#schedule-form').on('submit', (evt) => {
 
                 evt.preventDefault();
-                const formData = $('#schedule-form').serialize() + platforms_query;
-                
+
+                const params = {
+                    "game": $('#gameselect').val(),
+                    "image_path": $('#image_path').val(),
+                    "icon_path": $('#icon_path').val(),
+                    "date": $('#date').val(),
+                    "time": $('#time').val(),
+                    "timezone": $('#timezone option:selected').text(),
+                    "platform": $('#platform').val(),
+                    "description": sanitizeHTML($('#description').val()),
+                    "max_user": $('#max_user').val(),
+                    "max_team": $('#max_team').val(),
+                    "platforms_query": platforms_query
+                };
+
+                const formData = jQuery.param(params) + platforms_query;
+                console.log(formData)
                 $.post('/create-schedule-by-search-game', formData, (data) => {
 
                     if (data.status === "fail") {
@@ -1293,7 +1327,7 @@ function search_games() {
     curr_game_page_num = 0;
     num_page_results = 0;
     num_total_results = 0;
-    const searchData = $('#search-game').val();
+    const searchData = sanitizeHTML($('#search-game').val());
     loading_screen();
 
     $.get('/game-info.json', {'search': searchData, "limit": MAX_GAMES_PER_PAGE, "page_offset": curr_game_page_num}, (response) => {
@@ -1359,7 +1393,7 @@ function search_games() {
                         if (game.length !== 0) {
 
                             fromSearch = true;
-                            saved_search = $('#search-game').val();
+                            saved_search = sanitizeHTML($('#search-game').val());
                             createSchedule_by_game_id(game.game_id);
                         }
                         else {
@@ -1369,7 +1403,7 @@ function search_games() {
                             $.get('/get-game-info-GB', {"game_id": evt.target.id.slice(25)}, (res) => {
                                 
                                 fromSearch = true;
-                                saved_search = $('#search-game').val();
+                                saved_search = sanitizeHTML($('#search-game').val());
                                 createSchedule_by_game_name(results[i].name, res.super_url, res.icon_url, res.deck, res.platforms, res.site_detail_url);
                             });
                         }
@@ -1397,7 +1431,7 @@ function search_games() {
                     if (curr_game_page_num < total_pages) {
 
                         curr_game_page_num += 1;
-                        saved_search = $('#search-game').val();
+                        saved_search = sanitizeHTML($('#search-game').val());
 
                         $("#search-results-loading").remove();
                         $("#display-search-results").append("<div class=\"search-results-loading bounce\" id=\"search-results-loading\"></div>");
@@ -1488,7 +1522,7 @@ function lazy_loading () {
                         if (game.length !== 0) {
 
                             fromSearch = true;
-                            saved_search = $('#search-game').val();
+                            saved_search = sanitizeHTML($('#search-game').val());
                             createSchedule_by_game_id(game.game_id);
                         }
                         else {
@@ -1498,7 +1532,7 @@ function lazy_loading () {
                             $.get('/get-game-info-GB', { "game_id": evt.target.id.slice(25) }, (res) => {
 
                                 fromSearch = true;
-                                saved_search = $('#search-game').val();
+                                saved_search = sanitizeHTML($('#search-game').val());
                                 createSchedule_by_game_name(results[i].name, res.super_url, res.icon_url, res.deck, res.platforms, res.site_detail_url);
                             });
                         }
@@ -1520,4 +1554,8 @@ function append_back_to_search () {
     });
 }
 
+function alphaOnly(evt) {
 
+    let key = evt.keyCode;
+    return (((key >= 65 && key <= 90) || key == 8 || key == 9) && key != 13);
+}

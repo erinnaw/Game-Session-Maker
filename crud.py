@@ -165,7 +165,7 @@ def get_games_by_criteria(formData, limit_size=20, offset_num=0):
         return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).order_by(Game.name.asc()).limit(limit_size).offset(offset_num)
 
     elif formData["game_name"] != '' and formData["sort_by"] == "most-active":
-        return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).outerjoin(Schedule).group_by(Game.game_id).order_by(func.count(Game.game_id).asc()).limit(limit_size).offset(offset_num)
+        return Game.query.outerjoin(Schedule).filter(Game.name.ilike('%'+formData["game_name"]+'%')).group_by(Game.game_id).order_by(func.count(Game.game_id).desc()).limit(limit_size).offset(offset_num)
 
     elif formData["game_name"] != '' and (formData["sort_by"] == '' or formData["sort_by"] == None):
         return Game.query.filter(Game.name.ilike('%'+formData["game_name"]+'%')).limit(limit_size).offset(offset_num)
@@ -174,7 +174,7 @@ def get_games_by_criteria(formData, limit_size=20, offset_num=0):
         return Game.query.order_by(Game.name.asc()).limit(limit_size).offset(offset_num)
 
     elif formData["game_name"] == '' and formData["sort_by"] == "most-active":
-        return Game.query.outerjoin(Schedule).group_by(Game.game_id).order_by(func.count(Game.game_id).asc()).limit(limit_size).offset(offset_num)
+        return Game.query.outerjoin(Schedule).group_by(Game.game_id).order_by(func.count(Game.game_id).desc()).limit(limit_size).offset(offset_num)
 
 
 def get_games_by_criteria_count(formData):
@@ -517,11 +517,11 @@ def set_schedule_archived_by_id(schedule_id):
     return False
 
 
-def set_user_profile(user_id, fname, lname, email, password, image_path):
+def set_user_profile(user_id, fname, lname, password, image_path):
     """Set user profile firstname, lastname, email and password."""
 
     if User.query.get(user_id):
-        User.query.filter(User.user_id == user_id).update({"first_name": fname, "last_name": lname, "email": email, "password": password, "image_path": image_path})
+        User.query.filter(User.user_id == user_id).update({"first_name": fname, "last_name": lname, "password": password, "image_path": image_path})
         db.session.commit()
         return True
     

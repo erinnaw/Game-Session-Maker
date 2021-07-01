@@ -9,11 +9,18 @@ import os
 import hashlib
 import pybomb
 import sys
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = '/path/to/static/img'
+ALLOWED_EXTENSIONS = set(['png','kph','jpeg','gif'])
+
 os.system("sh keys.sh")
 
 app = Flask(__name__)
 app.secret_key = "secret"
 app.jinja_env.undefined = StrictUndefined
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 8 * 400 * 400
 
 # IGDB API call initialization
 #igdb = {
@@ -250,10 +257,14 @@ def add_user():
         flash = "Username, email and password is required."
         status = 3
 
+    elif (len(fname) > 0 and not fname.isalpha()) or (len(lname) > 0 and not lname.isalpha()):
+        flash = "First name and last name must be alphabetical only."
+        status = 4
+
     else:
         if len(password) < 6 or len(password) > 20:
             flash = "Password must be between 6 to 20 characters."
-            status = 4           
+            status = 5           
 
         else:
             crud.create_user(username, fname, lname, email, password, image_path)
@@ -343,6 +354,23 @@ def get_user():
     return "None"
 
 
+@app.route("/upload-image", methods=["POST"])
+def upload_image():
+
+    if 'file' in request.files:
+        file = request.files['image/png/gif']
+        print(file)
+        print("---------------2-----------------")
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            img = Image.open(file.stream)
+
+            return jsonify({'msg': 'image uploaded to server', 'size': [img.width, img.height]})
+
+    return jsonify({'msg': 'image failed to upload to server'})
+
+
 @app.route("/edit-profile", methods=["POST"])
 def edit_profile():
     """Edit logged user"s profile."""
@@ -350,19 +378,21 @@ def edit_profile():
     flash = ""
     fname = request.form.get("fname")
     lname = request.form.get("lname")
-    email = request.form.get("email")
     password = request.form.get("password")
     image_path = request.form.get("image_path")
 
     if session.get("user", 0):
-        if crud.set_user_profile(session["user"], fname, lname, email, password, image_path):
+        if (len(fname) > 0 and not fname.isalpha()) or (len(lname) > 0 and not lname.isalpha()):
+            flash = "Error: First name and last name must be alphabetical only."
+
+        elif crud.set_user_profile(session["user"], fname, lname, password, image_path):
             flash = "Profile Updated"
 
         else:
             flash = "Error: Profile could not be changed." 
 
     else:
-        flash = "You must be logged in to edit your profile"
+        flash = "Error: You must be logged in to edit your profile"
 
     return flash
 

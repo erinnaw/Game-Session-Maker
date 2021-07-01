@@ -35,6 +35,8 @@ $('#my-profile').on('click', () => {
 
             $('#edit-profile').on('click', () => {
 
+                let form_data = new FormData();
+                
                 $('#avator-img-edit').replaceWith("<form class=\"avator-upload-form\" id=\"avator-upload-form\" method=\"post\">");
                 $('#avator-upload-form').append("<img class=\"avator-img-profile-upload\" id=\"avator-img\" src=\"\"></img>");
                 $('#avator-upload-form').append("<div class=\"drop-area\" id=\"drop-area\"></div>");
@@ -71,6 +73,7 @@ $('#my-profile').on('click', () => {
 
                             droppedFiles = evt.originalEvent.dataTransfer.files;
                             showFiles(droppedFiles);
+                            form_data = new FormData(showFiles(droppedFiles));
 
                             if (droppedFiles) {
                                 $('#avator-img').attr("src", URL.createObjectURL(droppedFiles[0]));
@@ -79,15 +82,16 @@ $('#my-profile').on('click', () => {
                         .on('change', () => {
 
                             const [file_] = file.files;
+                            form_data = new FormData(showFiles(file.files));
+
                             if (file_) {
                                 $('#avator-img').attr("src", URL.createObjectURL(file_));
                             }
                         });
                 }
 
-                $('#edit-firstname').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"firstname\" id=\"firstname\" class=\"edit-firstname-text\"></input>");
-                $('#edit-lastname').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"text\" name=\"lastname\" id=\"lastname\" class=\"edit-lastname-text\"></input>");
-                $('#edit-email').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"email\" name=\"email\" id=\"email\" class=\"edit-email-text\"></input>");
+                $('#edit-firstname').replaceWith("<input onkeydown=\"return alphaOnly(event);\"/ type=\"text\" name=\"firstname\" id=\"firstname\" class=\"edit-firstname-text\"></input>");
+                $('#edit-lastname').replaceWith("<input onkeydown=\"return alphaOnly(event);\"/ type=\"text\" name=\"lastname\" id=\"lastname\" class=\"edit-lastname-text\"></input>");
                 $('#edit-password').replaceWith("<input onkeydown=\"return (event.keyCode != 13);\"/ type=\"\" name=\"password\" id=\"password\" class=\"edit-password-text\"></input>");
                 $('#edit-profile').replaceWith("<div class=\"edit-profile-button\" id=\"save-changes\"><i class=\"bi bi-save button-symbol\"></i></div></form>");
                 $('#edit-lastname').css("background-color", "lightsteelblue");
@@ -95,7 +99,6 @@ $('#my-profile').on('click', () => {
 
                 $('#firstname').val(`${res.firstname}`);
                 $('#lastname').val(`${res.lastname}`);
-                $('#email').val(`${res.email}`);
                 $('#password').val(`${res.password}`);
                 $('#avator-img').attr("src", res.image_path);
 
@@ -106,22 +109,54 @@ $('#my-profile').on('click', () => {
                         $('#flash-msg').html("Email and Password cannot be blank.");
                         return;
                     }
+                    else if ($('#password').val().length < 6 || $('#password').val().length > 20) {
+
+                        $('#flash-msg').html("Password must be between 6 to 20 letters.");
+                    }
                     else {
 
+                        var base64data = btoa(form_data);
+                        var bs = atob(base64data);
+                        var buffer = new ArrayBuffer(base64data.length);
+                        var ba = new Uint8Array(buffer);
+                        for (var i = 0; i < base64data.length; i++) {
+                            ba[i] = base64data.charCodeAt(i);
+                        }
+                        var blob = new Blob([ba], { type: "image/png/gif" });
+                        console.log(blob)
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '/upload-image',
+                            data: $('#avator-img').attr('src'),
+                            contentType: "image/png/gif",
+                            cache: false,
+                            processData: false,
+                            async: false,
+                            success: function (data) {
+                                console.log(data.msg);
+                            },
+                        });
+
                         const formData = {
-                            "fname": $('#firstname').val(),
-                            "lname": $('#lastname').val(),
-                            "email": $('#email').val(),
-                            "password": $('#password').val(),
+                            "fname": sanitizeHTML($('#firstname').val()),
+                            "lname": sanitizeHTML($('#lastname').val()),
+                            "password": sanitizeHTML($('#password').val()),
                             "image_path": $('#avator-img').attr('src')
                         }
+                        console.log(formData)
 
                         $.post('/edit-profile', formData, (msg) => {
 
-                            $('#snackbar').html(msg);
-                            document.getElementById("snackbar").className = "show";
-                            setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
-                            $('#my-profile').trigger('click');
+                            if (msg.includes("Error")) {
+                                $('#flash-msg').html(msg.slice(7));
+                            }
+                            else {
+                                $('#snackbar').html(msg);
+                                document.getElementById("snackbar").className = "show";
+                                setTimeout(function () { document.getElementById("snackbar").className = document.getElementById("snackbar").className.replace("show", ""); }, 3000);
+                                $('#my-profile').trigger('click');
+                            }
                         });
                     }
                 });
@@ -739,9 +774,9 @@ function get_userposts() {
 
         $('#display-userposts').html('');
 
-        if (posts[0].length == 0) {
+        if (posts[0].length === 0) {
 
-            $('#pdisplay-userposts').append("<div class=\"error-page\">No posts yet.</div>");
+            $('#display-userposts').append("<div class=\"error-page\">No posts yet.</div>");
         }
         else {
 
