@@ -30,13 +30,13 @@ platform = ["PC", "Playstation", "Xbox", "Nintendo"]
 #            "Battlefield 2", "Battlefield 3", "League of Legends", ""]
 
 
-crud.create_user("admin", "admin", "admin", "admin@email.com", "admin", "/static/img/avator15.jpg")
+crud.create_user("admin", "admin", "admin", "admin&#64;email.com", "admin", "/static/img/avator15.jpg")
 
 #generate users
 for i in range(MAX_USERS):
     fname = first_names[randint(0, len(first_names)-1)]
     lname = last_names[randint(0, len(last_names))-1]
-    crud.create_user("user"+str(i), fname, lname, "user"+str(i)+"@email.com", fname, "/static/img/avator"+str(randint(1,16))+".jpg")
+    crud.create_user("user"+str(i), fname, lname, "user"+str(i)+"&#64;email.com", fname, "/static/img/avator"+str(randint(1,16))+".jpg")
 
 #generate games
 game_list = []

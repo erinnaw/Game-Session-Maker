@@ -37,7 +37,7 @@ $('#my-profile').on('click', () => {
 
                 let form_data = new FormData();
                 
-                $('#avator-img-edit').replaceWith("<form class=\"avator-upload-form\" id=\"avator-upload-form\" method=\"post\">");
+                $('#avator-img-edit').replaceWith("<form class=\"avator-upload-form\" id=\"avator-upload-form\" method=\"post\" enctype=\"multipart/form-data\">");
                 $('#avator-upload-form').append("<img class=\"avator-img-profile-upload\" id=\"avator-img\" src=\"\"></img>");
                 $('#avator-upload-form').append("<div class=\"drop-area\" id=\"drop-area\"></div>");
                 $('#drop-area').append("<input accept=\"image/*\" type=\"file\" class=\"file-box\" name=\"files[]\" id=\"file\" data-multiple-caption=\"{count} files selected\" multiple></input>" +
@@ -73,8 +73,8 @@ $('#my-profile').on('click', () => {
 
                             droppedFiles = evt.originalEvent.dataTransfer.files;
                             showFiles(droppedFiles);
-                            form_data = new FormData(showFiles(droppedFiles));
-
+                            form_data.append("file", droppedFiles[0]);
+                            
                             if (droppedFiles) {
                                 $('#avator-img').attr("src", URL.createObjectURL(droppedFiles[0]));
                             }
@@ -82,7 +82,7 @@ $('#my-profile').on('click', () => {
                         .on('change', () => {
 
                             const [file_] = file.files;
-                            form_data = new FormData(showFiles(file.files));
+                            form_data.append("file", file_);
 
                             if (file_) {
                                 $('#avator-img').attr("src", URL.createObjectURL(file_));
@@ -115,26 +115,25 @@ $('#my-profile').on('click', () => {
                     }
                     else {
 
-                        var base64data = btoa(form_data);
-                        var bs = atob(base64data);
-                        var buffer = new ArrayBuffer(base64data.length);
-                        var ba = new Uint8Array(buffer);
-                        for (var i = 0; i < base64data.length; i++) {
-                            ba[i] = base64data.charCodeAt(i);
-                        }
-                        var blob = new Blob([ba], { type: "image/png/gif" });
-                        console.log(blob)
+                        let image_url = res.image_path;
 
                         $.ajax({
                             type: 'POST',
                             url: '/upload-image',
-                            data: $('#avator-img').attr('src'),
-                            contentType: "image/png/gif",
+                            data: form_data,
+                            contentType: false,
                             cache: false,
                             processData: false,
                             async: false,
                             success: function (data) {
-                                console.log(data.msg);
+                                
+                                setTimeout(function () { $('#flash-msg').html(data.msg); }, 1000);
+                                setTimeout(function () { $('#flash-msg').html(''); }, 10000);
+
+                                if (data.status === 1) {
+
+                                    image_url = data.image_path;
+                                }
                             },
                         });
 
@@ -142,9 +141,8 @@ $('#my-profile').on('click', () => {
                             "fname": sanitizeHTML($('#firstname').val()),
                             "lname": sanitizeHTML($('#lastname').val()),
                             "password": sanitizeHTML($('#password').val()),
-                            "image_path": $('#avator-img').attr('src')
+                            "image_path": image_url
                         }
-                        console.log(formData)
 
                         $.post('/edit-profile', formData, (msg) => {
 

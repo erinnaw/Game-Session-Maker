@@ -87,6 +87,8 @@ const isAdvancedUpload = function () {
 
 $('#create-account').on('click', () => {
 
+    let form_data = new FormData();
+
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\"><i class=\"bi bi-person-plus header-symbol\"></i> Create Account</div>");
     $('#homepage-display').append("<form class=\"registration-form\" id=\"registration-form\" action=\"/create-user\" method=\"POST\"></form>");
 
@@ -144,6 +146,7 @@ $('#create-account').on('click', () => {
 
             droppedFiles = evt.originalEvent.dataTransfer.files;
             showFiles(droppedFiles);
+            form_data.append("file", droppedFiles[0]);
 
             if (droppedFiles) {
                 $('#avator-img').attr("src", URL.createObjectURL(droppedFiles[0]));
@@ -152,6 +155,8 @@ $('#create-account').on('click', () => {
         .on('change', () => {
 
             const [file_] = file.files;
+            form_data.append("file", file_);
+
             if (file_) {
                 $('#avator-img').attr("src", URL.createObjectURL(file_));
             }
@@ -159,7 +164,29 @@ $('#create-account').on('click', () => {
     }
 
     $('#registration-form').on('submit', (evt) => {
-        
+
+        let image_url = res.image_path;
+
+        $.ajax({
+            type: 'POST',
+            url: '/upload-image',
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data) {
+
+                setTimeout(function () { $('#flash-msg').html(data.msg); }, 1000);
+                setTimeout(function () { $('#flash-msg').html(''); }, 10000);
+
+                if (data.status === 1) {
+
+                    image_url = data.image_path;
+                }
+            },
+        });
+
         evt.preventDefault();
         const formData = {
             "username": sanitizeHTML($('#username').val()),
@@ -167,7 +194,7 @@ $('#create-account').on('click', () => {
             "lname": sanitizeHTML($('#lname').val()),
             "email": sanitizeHTML($('#email').val()),
             "password": sanitizeHTML($('#password').val()),
-            "image_path": sanitizeHTML($('#avator-img').attr('src'))
+            "image_path": image_url
         };
 
         $.post('/add-user', formData, (res) => {

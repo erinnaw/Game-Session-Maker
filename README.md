@@ -100,6 +100,13 @@
 
 **Libraries/APIs**: GiantBomb API, Pybomb
 
+# View Existing Data on the Server's Databasee
+---
+![alt View existing data on the server](/README_images/19.JPG)
+
+- Use the data provided at the **bottom navbar** to explore the website. 
+- Log into an existing user account and start exploring.  
+
 # Data Model
 ---
 

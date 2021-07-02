@@ -10,9 +10,10 @@ import hashlib
 import pybomb
 import sys
 from werkzeug.utils import secure_filename
+from os import path
 
-UPLOAD_FOLDER = '/path/to/static/img'
-ALLOWED_EXTENSIONS = set(['png','kph','jpeg','gif'])
+UPLOAD_FOLDER = './static/img'
+ALLOWED_EXTENSIONS = set(['png','jpg','jpeg','gif'])
 
 os.system("sh keys.sh")
 
@@ -356,19 +357,51 @@ def get_user():
 
 @app.route("/upload-image", methods=["POST"])
 def upload_image():
+    """Upload an image to the database."""
 
-    if 'file' in request.files:
-        file = request.files['image/png/gif']
-        print(file)
-        print("---------------2-----------------")
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            img = Image.open(file.stream)
+    status = 0
+    msg = 'File is of incompatible type.'
+    url = ''
 
-            return jsonify({'msg': 'image uploaded to server', 'size': [img.width, img.height]})
+    if 'file' not in request.files:
+        msg = ''
 
-    return jsonify({'msg': 'image failed to upload to server'})
+    else:
+        if session.get('user', 0):
+            image = request.files['file']
+
+            if image:
+                for ext in ALLOWED_EXTENSIONS:
+                    if image.filename.lower().endswith(ext):
+                        image.filename = 'avator-' + str(session['user']) + '.' + ext
+                        filename = secure_filename(image.filename)
+                        # checks size of image
+
+                        image.seek(0)
+                        image.save(os.path.join('/tmp', filename))
+
+
+                        size = os.stat('/tmp').st_size
+                        if size > app.config['MAX_CONTENT_LENGTH']:
+                            os.remove(os.path.join('/tmp', filename))
+                            msg = 'Image must be under ' + str(app.config['MAX_CONTENT_LENGTH']) + ' bytes.'
+
+                        else:
+                            os.remove(os.path.join('/tmp', filename))
+                            user = crud.get_user_by_id(session['user'])
+                            
+                            if path.exists('.' + user.image_path):
+                                os.remove('.' + user.image_path)
+                            
+                            image.seek(0)
+                            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                            
+                            msg = 'Image uploaded | size: ' + str(size) + ' bytes.'
+                            status = 1
+                            url = app.config['UPLOAD_FOLDER'] + '/' + filename
+
+    return jsonify({'msg': msg, 'status': status, 'image_path': url[1:]})
 
 
 @app.route("/edit-profile", methods=["POST"])
@@ -1404,4 +1437,4 @@ def view_admin_display(path):
 
 if __name__ == "__main__":
     connect_to_db(app)
-    app.run(host="0.0.0.0", debug=False, port=5000)    
+    app.run(host="0.0.0.0", debug=True, port=5000)    
