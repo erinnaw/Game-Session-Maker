@@ -377,8 +377,8 @@ function onKeyUp_searchSchedules() {
 function get_schedules() {
 
     const formData = {"limit_size": $('#limit_size').val(),
-                        "username": sanitizeHTML($('#username').val()),
-                        "game_name": sanitizeHTML($('#game_name').val()),
+                        "username": $('#username').val(),
+                        "game_name": $('#game_name').val(),
                         "date": $('#date').val(),
                         "time": $('#time').val(),
                         "offset_page": curr_schedule_search_page_num - 1};
