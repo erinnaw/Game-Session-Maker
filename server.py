@@ -245,6 +245,7 @@ def add_user():
     image_path = request.form.get("image_path")
     flash = ''
     status = 0
+    user_id = 0
 
     if crud.get_user_by_username(username):
         flash = "Username already exist."
@@ -268,11 +269,12 @@ def add_user():
             status = 5           
 
         else:
-            crud.create_user(username, fname, lname, email, password, image_path)
+            user = crud.create_user(username, fname, lname, email, password, image_path)
+            user_id = user.user_id
             flash = "User created. Please log in."
             status = 0
 
-    return jsonify({"flash": flash, "status": status})
+    return jsonify({"flash": flash, "status": status, "user_id": user_id})
 
 
 @app.route("/get-hashkey", methods=["POST"])
@@ -355,6 +357,40 @@ def get_user():
     return "None"
 
 
+@app.route("/upload-image/new-user", methods=["POST"])
+def upload_image_new_user():
+    """Upload an image to the database as a new user."""
+    
+    if 'file' in request.files:
+        image = request.files['file']
+        user_id = request.form.get('user_id')
+
+        if image:
+            for ext in ALLOWED_EXTENSIONS:
+                if image.filename.lower().endswith(ext):
+                    image.filename = 'avator-' + str(user_id) + '.' + ext
+                    filename = secure_filename(image.filename)
+
+                    # checks size of image
+                    image.seek(0)
+                    image.save(os.path.join('/tmp', filename))
+                    size = os.stat('/tmp').st_size
+            
+                    if size > app.config['MAX_CONTENT_LENGTH']:
+                        os.remove(os.path.join('/tmp', filename))
+
+                    else:
+                        os.remove(os.path.join('/tmp', filename))
+                        image.seek(0)
+                        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                        url = app.config['UPLOAD_FOLDER'] + '/' + filename
+                        crud.set_user_image(user_id, url[1:])
+
+                        return url[1:]
+
+    return 'No image file.'
+
+
 @app.route("/upload-image", methods=["POST"])
 def upload_image():
     """Upload an image to the database."""
@@ -375,13 +411,12 @@ def upload_image():
                     if image.filename.lower().endswith(ext):
                         image.filename = 'avator-' + str(session['user']) + '.' + ext
                         filename = secure_filename(image.filename)
-                        # checks size of image
 
+                        # checks size of image
                         image.seek(0)
                         image.save(os.path.join('/tmp', filename))
-
-
                         size = os.stat('/tmp').st_size
+
                         if size > app.config['MAX_CONTENT_LENGTH']:
                             os.remove(os.path.join('/tmp', filename))
                             msg = 'Image must be under ' + str(app.config['MAX_CONTENT_LENGTH']) + ' bytes.'

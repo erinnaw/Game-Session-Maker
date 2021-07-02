@@ -90,7 +90,7 @@ $('#create-account').on('click', () => {
     let form_data = new FormData();
 
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\"><i class=\"bi bi-person-plus header-symbol\"></i> Create Account</div>");
-    $('#homepage-display').append("<form class=\"registration-form\" id=\"registration-form\" action=\"/create-user\" method=\"POST\"></form>");
+    $('#homepage-display').append("<form class=\"registration-form\" id=\"registration-form\" action=\"/create-user\" method=\"POST\" enctype=\"multipart/form-data\"></form>");
 
     $('#registration-form').append("<div class=\"avator-upload-form\" id=\"avator-upload-form\">");
     $('#avator-upload-form').append("<img class=\"avator-img-profile-upload\" id=\"avator-img\" src=\"/static/img/avator-placeholder.jpg\"></img>");
@@ -165,29 +165,9 @@ $('#create-account').on('click', () => {
 
     $('#registration-form').on('submit', (evt) => {
 
-        let image_url = res.image_path;
-
-        $.ajax({
-            type: 'POST',
-            url: '/upload-image',
-            data: form_data,
-            contentType: false,
-            cache: false,
-            processData: false,
-            async: false,
-            success: function (data) {
-
-                setTimeout(function () { $('#flash-msg').html(data.msg); }, 1000);
-                setTimeout(function () { $('#flash-msg').html(''); }, 10000);
-
-                if (data.status === 1) {
-
-                    image_url = data.image_path;
-                }
-            },
-        });
-
         evt.preventDefault();
+        let image_url = "/static/img/avator-placeholder.jpg";
+
         const formData = {
             "username": sanitizeHTML($('#username').val()),
             "fname": sanitizeHTML($('#fname').val()),
@@ -200,6 +180,36 @@ $('#create-account').on('click', () => {
         $.post('/add-user', formData, (res) => {
 
             if(!res.status) {
+
+                if (form_data.has('file')) {
+
+                    form_data.append("user_id", res.user_id);
+
+                    for (let key of form_data.keys()) {
+                        console.log(key)
+                    }
+
+                    for (let key of form_data.values()) {
+                        console.log(key)
+                    }
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/upload-image/new-user',
+                        data: form_data,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        async: false,
+                        success: function (res) {
+
+                            if (res != false) {
+
+                                console.log(res);
+                            }
+                        },
+                    });
+                }
 
                 $('#snackbar').html(res.flash);
                 document.getElementById("snackbar").className = "show";

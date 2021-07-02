@@ -527,6 +527,16 @@ def set_user_profile(user_id, fname, lname, password, image_path):
     
     return False
 
+def set_user_image(user_id, image_path):
+    """Set user's image."""
+
+    if User.query.get(user_id):
+        User.query.filter(User.user_id == user_id).update({"image_path": image_path})
+        db.session.commit()
+        return True
+    
+    return False
+
 
 #-----------------Boolean Wrappers------------------------------->
 def isScheduleUser(schedule_id, user_id):
