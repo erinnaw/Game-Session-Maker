@@ -23,8 +23,8 @@ MAX_POSTS_PER_USER = 1
 
 first_names = ["Abby", "Becca", "Cathy", "Darren", "Eric", "Fran", "Garry", "Harry", "Ingrid", "Jackie", "Karen", "Larry", 
                 "Mary", "Noir", "Oprah", "Perry", "%*Q!", "Rick", "Sarah", "Ted", "Umbria", "Valerie", "Wayne", "Xander", "Yara", "Zara"]
-last_names = ["Ashe", "Benjamin", "Cassidy", "D%^AX~", "Emery", "Ferry", "Gambit", "Hans", "Ingot", "Jesse", "Kennedy", "Lee", 
-                "Mara", "Nate", "Omah", "Ping", "Qi", "Ren", "Sanders", "Tickles", "Uber", "Vicky", "White", "X-K-D#$", "Young", "Zen"]
+last_names = ["Ashe", "Benjamin", "Cassidy", "Emery", "Ferry", "Gambit", "Hans", "Ingot", "Jesse", "Kennedy", "Lee", 
+                "Mara", "Nate", "Omah", "Ping", "Qi", "Ren", "Sanders", "Tickles", "Uber", "Vicky", "White", "Young", "Zen"]
 platform = ["PC", "Playstation", "Xbox", "Nintendo"]
 #game_list = ["Dota 2", "Overwatch", "Counter-Strike", "Monster Hunter", "World of Warcraft", "Starcraft", "Rocket League", "Among Us", "Battlefield", 
 #            "Battlefield 2", "Battlefield 3", "League of Legends", ""]
