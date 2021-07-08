@@ -34,6 +34,23 @@
     margin-top: 200px
 }
 
+.warning-box {
+    position: absolute;
+    height: 250px;
+    width: 400px;
+    text-align: center;
+    font-weight: bold;
+    background-color: rgb(211, 0, 0);
+    border-radius: 20px;
+    border: 2px solid rgb(0, 0, 0);
+    color:black;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    top: 300px;
+    left: 400px;    
+}
+
 .flash-msg {
     font-size: 14px;
     height: 30px;

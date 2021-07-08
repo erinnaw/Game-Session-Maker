@@ -92,6 +92,11 @@ $('#create-account').on('click', () => {
     $('#homepage-display').html("<div class=\"subheader\" id=\"subheader\"><i class=\"bi bi-person-plus header-symbol\"></i> Create Account</div>");
     $('#homepage-display').append("<form class=\"registration-form\" id=\"registration-form\" action=\"/create-user\" method=\"POST\" enctype=\"multipart/form-data\"></form>");
 
+    $('#homepage-display').append("<div class=\"warning-box\" id=\"warning-box\"></div>");
+    $('#warning-box').html("Warning<br><br>Do not write your personal information on this demo site. All user information will be displayed under 'Users' in the bottom navbar. " + 
+                            "Feel free to log in with an existing user account under 'Users'.<br><br>" + 
+                            "<input type=\"checkbox\" name=\"agreement\" id=\"agreement\"/><label for=\"agreement\">I understand</label>");
+    
     $('#registration-form').append("<div class=\"avator-upload-form\" id=\"avator-upload-form\">");
     $('#avator-upload-form').append("<img class=\"avator-img-profile-upload\" id=\"avator-img\" src=\"/static/img/avator-placeholder.jpg\"></img>");
     $('#avator-upload-form').append("<div class=\"drop-area\" id=\"drop-area\"></div>");
@@ -116,6 +121,14 @@ $('#create-account').on('click', () => {
         "<div></div><input type=\"submit\" value=\"Submit\" class=\"submit\">" +
         "<div></div>* required fields" +
         "<div class=\"flash-msg\" id=\"flash-msg\"></div>");
+
+    $('#agreement').click(function () {
+
+        if (document.getElementById('agreement').checked == true) {
+
+            $('#warning-box').css('visibility', 'hidden');
+        }
+    });
 
     if (isAdvancedUpload) {
 
